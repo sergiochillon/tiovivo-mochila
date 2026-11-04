@@ -22,7 +22,9 @@ Petición (envoltorio ilustrativo; el objeto `pack` depende del esquema oficial)
 
 `400 Bad Request` si el JSON no se puede parsear; `422 Unprocessable Entity`
 si no cumple el esquema, con `{ "error": "validation_failed", "details": ["..."] }`.
-No se guarda ni se sirve un paquete inválido.
+No se guarda ni se sirve un paquete inválido. Volver a enviar un `id` existente
+reemplaza el borrador editable; no se puede sobrescribir un paquete aprobado
+(`409 pack_already_approved`). Así se persisten las ediciones antes del sello.
 
 ## `POST /api/review/approve`
 
@@ -135,3 +137,5 @@ contadores. La respuesta no incluye avatares ni datos personales.
   esquema pack-v0.1 de Sergio.
 - El almacén es local y de alcance demo; no hay autenticación ni garantía de
   persistencia entre despliegues.
+- Rodrigo debe confirmar la semántica de reemplazar un borrador existente al
+  volver a enviar su mismo `id` en `/api/generate`.
