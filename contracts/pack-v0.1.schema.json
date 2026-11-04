@@ -122,7 +122,7 @@
         "result": { "enum": ["completed", "correct", "incorrect", "skipped"] },
         "ts": { "type": "string", "format": "date-time" },
         "avatarId": { "$ref": "#/$defs/slug" },
-        "type": { "type": "string", "pattern": "^[a-z]+(_[a-z]+)*$", "description": "Tipo de evento (opcional). En el MVP la PWA solo envía activity_completed (acordado con Alejandro y Rodrigo)." },
+        "type": { "enum": ["activity_completed"], "description": "Tipo de evento (opcional). Único valor del MVP. Se amplía la lista añadiendo valores (aditivo), con aviso a Rodrigo y Alejandro." },
         "classCode": { "$ref": "#/$defs/ClassCode", "description": "Opcional en el evento: normalmente va en el lote de /api/sync. Si va en ambos, el servidor exige que coincidan." }
       }
     }
