@@ -1,0 +1,26 @@
+# Secretos: NUNCA al repositorio
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# Sistema
+.DS_Store
+
+# Dependencias y builds (cada área tiene las suyas)
+node_modules/
+dist/
+build/
+.vite/
+__pycache__/
+*.pyc
+.venv/
+
+# Datos locales
+*.sqlite
+*.db
+data/local/
+
+# Datos personales: no deben existir en el repo
+**/datos-reales/
