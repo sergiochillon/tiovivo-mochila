@@ -79,3 +79,8 @@ a.secondary-link{background:#fffdf5;color:#174c43;border:1.5px solid #d8cfb5;mar
 .check{display:flex;gap:10px;align-items:flex-start;font-weight:600;cursor:pointer}.check input{width:22px;height:22px;margin-top:2px;flex:none;accent-color:#174c43}
 .approved{background:#e4eedf;border:2px solid #174c43;border-radius:16px;padding:14px 16px;margin-top:12px}.approved strong{color:#174c43}
 @media(max-width:480px){header{padding:12px 0}.edition{font-size:.61rem}.map-copy{padding:8px 12px}aside{background-position:58% center}.teacher aside{min-height:90px}.avatar,.answer{width:calc(50% - 4px)}.avatar+.avatar,.answer+.answer{margin-left:8px}.metrics{gap:8px}}
+
+.reading-control { display:flex; flex-wrap:wrap; gap:.6rem; align-items:center; margin:.5rem 0; }
+.reading-control small { font:inherit; font-size:.85rem; text-transform:none; letter-spacing:normal; }
+.celebrate .reading-control { justify-content:center; }
+.celebrate .reading-control button { width:auto; margin:0; }
