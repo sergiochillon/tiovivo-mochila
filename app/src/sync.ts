@@ -6,7 +6,7 @@ export interface Progress {
   avatarId: 'zorro' | 'colibri'
   packId: string
   activityId: string
-  result: 'correct'
+  result: 'correct' | 'completed'
   type: 'activity_completed'
   ts: string
   classCode: string

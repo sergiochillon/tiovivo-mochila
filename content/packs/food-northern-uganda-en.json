@@ -13,8 +13,10 @@
     "ageRange": "6-10"
   },
   "review": {
-    "status": "draft",
-    "notes": "Pedagogical draft by Carlos for technical and cultural review. Not approved and not tested with children. Before approval, confirm foods and wording with someone from the selected community, ideally in the language children use. Review the handwashing activity against available resources."
+    "status": "approved",
+    "reviewedBy": "Carlos Herrero",
+    "reviewedAt": "2026-11-04T16:44:06+01:00",
+    "notes": "Revisión pedagógica aprobada por Carlos Herrero el 4 nov 2026. La validación cultural local sigue pendiente: confirmar alimentos, preparación, nombre Ayo y adecuación del inglés con una persona de la comunidad concreta. No probado con niños. Esta aprobación no implica validación por la comunidad."
   },
   "modules": [
     {
@@ -68,7 +70,7 @@
             { "id": "try-without-asking", "text": "Try it without asking" }
           ],
           "correct": "ask-trusted-adult",
-          "feedback": "It is okay to ask for help. An adult can explain how to prepare that food safely.",
+          "feedback": "It is okay to ask for help. Ask a trusted adult to help you find out whether the food needs cooking and how to prepare it safely.",
           "safetyTag": "help-adult",
           "durationMin": 2
         },

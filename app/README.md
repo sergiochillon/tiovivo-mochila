@@ -44,3 +44,13 @@ Abrir /docente en el mismo origen y navegador que el reproductor. «Enviar progr
 Por defecto el frontend usa /api en su propio origen. Para probar con el servidor de Álex en el puerto 3001 y una vista previa separada, compilar con `VITE_API_BASE_URL=http://127.0.0.1:3001/api npm run build -- --mode revision` y servir con `npm run preview -- --host 127.0.0.1 --port 4173`. El servidor debe permitir ese origen. /revision es solo para pruebas internas. La compilación de demo usa `npm run build`.
 
 Prueba local en Chrome con el servidor de la PR 9 (f401bba): se completó la actividad, se intentó enviar sin red y se conservó el evento. Después se simuló la pérdida de la respuesta de un envío que el servidor sí almacenó. Al reintentar, el panel mantuvo 1 evento y 1 actividad completada. Un nuevo envío indicó que todo estaba enviado, y Zorro conservó su resultado.
+
+## Paquetes para el alumno
+
+Abrir `/alumno?pack=alimentacion-andes-es` o `/alumno?pack=food-northern-uganda-en`. Si se omite el ID se solicita Andes. El reproductor solicita `GET /api/packs/:id`, valida el esquema v0.1, el identificador y la aprobación antes de guardar el paquete en IndexedDB. Para reabrirlo sin conexión hay que visitar la misma URL con conexión una primera vez. Un 404 elimina la copia de ese ID. Para una API en otro origen configurar VITE_API_BASE_URL al compilar.
+
+El selector de actividades admite historias, elección, ordenación y escenarios. Las pistas permiten reintentar. Cada finalización se conserva por paquete, actividad y avatar y entra en el envío manual. El ejemplo técnico de /revision conserva su actividad de elección aislada.
+
+## Proxy temporal para la prueba física de sincronización
+
+Compilar sin VITE_API_BASE_URL para que el iPhone utilice /api en el mismo origen HTTPS que la PWA. Con la API de datos de prueba en 127.0.0.1:3001, ejecutar `MOCHILA_IPHONE_PROXY=1 npm run preview -- --host 127.0.0.1 --port 4173 --strictPort`. El túnel apunta exclusivamente a esa vista previa. El proxy reenvía GET /api/packs/:id (la API solo sirve aprobados), POST /api/sync y GET /api/progress/DEMO-01. Cualquier otro método o ruta de API queda bloqueado, incluidos generación y aprobación.
