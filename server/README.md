@@ -19,6 +19,8 @@ Por defecto escucha en `http://127.0.0.1:3001`. Configuración opcional:
   Vite en `localhost:5173`, `127.0.0.1:5173`, `localhost:4173` y
   `127.0.0.1:4173`).
 - `MOCHILA_DATA_DIR`: directorio alternativo para el almacén JSON local.
+- `GEMINI_API_KEY`: clave opcional del servidor para generación asistida con Gemini.
+- `GEMINI_MODEL`: modelo Gemini opcional (por defecto `gemini-3.5-flash`, probado en la API gratuita).
 
 El servidor crea `data/store.json` al guardar el primer borrador, aprobación o
 lote de progreso. El directorio local está ignorado por Git. No hay paquetes
@@ -42,13 +44,26 @@ servidor con el mismo valor.
 
 - `POST /api/generate`: valida JSON asistido y guarda un paquete como `draft`.
   Reenviar el ID actualiza el borrador; un paquete aprobado no se sobrescribe.
+- `GET /api/prompt?country=...&region=...&language=es&foods=...`: construye la
+  plantilla con las reglas pedagógicas y el contexto. Repite `foods` para varios
+  alimentos. Devuelve `422` si falta contexto o excede los límites.
+- `POST /api/generate/ai`: recibe `{ "context": { "country", "region",
+  "language", "foods": [] } }`, llama a Gemini desde el servidor, valida la
+  respuesta con pack-v0.1 y guarda el resultado como `draft`. `GEMINI_API_KEY`
+  nunca se envía al cliente; si falta, devuelve `503 ai_not_configured`.
+- `GET /api/drafts/:id`: recupera solo borradores para edición; paquetes
+  aprobados o IDs inexistentes devuelven `404`.
 - `POST /api/review/approve`: registra revisor y fecha en el servidor.
 - `GET /api/packs/:id`: devuelve solo paquetes aprobados.
 - `POST /api/sync`: valida el lote completo, guarda de forma atómica e
   idempotente por `eventId`.
 - `GET /api/progress/:classCode`: devuelve contadores agregados sin avatares.
 
-El endpoint de generación no llama a un proveedor de IA. Las claves no son
-necesarias para el flujo asistido y nunca se registran cuerpos de petición.
+El `POST /api/generate` original conserva el flujo de JSON pegado y validado.
+La llamada opcional a Gemini envía únicamente el contexto indicado y las reglas
+pedagógicas. En el nivel gratuito, Google puede usar el contenido enviado para
+mejorar sus productos; usa solo contextos sintéticos o no personales. Las claves
+se guardan en `server/.env` (ignorado por Git) y nunca se registran cuerpos de
+petición. Ninguna generación se aprueba automáticamente.
 
 `npm run typecheck` comprueba los tipos TypeScript sin iniciar el servidor.
