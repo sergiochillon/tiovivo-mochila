@@ -1,5 +1,6 @@
 import pack from './demo.json'
 import './style.css'
+import { classTotals, sendProgress, type Progress } from './sync'
 import fox from './zorro.svg'
 import bird from './colibri.svg'
 const avatars = [
@@ -12,17 +13,6 @@ const choice = pack.modules.flatMap(module => module.activities).find(item => it
 if (!choice?.options || typeof choice.correct !== 'string') throw new Error('Falta la actividad de elección del ejemplo')
 const activity = { ...choice, options: choice.options, correct: choice.correct }
 type Avatar = typeof avatars[number]
-interface Progress {
-  eventId: string
-  avatarId: Avatar['id']
-  packId: string
-  activityId: string
-  result: 'correct'
-  type: 'activity_completed'
-  ts: string
-  classCode: string
-}
-
 const database = new Promise<IDBDatabase>((resolve, reject) => {
   const request = indexedDB.open('mochila-aula', 2)
   request.onupgradeneeded = event => {
@@ -136,11 +126,66 @@ function complete(avatar: Avatar) {
   button('Cambiar de avatar', choose)
 }
 
-const technicalPreview = location.pathname === '/revision'
+function teacherPanel() {
+  document.body.classList.add('teacher')
+  screen('Cuaderno de clase', 'Seguimiento del progreso · Clase DEMO-01')
+  const metrics = document.createElement('div')
+  metrics.className = 'metrics'
+  function metric(label: string) {
+    const card = document.createElement('div')
+    const value = document.createElement('strong')
+    value.textContent = '—'
+    const caption = document.createElement('span')
+    caption.textContent = label
+    card.append(value, caption)
+    metrics.append(card)
+    return value
+  }
+  const received = metric('Eventos recibidos')
+  const completed = metric('Actividades completadas')
+  lesson.append(metrics)
+  const totals = document.createElement('p')
+  const status = document.createElement('p')
+  status.setAttribute('role', 'status')
+  async function refresh() {
+    try {
+      const data = await classTotals()
+      received.textContent = String(data.eventsReceived)
+      completed.textContent = String(data.activitiesCompleted)
+      totals.textContent = 'Datos de la última consulta al servidor.'
+    }
+    catch { totals.textContent = 'No se pueden consultar los contadores ahora.' }
+  }
+  const panelTitle = document.createElement('h2')
+  panelTitle.textContent = 'Sincronizar la clase'
+  const explanation = document.createElement('p')
+  explanation.textContent = 'Envía las actividades guardadas en este dispositivo cuando tengas conexión.'
+  lesson.append(panelTitle, explanation)
+  const submit = button('Enviar progreso', async () => {
+    submit.disabled = true
+    try {
+      status.textContent = await sendProgress(await database)
+      await refresh()
+    } catch (error) {
+      status.textContent = 'El progreso sigue guardado. ' +
+        (error instanceof Error ? error.message : '') + ' Puedes volver a enviarlo.'
+    } finally {
+      submit.disabled = false
+    }
+  })
+  button('Actualizar contadores', refresh)
+  lesson.append(status, totals)
+  void refresh()
+}
+
+const reviewRoute = location.pathname === '/revision'
+const technicalPreview = reviewRoute && import.meta.env.MODE === 'revision'
 if (technicalPreview) {
   document.querySelector('header')!.append(' · Revisión técnica')
   document.querySelector('footer')!.textContent = 'Ejemplo técnico en borrador · Solo para pruebas del equipo.'
 }
-if (pack.review.status === 'approved' || technicalPreview) choose()
+if (location.pathname === '/docente') teacherPanel()
+else if (reviewRoute && !technicalPreview) screen('Página no disponible')
+else if (pack.review.status === 'approved' || technicalPreview) choose()
 else screen('Este material está pendiente de revisión')
 database.catch(storageError)
