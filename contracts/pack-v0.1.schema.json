@@ -89,7 +89,7 @@
             { "$ref": "#/$defs/slug" },
             { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
           ],
-          "description": "choice/scenario: id de la opción correcta (o varias). order: ids de opciones en orden correcto. match: elementos 'idA:idB'. story: se omite. Semántica de match/order pendiente de confirmar con Rodrigo."
+          "description": "choice/scenario: id de la opción correcta (o varias). order: ids de opciones en orden correcto. match: elementos 'idA:idB' (pareja izquierda-derecha; el orden de las parejas no importa; los ids no admiten ':'). story: se omite. Semántica confirmada por Rodrigo el 4 nov."
         },
         "feedback": { "type": "string", "minLength": 1, "maxLength": 300, "description": "Mensaje al terminar. Tono positivo, sin culpabilizar." },
         "safetyTag": { "type": "string", "pattern": "^[a-z]+(-[a-z]+)*$", "description": "Etiqueta de seguridad revisada por Carlos. Ej.: none, help-adult, hygiene." },
@@ -102,11 +102,18 @@
         }
       ]
     },
+    "ClassCode": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]+(-[A-Z0-9]+)*$",
+      "minLength": 4,
+      "maxLength": 12,
+      "description": "Código de clase simulado. Admite DEMO01 y DEMO-01."
+    },
     "ProgressEvent": {
       "description": "Evento de progreso en el dispositivo (outbox). avatarId es un seudónimo local, nunca un nombre real. Sin PII.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["eventId", "packId", "activityId", "result", "ts", "avatarId", "classCode"],
+      "required": ["eventId", "packId", "activityId", "result", "ts", "avatarId"],
       "properties": {
         "eventId": { "type": "string", "minLength": 8, "description": "Único por evento; el servidor lo usa para idempotencia." },
         "packId": { "$ref": "#/$defs/slug" },
@@ -114,7 +121,8 @@
         "result": { "enum": ["completed", "correct", "incorrect", "skipped"] },
         "ts": { "type": "string", "format": "date-time" },
         "avatarId": { "$ref": "#/$defs/slug" },
-        "classCode": { "type": "string", "pattern": "^[A-Z0-9]{4,8}$" }
+        "type": { "$ref": "#/$defs/slug", "description": "Tipo de evento (opcional). Valores por definir entre Rodrigo y Alejandro en sync-api.md; hasta entonces, cualquier slug." },
+        "classCode": { "$ref": "#/$defs/ClassCode", "description": "Opcional en el evento: normalmente va en el lote de /api/sync. Si va en ambos, el servidor exige que coincidan." }
       }
     }
   }

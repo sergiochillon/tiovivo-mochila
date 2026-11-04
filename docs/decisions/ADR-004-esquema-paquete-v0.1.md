@@ -18,7 +18,7 @@ Adoptar `contracts/pack-v0.1.schema.json` (JSON Schema 2020-12) como contrato, p
 - Ejemplo sintético: `contracts/pack-example.json` (estado `draft`, no apto para niños).
 
 ## Puntos abiertos para los revisores
-1. **Rodrigo:** semántica de `correct` en `match` (`"idA:idB"`) y `order` (lista ordenada); ¿le sirve así?
+1. ~~**Rodrigo:** semántica de `correct`~~ **Confirmada** (4 nov): `order` compara la secuencia de ids; `match` son parejas `"idA:idB"` izquierda-derecha, sin importar el orden. No necesita campos nuevos.
 2. **Alejandro:** `ajv` con formatos (`date-time`) y `additionalProperties:false`; ¿le encaja con el generador?
 3. **Carlos:** valores de `safetyTag` (ahora cualquier texto en minúsculas con guiones); ¿cerrar una lista?
 
@@ -30,3 +30,6 @@ Adoptar `contracts/pack-v0.1.schema.json` (JSON Schema 2020-12) como contrato, p
 - Mejora: todos construyen sobre el mismo contrato y validan lo mismo.
 - Empeora: cualquier cambio exige aviso.
 - Estado de verificación: el esquema es JSON válido, pero **no se ha probado todavía con un validador real (ajv)**.
+
+## Actualización (4 nov): ProgressEvent y /api/sync
+Rodrigo y Alejandro detectaron que el `ProgressEvent` del borrador no encajaba con el borrador de `/api/sync`. Cambios propuestos en el esquema (aditivos): `type` opcional (slug), `classCode` opcional en el evento (el contrato lo pone en el lote; si va en ambos deben coincidir) y `classCode` acepta `DEMO01` y `DEMO-01`. Pendiente: Alejandro confirma los valores de `type` y que su `sync-api.md` coincide; no he visto ese borrador en el repo.
