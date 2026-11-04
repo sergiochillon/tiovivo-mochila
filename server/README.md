@@ -20,7 +20,7 @@ Por defecto escucha en `http://127.0.0.1:3001`. Configuración opcional:
   `127.0.0.1:4173`).
 - `MOCHILA_DATA_DIR`: directorio alternativo para el almacén JSON local.
 - `GEMINI_API_KEY`: clave opcional del servidor para generación asistida con Gemini.
-- `GEMINI_MODEL`: modelo Gemini opcional (por defecto `gemini-3.8-flash`).
+- `GEMINI_MODEL`: modelo Gemini opcional (por defecto `gemini-3.5-flash`, probado en la API gratuita).
 
 El servidor crea `data/store.json` al guardar el primer borrador, aprobación o
 lote de progreso. El directorio local está ignorado por Git. No hay paquetes

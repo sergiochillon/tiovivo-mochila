@@ -1,4 +1,4 @@
-const defaultModel = "gemini-3.8-flash";
+const defaultModel = "gemini-3.5-flash";
 
 type GeminiResponse = {
   candidates?: Array<{
