@@ -51,4 +51,31 @@ button.activity.next{border:2.5px solid #174c43;background:#fffdf7;box-shadow:0 
 .celebrate .seals{margin:16px auto}.celebrate button{display:block;width:100%;max-width:420px;margin:10px auto 0}
 .seal{width:clamp(140px,38vw,200px);margin:0 auto 12px}.seal svg{display:block;width:100%;height:auto}
 .celebrate .badge{transform:none;background:#174c43;color:#f3c76b;border:0;border-radius:999px;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;padding:6px 14px}
+a.button-link{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;margin:4px 6px 4px 0;border-radius:14px;background:#215a49;color:#fffdf0;font-weight:700;text-decoration:none}
+a.secondary-link{background:#fffdf5;color:#174c43;border:1.5px solid #d8cfb5;margin-top:18px}
+.authoring>p{max-width:62ch}
+.author-step{padding:18px 0 22px;border-top:1px solid #e2d8bf;margin-top:8px}
+.author-step h2{display:flex;align-items:center;gap:10px;font:700 1.35rem/1.2 Georgia,serif;margin:0 0 4px;color:#174c43}
+.step-number{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#174c43;color:#f3c76b;font:800 1rem/1 "Avenir Next",system-ui,sans-serif;flex:none}
+.step-help{color:#4f5d58;margin:0 0 14px;max-width:62ch}
+.field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:12px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field-label{font-weight:700;font-size:.92rem}
+.field-help,.authoring .field small{font:600 .8rem/1.3 "Avenir Next",system-ui,sans-serif;letter-spacing:0;text-transform:none;color:#4f5d58}
+.field input,.field select,.field textarea{font:inherit;font-size:1rem;padding:10px 12px;border:1.5px solid #cfc6aa;border-radius:12px;background:#fff;color:#193f34;width:100%}
+.field textarea{resize:vertical;line-height:1.45}
+.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid #af501e55;border-color:#af501e}
+.prompt-box{margin-top:6px}.prompt-box textarea{font:.85rem/1.45 ui-monospace,monospace;background:#fbf8ee}
+.notice{border-radius:12px;padding:10px 14px;margin:10px 0;font-weight:600}.notice p{margin:.2rem 0}
+.notice.ok{background:#e4eedf;color:#174c43}.notice.error{background:#fbe3d6;color:#7a3414}
+.review-list{display:grid;gap:12px;margin-bottom:12px}
+.review-card{border:1.5px solid #e2d8bf;border-radius:16px;padding:14px;background:#fff}
+.review-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.review-top small{font:800 .76rem/1.3 "Avenir Next",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#174c43}
+.chip{font-size:.78rem;font-weight:700;background:#fbe9c0;color:#5b4a2e;border-radius:999px;padding:3px 10px}
+.option-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 12px}
+.teacher-note{font-size:.88rem;color:#4f5d58;background:#f6f2e4;border-radius:10px;padding:8px 12px;margin:4px 0 0}
+.checklist{display:grid;gap:8px;margin-bottom:14px}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:600;cursor:pointer}.check input{width:22px;height:22px;margin-top:2px;flex:none;accent-color:#174c43}
+.approved{background:#e4eedf;border:2px solid #174c43;border-radius:16px;padding:14px 16px;margin-top:12px}.approved strong{color:#174c43}
 @media(max-width:480px){header{padding:12px 0}.edition{font-size:.61rem}.map-copy{padding:8px 12px}aside{background-position:58% center}.teacher aside{min-height:90px}.avatar,.answer{width:calc(50% - 4px)}.avatar+.avatar,.answer+.answer{margin-left:8px}.metrics{gap:8px}}
