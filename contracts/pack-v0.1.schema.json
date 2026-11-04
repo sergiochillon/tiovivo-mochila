@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sergiochillon/tiovivo-mochila/contracts/pack-v0.1.schema.json",
+  "title": "MOCHILA Pack v0.1",
+  "description": "BORRADOR v0.1 (pendiente de aprobación de Rodrigo, Alejandro y Carlos; congelación prevista M1, 14:30 del 4 nov). Paquete de contenido: se genera con conexión, se revisa por una persona y se reproduce sin conexión. Sin datos personales. Regla: los campos se AÑADEN, no se renombran ni se quitan sin Issue + aviso a las áreas afectadas.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["packVersion", "id", "title", "language", "context", "review", "modules"],
+  "properties": {
+    "packVersion": { "const": "0.1" },
+    "id": { "$ref": "#/$defs/slug" },
+    "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "language": { "enum": ["es", "en"] },
+    "context": { "$ref": "#/$defs/Context" },
+    "review": { "$ref": "#/$defs/Review" },
+    "modules": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/Module" }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 80
+    },
+    "Context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["country", "region", "communityType", "foods", "resources", "ageRange"],
+      "properties": {
+        "country": { "type": "string", "minLength": 1 },
+        "region": { "type": "string", "minLength": 1 },
+        "communityType": { "type": "string", "minLength": 1, "description": "Ej.: rural andina, comunidad rural del norte de Uganda." },
+        "foods": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1, "description": "Alimentos locales y asequibles que pueden aparecer en las actividades." },
+        "resources": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "Recursos disponibles en el contexto (fuentes de agua, huerto, mercado, etc.)." },
+        "culturalNotes": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "ageRange": { "const": "6-10" }
+      }
+    },
+    "Review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["draft", "approved"] },
+        "reviewedBy": { "type": "string", "minLength": 1, "description": "Nombre o rol del revisor humano. Nunca datos de menores." },
+        "reviewedAt": { "type": "string", "format": "date-time" },
+        "notes": { "type": "string" }
+      },
+      "if": { "properties": { "status": { "const": "approved" } }, "required": ["status"] },
+      "then": { "required": ["status", "reviewedBy", "reviewedAt"] }
+    },
+    "Module": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "topic", "title", "activities"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "topic": { "enum": ["food", "help", "emotions"] },
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "activities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Activity" } }
+      }
+    },
+    "Option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "text": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "icon": { "type": "string", "description": "Pictograma o emoji opcional para niños que leen poco." },
+        "feedback": { "type": "string", "description": "Respuesta específica a esta opción (opcional)." }
+      }
+    },
+    "Activity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "prompt", "feedback", "safetyTag", "durationMin"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "type": { "enum": ["story", "choice", "match", "order", "scenario"] },
+        "prompt": { "type": "string", "minLength": 1, "maxLength": 400 },
+        "audioText": { "type": "string", "maxLength": 400, "description": "Texto para la voz del navegador, si difiere de prompt." },
+        "options": { "type": "array", "items": { "$ref": "#/$defs/Option" } },
+        "correct": {
+          "oneOf": [
+            { "$ref": "#/$defs/slug" },
+            { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
+          ],
+          "description": "choice/scenario: id de la opción correcta (o varias). order: ids de opciones en orden correcto. match: elementos 'idA:idB'. story: se omite. Semántica de match/order pendiente de confirmar con Rodrigo."
+        },
+        "feedback": { "type": "string", "minLength": 1, "maxLength": 300, "description": "Mensaje al terminar. Tono positivo, sin culpabilizar." },
+        "safetyTag": { "type": "string", "pattern": "^[a-z]+(-[a-z]+)*$", "description": "Etiqueta de seguridad revisada por Carlos. Ej.: none, help-adult, hygiene." },
+        "durationMin": { "type": "integer", "minimum": 1, "maximum": 10 }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "enum": ["choice", "scenario", "match", "order"] } }, "required": ["type"] },
+          "then": { "required": ["options", "correct"] }
+        }
+      ]
+    },
+    "ProgressEvent": {
+      "description": "Evento de progreso en el dispositivo (outbox). avatarId es un seudónimo local, nunca un nombre real. Sin PII.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eventId", "packId", "activityId", "result", "ts", "avatarId", "classCode"],
+      "properties": {
+        "eventId": { "type": "string", "minLength": 8, "description": "Único por evento; el servidor lo usa para idempotencia." },
+        "packId": { "$ref": "#/$defs/slug" },
+        "activityId": { "$ref": "#/$defs/slug" },
+        "result": { "enum": ["completed", "correct", "incorrect", "skipped"] },
+        "ts": { "type": "string", "format": "date-time" },
+        "avatarId": { "$ref": "#/$defs/slug" },
+        "classCode": { "type": "string", "pattern": "^[A-Z0-9]{4,8}$" }
+      }
+    }
+  }
+}

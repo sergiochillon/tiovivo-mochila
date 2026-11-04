@@ -1,0 +1,65 @@
+{
+  "packVersion": "0.1",
+  "id": "ejemplo-alimentacion-andes",
+  "title": "Ejemplo técnico: comer variado en los Andes",
+  "language": "es",
+  "context": {
+    "country": "Perú",
+    "region": "Andes rurales",
+    "communityType": "comunidad rural andina",
+    "foods": ["papa", "habas", "quinua", "huevo", "zanahoria"],
+    "resources": ["huerto familiar", "mercado semanal"],
+    "culturalNotes": ["Ejemplo técnico sin revisión cultural."],
+    "ageRange": "6-10"
+  },
+  "review": {
+    "status": "draft",
+    "notes": "EJEMPLO TÉCNICO para probar el reproductor y el validador. No es contenido pedagógico revisado. No mostrar a niños."
+  },
+  "modules": [
+    {
+      "id": "alimentacion",
+      "topic": "food",
+      "title": "Un plato con colores",
+      "activities": [
+        {
+          "id": "historia-plato",
+          "type": "story",
+          "prompt": "Ana prepara su plato con papa, habas y zanahoria. Cada comida tiene un color diferente.",
+          "audioText": "Ana prepara su plato con papa, habas y zanahoria. Cada comida tiene un color diferente.",
+          "feedback": "¡Muy bien! Un plato con varios colores es un plato variado.",
+          "safetyTag": "none",
+          "durationMin": 1
+        },
+        {
+          "id": "elige-plato",
+          "type": "choice",
+          "prompt": "¿Qué plato tiene más colores?",
+          "options": [
+            { "id": "solo-papa", "text": "Solo papa", "icon": "🥔" },
+            { "id": "papa-habas-zanahoria", "text": "Papa, habas y zanahoria", "icon": "🥕" }
+          ],
+          "correct": "papa-habas-zanahoria",
+          "feedback": "¡Eso es! Cuantos más colores, más variado.",
+          "safetyTag": "none",
+          "durationMin": 2
+        },
+        {
+          "id": "lavar-manos",
+          "type": "order",
+          "prompt": "Ordena los pasos antes de comer.",
+          "options": [
+            { "id": "mojar-manos", "text": "Mojarme las manos" },
+            { "id": "usar-jabon", "text": "Usar jabón" },
+            { "id": "enjuagar", "text": "Enjuagar" },
+            { "id": "secar", "text": "Secar" }
+          ],
+          "correct": ["mojar-manos", "usar-jabon", "enjuagar", "secar"],
+          "feedback": "¡Genial! Las manos limpias ayudan a cuidar tu cuerpo.",
+          "safetyTag": "hygiene",
+          "durationMin": 2
+        }
+      ]
+    }
+  ]
+}
