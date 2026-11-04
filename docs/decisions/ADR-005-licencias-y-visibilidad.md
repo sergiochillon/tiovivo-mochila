@@ -1,12 +1,12 @@
 # ADR-005 · Licencias y visibilidad del repositorio
 
 - **Fecha:** 2026-11-04
-- **Estado:** propuesta, revisión 2 tras los comentarios de Alejandro (necesita el visto bueno de los cinco; P-08)
+- **Estado:** aprobada (4 nov): ok de Rodrigo, Carlos, Mario y Sergio; Alejandro aprueba con las condiciones de esta revisión. **Versión decidida: CC BY-NC-SA 4.0**, porque la Base 9 dice «os recomendamos Creative Commons BY-NC-SA 3.0» (recomendación, no exigencia). Aplicada en `LICENSE`, `LICENSE-CONTENT.md` y `README.md`. Pendiente antes de publicar: revisión de secretos y datos personales en el historial.
 - **Propone:** Sergio
 - **Aprueba:** todo el equipo (los cinco son coautores y titulares de lo que licenciamos)
 
 ## Contexto
-Las bases exigen liberar lo entregado con licencia libre: el código con cualquier licencia aprobada por opensource.org; para documentación y recursos, según nuestro resumen de las bases (`PROJECT_CONTEXT.md §1`), **se recomienda** CC BY-NC-SA 3.0. **Pendiente: confirmar contra el texto literal de las bases si es una recomendación o una exigencia** (lo comprueba Sergio). La entrega incluye un enlace a GitHub y vence el jueves 5 nov a las 23:59. Hoy el repositorio es privado.
+Las bases exigen liberar lo entregado con licencia libre: el código con cualquier licencia aprobada por opensource.org; para documentación y recursos, según nuestro resumen de las bases (`PROJECT_CONTEXT.md §1`), **se recomienda** CC BY-NC-SA 3.0. **Confirmado con el texto de las bases (Base 9):** «Para la documentación y assets os recomendamos Creative Commons BY-NC-SA 3.0». Es una recomendación. La entrega incluye un enlace a GitHub y vence el jueves 5 nov a las 23:59. Hoy el repositorio es privado.
 
 No es asesoramiento jurídico: es la opción más simple que cumple lo que piden las bases, con sus límites explicados.
 
