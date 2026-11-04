@@ -1,0 +1,85 @@
+{
+  "packVersion": "0.1",
+  "id": "food-andes-es-example",
+  "title": "Una merienda posible",
+  "language": "es",
+  "context": {
+    "country": "Perú",
+    "region": "Andes rurales (contexto de ejemplo)",
+    "communityType": "rural",
+    "foods": ["A VALIDAR localmente antes de publicar: alimentos disponibles y asequibles en la comunidad elegida"],
+    "resources": ["A VALIDAR localmente: disponibilidad, coste, agua y utensilios habituales"],
+    "culturalNotes": ["Paquete de ejemplo, no validado culturalmente. No describe a todas las comunidades ni familias de los Andes rurales."],
+    "ageRange": "6-10"
+  },
+  "review": {
+    "status": "draft",
+    "reviewedBy": "",
+    "reviewedAt": "",
+    "notes": "Borrador de referencia. Antes de uso, sustituir los metadatos A VALIDAR con revisión local, verificar vocabulario y validar contra el contrato definitivo. No mostrar marcadores al niño. Sin aprobación humana."
+  },
+  "modules": [
+    {
+      "id": "food",
+      "topic": "food",
+      "title": "Una merienda que tenemos a mano",
+      "activities": [
+        {
+          "id": "food-01",
+          "type": "story",
+          "prompt": "Ana quiere preparar algo para comer. ¿Qué debe hacer antes de tocar los alimentos?",
+          "audioText": "Ana quiere preparar algo para comer. ¿Qué debe hacer antes de tocar los alimentos?",
+          "options": ["Lavarse las manos como le enseñó una persona adulta", "Tocar la comida sin lavarse las manos"],
+          "correct": 0,
+          "feedback": "Lavarse las manos antes de preparar o comer ayuda a mantenerlas limpias. Si no sabe cómo hacerlo, Ana puede preguntar a una persona adulta.",
+          "safetyTag": "no-shame-no-food-assumptions",
+          "durationMin": 2
+        },
+        {
+          "id": "food-02",
+          "type": "choice",
+          "prompt": "Hay varios alimentos en casa. ¿Qué opción ayuda a elegir una merienda posible para hoy?",
+          "audioText": "Hay varios alimentos en casa. ¿Qué opción ayuda a elegir una merienda posible para hoy?",
+          "options": ["Elegir algo que la familia tiene disponible", "Esperar a conseguir un alimento que no hay"],
+          "correct": 0,
+          "feedback": "Podemos pensar en lo que está disponible hoy. Cada familia elige según sus posibilidades, sin que una opción sirva para todas.",
+          "safetyTag": "no-shame-no-food-assumptions",
+          "durationMin": 2
+        },
+        {
+          "id": "food-03",
+          "type": "match",
+          "prompt": "¿Qué haces si no sabes si un alimento necesita cocinarse antes de comerlo?",
+          "audioText": "¿Qué haces si no sabes si un alimento necesita cocinarse antes de comerlo?",
+          "options": ["Preguntar a una persona adulta de confianza", "Probarlo sin preguntar"],
+          "correct": 0,
+          "feedback": "Buena idea: una persona adulta puede decirte cómo preparar ese alimento de forma segura.",
+          "safetyTag": "adult-help-food-safety",
+          "durationMin": 3
+        },
+        {
+          "id": "food-04",
+          "type": "order",
+          "prompt": "Ordena estos pasos para preparar una merienda sencilla con un alimento disponible en casa.",
+          "audioText": "Ordena los pasos para preparar una merienda sencilla.",
+          "options": ["Lavarse las manos", "Pedir ayuda adulta si hace falta usar un utensilio o cocinar", "Preparar un alimento disponible en casa"],
+          "correct": [0, 1, 2],
+          "feedback": "El orden puede cambiar según la comida y lo que haya en casa. Para utensilios o cocina, pide ayuda a una persona adulta.",
+          "safetyTag": "adult-help-when-needed",
+          "durationMin": 3
+        },
+        {
+          "id": "food-05",
+          "type": "scenario",
+          "prompt": "Vas a preparar un alimento y necesitas usar un cuchillo o cocinar. ¿Qué haces?",
+          "audioText": "Vas a preparar un alimento y necesitas usar un cuchillo o cocinar. ¿Qué haces?",
+          "options": ["Pedir ayuda a una persona adulta", "Usar el cuchillo o el fuego sin ayuda"],
+          "correct": 0,
+          "feedback": "Pedir ayuda está bien. Usa utensilios o fuego solo con la ayuda adecuada de una persona adulta.",
+          "safetyTag": "adult-supervision-food-preparation",
+          "durationMin": 2
+        }
+      ]
+    }
+  ]
+}
