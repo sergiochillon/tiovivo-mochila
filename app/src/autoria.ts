@@ -242,7 +242,7 @@ export function authoring(lesson: HTMLElement) {
     if (errors.length) { messages(target, 'error', ['Hay campos que corregir:', ...errors]); return false }
     const { status, data } = await send('/generate', { pack: current })
     if (status !== 200) { messages(target, 'error', serverLines(data)); return false }
-    draft = data.pack as Draft
+    // The editor controls still reference the activities in the current draft.
     return true
   }
 
