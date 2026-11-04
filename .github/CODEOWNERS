@@ -1,16 +1,16 @@
 # Propietarios por carpeta. Sustituir @usuario por el usuario real de GitHub de cada persona
 # cuando Sergio haya recibido los usuarios (T-03). Hasta entonces este archivo es solo documentación.
 #
-# Roles: Sergio = integración · Rodrigo = producto/pitch · Mario = front · Alejandro = back/IA · Carlos = contenido/QA
+# Roles: Sergio = integración · Mario = producto/pitch · Rodrigo = front · Alejandro = back/IA · Carlos = contenido/QA
 
 *                         @sergiochillon
-/app/                     @MarioUllan
+/app/                     @rodrigoocbz
 /server/                  @Alexesteevez
 /contracts/sync-api.md    @Alexesteevez
 /content/                 @carloshg1
 /qa/                      @carloshg1
-/pitch/                   @rodrigoocbz
-/research/                @rodrigoocbz
-/docs/PRODUCT_BRIEF.md            @rodrigoocbz
-/docs/RESEARCH_AND_VALIDATION.md  @rodrigoocbz
-/docs/PITCH_AND_DEMO.md           @rodrigoocbz
+/pitch/                   @MarioUllan
+/research/                @MarioUllan
+/docs/PRODUCT_BRIEF.md            @MarioUllan
+/docs/RESEARCH_AND_VALIDATION.md  @MarioUllan
+/docs/PITCH_AND_DEMO.md           @MarioUllan

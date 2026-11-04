@@ -68,12 +68,12 @@ MOCHILA separa dos momentos:
 |---|---|---|
 | `docs/` | Documentación y decisiones (`docs/decisions/`) | Ver `TEAM_ROLES.md` |
 | `contracts/` | Interfaces entre áreas (esquema del paquete, API de sincronización) | Sergio (esquema) · Alejandro (API) |
-| `app/` | PWA: reproductor del niño + interfaz de autoría | Mario |
+| `app/` | PWA: reproductor del niño + interfaz de autoría | Rodrigo |
 | `server/` | Generación con IA, validación, sincronización | Alejandro |
 | `content/` | Paquetes de contenido revisados y reglas pedagógicas | Carlos |
 | `qa/` | Plan de pruebas y registro de pruebas offline | Carlos |
-| `pitch/` | Guion, diapositivas, vídeo, guion de demo | Rodrigo |
-| `research/` | Notas de validación, competencia, fuentes | Rodrigo |
+| `pitch/` | Guion, diapositivas, vídeo, guion de demo | Mario |
+| `research/` | Notas de validación, competencia, fuentes | Mario |
 | `scripts/` | Utilidades (diagnóstico de Macs) | Sergio |
 
 Lectura recomendada para cualquier integrante nuevo (o IA): `docs/PROJECT_CONTEXT.md` → `docs/TEAM_ROLES.md` → `docs/GIT_WORKFLOW.md` → tu carpeta.

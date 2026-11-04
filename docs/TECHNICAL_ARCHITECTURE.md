@@ -20,20 +20,20 @@ Criterios de elección: velocidad de desarrollo, funcionar en Mac M1, facilidad 
 3. **Reproductor**: PWA con service worker + IndexedDB. Sin red.
 4. **Sincronización**: endpoint simple que recibe eventos de progreso y un panel docente mínimo.
 
-## 2. Frontend (Mario) — **recomendación [HIPÓTESIS], confirmar en ADR-001**
+## 2. Frontend (Rodrigo) — **recomendación [HIPÓTESIS], confirmar en ADR-001**
 
 - **Vite + TypeScript + React** (o Preact si hay problemas de rendimiento), **vite-plugin-pwa** (Workbox) para service worker y manifiesto, **Dexie** o `idb` para IndexedDB.
 - Una sola app con dos zonas: `/alumno` (reproductor) y `/docente` (autoría y panel).
 - Diseño para niños: pictogramas, botones grandes, poca lectura, audio. Accesibilidad básica (contraste, tamaño táctil, `aria`).
 - Audio: `speechSynthesis` del navegador como primera opción (**[HIPÓTESIS]**: la disponibilidad de voces en español/inglés **varía por dispositivo**; hay que probar en los móviles/tablets reales). Piper WASM es Prescindible.
-- Alternativa más simple si React da problemas: HTML + JS «vanilla» con módulos. Decide Mario con Sergio en el bloque 0, no a mitad de desarrollo.
+- Alternativa más simple si React da problemas: HTML + JS «vanilla» con módulos. Decide Rodrigo con Sergio en el bloque 0, no a mitad de desarrollo.
 
 ## 3. Backend e IA (Alejandro) — **recomendación [HIPÓTESIS], confirmar en ADR-002**
 
 - **Node + TypeScript** con un servidor mínimo (Fastify o Express). Un solo lenguaje con el front para compartir validación (JSON Schema con `ajv`).
 - Alternativa: Python + FastAPI + pydantic si Alejandro es claramente más fuerte ahí. Criterio: **lo que permita tener el endpoint de generación y el de sync funcionando antes de las 18:30**.
 - Almacenamiento: ficheros JSON o SQLite local. **Sin base de datos externa, sin cuentas, sin autenticación** en el MVP (solo un código de clase/PIN simulado, opcional).
-- Endpoints previstos (`contracts/sync-api.md`, lo define Alejandro y lo valida Mario):
+- Endpoints previstos (`contracts/sync-api.md`, lo define Alejandro y lo valida Rodrigo):
   - `POST /api/generate` — recibe contexto, devuelve borrador de paquete (`review.status="draft"`).
   - `POST /api/review/approve` — marca el paquete como aprobado con nombre del revisor y fecha.
   - `GET /api/packs/:id` — devuelve el paquete aprobado.
@@ -68,7 +68,7 @@ Activity { id, type: "story"|"choice"|"match"|"order"|"scenario",
 ProgressEvent { eventId, packId, activityId, result, ts, avatarId, classCode }
 ```
 
-Reglas del contrato: los campos nuevos se **añaden**, no se renombran. Cambiar o quitar un campo = Issue + aviso a Mario, Alejandro y Carlos + aprobación de Sergio.
+Reglas del contrato: los campos nuevos se **añaden**, no se renombran. Cambiar o quitar un campo = Issue + aviso a Rodrigo, Alejandro y Carlos + aprobación de Sergio.
 
 ## 6. Funcionamiento offline
 
@@ -112,7 +112,7 @@ Reglas del contrato: los campos nuevos se **añaden**, no se renombran. Cambiar 
 
 | ADR | Tema | Responsable | Límite |
 |---|---|---|---|
-| ADR-001 | Framework del front (React vs vanilla) y librería PWA | Mario + Sergio | 13:30 hoy |
+| ADR-001 | Framework del front (React vs vanilla) y librería PWA | Rodrigo + Sergio | 13:30 hoy |
 | ADR-002 | Lenguaje/servidor del back (Node vs Python) y proveedor de IA | Alejandro + Sergio | 13:30 hoy (proveedor: 15:00) |
-| ADR-003 | Cómo servir HTTPS para probar en móviles | Sergio + Mario | 15:00 hoy |
+| ADR-003 | Cómo servir HTTPS para probar en móviles | Sergio + Rodrigo | 15:00 hoy |
 | ADR-004 | Congelar esquema de paquete v0.1 | Sergio con los tres | 14:30 hoy (hito M1) |
