@@ -43,3 +43,77 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 - **Resultado:** correcto para el alcance probado: la aplicación reabre y conserva progreso local en Safari con el servidor inaccesible.
 - **Límite:** servidor parado no equivale a una prueba física de modo avión en móvil. No comprueba el recorrido integrado de autoría, aprobación, exportación ni sincronización.
 - **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
+
+## 2026-11-04 — Reapertura en modo avión y recuperación de progreso en iPhone
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** iPhone 17 con iOS 27.2.
+- **Navegador:** Safari.
+- **Conexión y URL:** comenzó con Wi-Fi y HTTPS; después activó modo avión, cerró la pestaña y reabrió la misma URL.
+- **URL usada:** `https://jam-rush-seeking-copied.trycloudflare.com/revision` (túnel temporal, ya cerrado; no es una URL vigente).
+- **Ruta:** `/revision`.
+- **Versión probada:** commit `24f7cf2`.
+- **Actividad y progreso:** completó una actividad con el avatar Zorro antes de desconectar. No se especificó el paquete utilizado.
+- **Acciones y resultado observado:** al reabrir en modo avión apareció el selector de avatares; al elegir Zorro, se recuperó «¡Buen trabajo, Zorro!».
+- **Resultado:** correcto para el alcance probado: la app reabre sin red y recupera el progreso guardado localmente.
+- **Límite:** la actividad se completó antes de desconectar. Esta prueba no demuestra que se pueda completar una actividad nueva offline ni que la sincronización funcione al volver la red.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
+
+## 2026-11-04 — Ensayo integrado de carga, uso local y sincronización
+
+- **Ejecutó:** Sergio, con apoyo de Claude Code.
+- **Registro preparado por:** Carlos, a partir del informe de Sergio.
+- **Dispositivo:** MacBook Air.
+- **Navegador:** navegador integrado, tamaño de viewport móvil; versión no indicada.
+- **Entorno:** API local con datos de prueba y `CORS_ORIGINS`; proxy HTTPS de ADR-003.
+- **Versión probada:** `main` en `e39c184`.
+- **Paquetes:** seed cargó los dos paquetes aprobados; Andes y Uganda se descargaron desde `/alumno`.
+- **Acciones y resultado observado:** con la API parada, se reabrió Andes desde la copia local y se completó una actividad nueva. El envío sin API conservó el progreso. Al volver a iniciar la API, se confirmaron 2 eventos y el panel mostró 2/2. Al reenviar, no se crearon duplicados.
+- **Resultado:** correcto para el recorrido integrado de descarga, actividad local, cola y sincronización con API disponible.
+- **Límite:** no fue modo avión real; el navegador no registró un service worker. No se probó el recorrido integrado en un iPhone. La prueba anterior en iPhone solo cubrió reapertura y recuperación de un resultado completado antes de desconectar.
+- **Fuente del registro:** mensaje de Sergio del 4 nov 2026.
+
+## 2026-11-04 — Actividad nueva en modo avión y sincronización desde iPhone
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** iPhone 17 con iOS 27.2.
+- **Navegador:** Safari.
+- **Conexión:** abrió la app con Wi-Fi y HTTPS; activó modo avión y apagó el Wi-Fi antes de elegir avatar y empezar la actividad.
+- **Rutas:** `/alumno` y, al recuperar la conexión, `/docente`.
+- **Versión probada:** commit `5afc92a`.
+- **Paquete:** paquete sintético aprobado `qa-iphone-nuevo`; no son los paquetes reales de Andes o Uganda.
+- **Acciones y resultado observado:** eligió Zorro, abrió «¿Qué plato tiene más colores?», respondió sin conexión y vio «¡Buen trabajo, Zorro!». Al volver el Wi-Fi, pulsó «Enviar progreso» una vez. En `DEMO-01`, los contadores pasaron de 0 eventos/0 actividades a 1 evento/1 actividad; la API confirmó el mismo resultado.
+- **Resultado:** correcto para el alcance probado: se completa una actividad nueva en modo avión y se sincroniza al recuperar la conexión.
+- **Límite:** se probó un paquete sintético y un evento. No es una prueba con el contenido Andes/Uganda ni con varios eventos.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
+
+## 2026-11-04 — Tres actividades del paquete Andes en modo avión y sincronización
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** iPhone 17.
+- **Navegador:** Safari en iOS 27.2.
+- **Conexión:** cargó `/alumno` por Wi-Fi; luego activó modo avión antes de elegir avatar y empezar las actividades.
+- **Ruta de sincronización:** `/docente` al recuperar Wi-Fi.
+- **Versión probada:** commit `0900e78`.
+- **Paquete:** `alimentacion-andes-es`, con revisión pedagógica aprobada; la validación cultural local sigue pendiente.
+- **Acciones y resultado observado:** con Zorro completó sin red la historia de Ana, la elección de papa y habas y la ordenación del lavado de manos. La pantalla mostró «Tus sellos: 3 de 5». En `/docente`, los contadores empezaron en 0 eventos/0 actividades; tras pulsar «Enviar progreso» una vez, pasaron a 3/3. La API confirmó el resultado.
+- **Resultado:** correcto para el alcance probado: tres actividades del paquete Andes se completan en modo avión y se sincronizan al recuperar Wi-Fi.
+- **Límite:** no prueba el paquete de Uganda ni sustituye la validación cultural local o pruebas con niños.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
+
+## 2026-11-04 — Instalación de la PWA y arranque desde el icono sin conexión
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** iPhone 17 con iOS 27.2.
+- **Navegador:** Safari.
+- **Versión probada:** commit `0900e78`.
+- **Paquete:** `alimentacion-andes-es`, con revisión pedagógica aprobada; la validación cultural local sigue pendiente.
+- **Instalación y conexión:** añadió MOCHILA a la pantalla de inicio desde Safari. Con Wi-Fi, abrió la app desde el icono y apareció «¿Quién va contigo?» sin barra de direcciones.
+- **Acciones y resultado observado:** activó el modo avión, comprobó que el Wi-Fi estaba apagado, cerró la app desde el selector y la volvió a abrir desde el icono. Volvió a cargar el selector de avatar.
+- **Resultado:** correcto para el alcance probado: la PWA instalada abre desde el icono y vuelve a mostrar su pantalla inicial en modo avión.
+- **Límite:** esta prueba acredita instalación y arranque offline; no prueba completar una actividad nueva ni sincronizar progreso. Esas acciones constan en la prueba Andes anterior.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026, 18:10.

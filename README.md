@@ -60,7 +60,12 @@ MOCHILA separa dos momentos:
 
 ## Licencia
 
-> **Pendiente de decidir** (ver `docs/PROJECT_CONTEXT.md`). Las bases exigen liberar el trabajo con licencia libre: código con cualquier licencia de opensource.org; documentación y assets, recomendada CC BY-NC-SA 3.0. No subir nada con licencia incompatible ni con datos personales.
+- **Código y esquemas** (código fuente de `app/` excepto las ilustraciones SVG y PNG listadas en `LICENSE-CONTENT.md`, además de `server/`, `scripts/` y `contracts/`): **MIT**. Ver [`LICENSE`](LICENSE).
+- **Documentación y contenido** (`docs/`, `content/`, `pitch/`, `research/`, `qa/` y las ilustraciones SVG/PNG de `app/` listadas en `LICENSE-CONTENT.md`): **CC BY-NC-SA 4.0**. Ver [`LICENSE-CONTENT.md`](LICENSE-CONTENT.md).
+- Las licencias cubren solo el material cuyos derechos tiene el equipo; las dependencias y los materiales de terceros mantienen sus propias licencias.
+- Usos comerciales del contenido: se acuerdan con el equipo.
+
+Las bases (Base 9) exigen una licencia aprobada por OSI para el código y recomiendan CC BY-NC-SA 3.0 para documentación y assets; usamos la versión 4.0. Decisión: `docs/decisions/ADR-005-licencias-y-visibilidad.md`.
 
 ## Mapa del repositorio
 

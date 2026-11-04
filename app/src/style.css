@@ -1,0 +1,81 @@
+:root{font:100%/1.55 "Avenir Next",system-ui,sans-serif;color:#193f34;background:#f5f2e8;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;background-image:radial-gradient(#9b987b44 .8px,transparent .9px);background-size:12px 12px;min-height:100vh}
+main{max-width:1080px;margin:auto;padding:0 clamp(14px,4vw,52px) 32px}
+header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #bbc3ad;padding:17px 0;margin-bottom:clamp(14px,3vw,30px)}
+.brand{display:flex;align-items:center;gap:10px;font-size:1.55rem;letter-spacing:-.055em}.brand img{width:38px;height:38px}.edition,small,.map-mark{font:700 .72rem/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}
+.edition{padding:7px 12px;border:1px solid #a6b6a8;border-radius:30px}
+article{background:#fffdf5;border:1px solid #bdc5ac;border-radius:22px;overflow:hidden;box-shadow:0 8px 0 -4px #d8d8c4,0 18px 36px -28px #364839}
+aside{position:relative;min-height:clamp(150px,24vw,258px);display:flex;align-items:flex-start;padding:clamp(18px,3vw,34px);background:#ffde9c url('./valle.svg') center center/cover;border-bottom:1px solid #91a77e}
+.map-copy{background:#fffae9;padding:12px 20px 14px;box-shadow:3px 4px 0 #384d3930;transform:rotate(-2deg);border-radius:3px}
+.map-copy h2{font:700 clamp(1.7rem,4vw,3.3rem)/1.03 Georgia,serif;letter-spacing:-.055em;margin:.15em 0}.map-copy p{font-size:.82rem;margin:0}.map-mark{position:absolute;right:16px;bottom:14px;background:#fffae9;padding:6px 9px;border-radius:50%}
+section{padding:clamp(18px,3.7vw,40px)}h1{font:700 clamp(1.85rem,4.4vw,3.4rem)/1.04 Georgia,serif;letter-spacing:-.045em;margin:0;max-width:24ch}h1:focus{outline:none}p{margin:.6rem 0 1.1rem}section>p{color:#475c50}
+button{min-height:48px;font:700 1rem/1.35 inherit;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;background:#215a49;color:#fffdf0;border:1px solid transparent;border-radius:14px;padding:12px 20px;margin:4px 6px 4px 0}
+button:focus-visible{outline:3px solid #af501e;outline-offset:3px}button:disabled{opacity:.65}button:hover{filter:brightness(.96)}
+.avatar,.answer{vertical-align:top;width:calc(50% - 6px);margin-right:0;position:relative;color:#283f33;border:1px solid #d4b281;background:#fbe3bd;box-shadow:0 3px 0 #cfb58d;text-align:left}
+.avatar+.avatar,.answer+.answer{margin-left:12px}
+.avatar{overflow:hidden;padding:14px clamp(12px,3vw,24px);font:700 clamp(1.25rem,3vw,1.9rem)/1.2 Georgia,serif}
+.avatar[data-avatar=colibri]{background:#d7eadb;border-color:#a0c3af;box-shadow:0 3px 0 #acc6af}
+.avatar img{display:block;width:100%;height:clamp(78px,12vw,132px);background:radial-gradient(ellipse at center,#fff6d58a 0 37%,transparent 38%);margin-bottom:6px}
+.avatar::after{content:'→';float:right;font-family:system-ui;color:#344d3d}
+.answer{background:#f6f0db;border-color:#c3bfa2;box-shadow:0 3px 0 #cbc8b3;text-align:center;padding:14px 8px}
+.answer span{display:grid;place-items:center;margin:0 auto 8px;width:64px;height:64px;border:4px double #b4c4af;border-radius:50%;background:#fffcf3;font-size:2rem}
+.badge{display:inline-block;background:#f7d782;border:1px dashed #96672f;padding:8px 14px;margin-bottom:14px;color:#63411b;border-radius:6px;transform:rotate(-2deg)}
+footer{padding:14px 3px;font-size:.8rem;color:#455c4c}
+.teacher aside{min-height:110px;background-position:center 58%}.teacher .map-copy{padding:8px 14px}.teacher .map-copy h2{font-size:1.5rem}.teacher section h2{font-size:1.25rem;margin:1.5rem 0 0}.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.metrics div{padding:clamp(14px,2.4vw,26px);border-radius:14px;background:#e4eedf;border-left:5px solid #337155}.metrics div+div{background:#ffedc9;border-color:#bb7b33}.metrics strong,.metrics span{display:block}.metrics strong{font:700 clamp(2rem,5vw,3.5rem)/1.1 Georgia,serif}.metrics span{margin-top:.3rem;font-size:.94rem}
+.teacher button+button{background:#fffdf5;color:#254e3c;border-color:#a9baaa}p:empty{display:none}
+button.secondary,.back{background:#fffdf5;color:#174c43;border:1.5px solid #d8cfb5;box-shadow:none}
+.back{border-radius:999px;min-height:44px;padding:8px 16px;margin:0 0 16px}
+.seals{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fbe9c0;border-radius:16px;padding:10px 14px;margin:0 0 18px;max-width:560px}
+.seals strong{font-size:1rem}.dots{display:flex;gap:6px;flex-wrap:wrap}.dots i{width:18px;height:18px;border-radius:50%;background:#fffdf5;border:2px solid #c9a24a}.dots i.on{background:#174c43;border-color:#174c43}
+.activities{display:grid;gap:10px;margin:0 0 16px;max-width:560px}
+button.activity{display:flex;align-items:center;gap:12px;width:100%;margin:0;text-align:left;background:#fff;color:#193f34;border:1.5px solid #e2d8bf;border-radius:18px;padding:10px 12px;min-height:68px}
+.activity .tile{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#dcebe4;color:#174c43}
+.activity-text{display:flex;flex-direction:column;min-width:0;flex:1}
+.activity small{font:800 .74rem/1.3 "Avenir Next",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#4f5d58}
+.activity-title{font-weight:700;font-size:1rem;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+button.activity.next{border:2.5px solid #174c43;background:#fffdf7;box-shadow:0 4px 0 #174c43}.activity.next .tile{background:#f3c76b}.activity.next small{color:#174c43}
+.activity .status{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#174c43;color:#f3c76b}
+.pill{flex:none;background:#174c43;color:#fff;font-weight:800;font-size:.9rem;border-radius:999px;padding:8px 14px}
+.time{flex:none;font-size:.85rem;font-weight:700;color:#4f5d58}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hint{font-weight:700;color:#174c43;min-height:1.5em}
+.slots{list-style:none;margin:0 0 8px;padding:0;display:grid;gap:8px;max-width:520px}
+.slots li{display:flex;align-items:center;gap:12px;min-height:48px}
+.slots b{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:2px dashed #b9a77a;color:#6d5d37}
+.slots span{flex:1;min-height:46px;border:2px dashed #d8cba8;border-radius:14px;padding:11px 14px;font-weight:800}
+.slots li.filled b{border:0;background:#174c43;color:#f3c76b}.slots li.filled span{border:0;background:#dcebe4;color:#174c43}
+.steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:520px;margin-bottom:12px}
+.steps button{margin:0;min-height:72px;background:#fff;color:#193f34;border:2px solid #e2d8bf;box-shadow:0 3px 0 #e2d8bf;border-radius:18px}
+.steps button:disabled{opacity:.4}
+.celebrate{text-align:center}.celebrate h1{margin:0 auto}.celebrate>p{max-width:34ch;margin-left:auto;margin-right:auto}
+.celebrate .seals{margin:16px auto}.celebrate button{display:block;width:100%;max-width:420px;margin:10px auto 0}
+.seal{width:clamp(140px,38vw,200px);margin:0 auto 12px}.seal svg{display:block;width:100%;height:auto}
+.celebrate .badge{transform:none;background:#174c43;color:#f3c76b;border:0;border-radius:999px;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;padding:6px 14px}
+a.button-link{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 20px;margin:4px 6px 4px 0;border-radius:14px;background:#215a49;color:#fffdf0;font-weight:700;text-decoration:none}
+a.secondary-link{background:#fffdf5;color:#174c43;border:1.5px solid #d8cfb5;margin-top:18px}
+.authoring>p{max-width:62ch}
+.author-step{padding:18px 0 22px;border-top:1px solid #e2d8bf;margin-top:8px}
+.author-step h2{display:flex;align-items:center;gap:10px;font:700 1.35rem/1.2 Georgia,serif;margin:0 0 4px;color:#174c43}
+.step-number{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#174c43;color:#f3c76b;font:800 1rem/1 "Avenir Next",system-ui,sans-serif;flex:none}
+.step-help{color:#4f5d58;margin:0 0 14px;max-width:62ch}
+.field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-bottom:12px}
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.field-label{font-weight:700;font-size:.92rem}
+.field-help,.authoring .field small{font:600 .8rem/1.3 "Avenir Next",system-ui,sans-serif;letter-spacing:0;text-transform:none;color:#4f5d58}
+.field input,.field select,.field textarea{font:inherit;font-size:1rem;padding:10px 12px;border:1.5px solid #cfc6aa;border-radius:12px;background:#fff;color:#193f34;width:100%}
+.field textarea{resize:vertical;line-height:1.45}
+.field input:focus,.field select:focus,.field textarea:focus{outline:3px solid #af501e55;border-color:#af501e}
+.prompt-box{margin-top:6px}.prompt-box textarea{font:.85rem/1.45 ui-monospace,monospace;background:#fbf8ee}
+.notice{border-radius:12px;padding:10px 14px;margin:10px 0;font-weight:600}.notice p{margin:.2rem 0}
+.notice.ok{background:#e4eedf;color:#174c43}.notice.error{background:#fbe3d6;color:#7a3414}
+.review-list{display:grid;gap:12px;margin-bottom:12px}
+.review-card{border:1.5px solid #e2d8bf;border-radius:16px;padding:14px;background:#fff}
+.review-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.review-top small{font:800 .76rem/1.3 "Avenir Next",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#174c43}
+.chip{font-size:.78rem;font-weight:700;background:#fbe9c0;color:#5b4a2e;border-radius:999px;padding:3px 10px}
+.option-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 12px}
+.teacher-note{font-size:.88rem;color:#4f5d58;background:#f6f2e4;border-radius:10px;padding:8px 12px;margin:4px 0 0}
+.checklist{display:grid;gap:8px;margin-bottom:14px}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:600;cursor:pointer}.check input{width:22px;height:22px;margin-top:2px;flex:none;accent-color:#174c43}
+.approved{background:#e4eedf;border:2px solid #174c43;border-radius:16px;padding:14px 16px;margin-top:12px}.approved strong{color:#174c43}
+@media(max-width:480px){header{padding:12px 0}.edition{font-size:.61rem}.map-copy{padding:8px 12px}aside{background-position:58% center}.teacher aside{min-height:90px}.avatar,.answer{width:calc(50% - 4px)}.avatar+.avatar,.answer+.answer{margin-left:8px}.metrics{gap:8px}}

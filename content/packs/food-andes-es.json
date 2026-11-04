@@ -13,8 +13,10 @@
     "ageRange": "6-10"
   },
   "review": {
-    "status": "draft",
-    "notes": "Borrador pedagógico de Carlos para revisión técnica y cultural. No está aprobado ni probado con niños. Antes de aprobar, confirmar alimentos y expresiones con una persona de la comunidad concreta; revisar la actividad de higiene según los recursos disponibles."
+    "status": "approved",
+    "reviewedBy": "Carlos Herrero",
+    "reviewedAt": "2026-11-04T16:44:06+01:00",
+    "notes": "Revisión pedagógica aprobada por Carlos Herrero el 4 nov 2026. La validación cultural local sigue pendiente: confirmar alimentos, disponibilidad y coste, nombres y vocabulario con una persona de la comunidad concreta. No probado con niños. Esta aprobación no implica validación por la comunidad."
   },
   "modules": [
     {
@@ -68,7 +70,7 @@
             { "id": "probar-sin-preguntar", "text": "Probarlo sin preguntar" }
           ],
           "correct": "preguntar-adulto",
-          "feedback": "Pedir ayuda está bien. Una persona adulta puede explicar cómo preparar ese alimento con seguridad.",
+          "feedback": "Pedir ayuda está bien. Pregunta a una persona adulta de confianza cómo averiguar si ese alimento necesita cocinarse y cómo prepararlo con seguridad.",
           "safetyTag": "help-adult",
           "durationMin": 2
         },
