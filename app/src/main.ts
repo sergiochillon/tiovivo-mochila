@@ -1,5 +1,6 @@
 import demo from './demo.json'
 import { loadPack, type Pack, type Activity } from './packs'
+import { authoring } from './autoria'
 import './style.css'
 import { classTotals, sendProgress, type Progress } from './sync'
 import fox from './zorro.svg'
@@ -42,6 +43,44 @@ const database = new Promise<IDBDatabase>((resolve, reject) => {
   request.onerror = () => reject(request.error)
 })
 
+const texts = {
+  es: {
+    kinds: { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?' } as Record<string, string>,
+    avatars: { zorro: 'Zorro', colibri: 'Colibrí' } as Record<string, string>,
+    edition: 'Atlas de aula', expedition: 'EXPEDICIÓN 01', footer: 'El progreso se guarda en este dispositivo.',
+    who: '¿Quién va contigo?', whoHelp: 'Elige un compañero para explorar el valle.',
+    activities: 'Actividades', goingWith: (name: string) => 'Vas con ' + name + '. Toca una actividad para empezar.',
+    next: 'Siguiente', start: 'Empezar', done: 'Completada', minutes: 'min', changeAvatar: 'Cambiar de avatar',
+    back: '← Actividades', continue: 'Continuar', needsReview: 'Esta actividad necesita revisión.', goBack: 'Volver',
+    yourOrder: 'Tu orden', firstStep: '¿Cuál es el primer paso?', wrongStep: 'Ese no va ahora. Prueba otro paso.',
+    nextStep: '¡Bien! ¿Cuál va después?', tryAgain: 'Puedes volver a elegir.',
+    wellDone: (name: string) => '¡Buen trabajo, ' + name + '!', seal: 'Sello del valle',
+    seals: (done: number, total: number) => 'Tus sellos: ' + done + ' de ' + total,
+    nextActivity: 'Siguiente actividad', allActivities: 'Ver todas las actividades',
+    storageTitle: 'No se puede acceder al progreso',
+    storageHelp: 'Comprueba que el navegador permite guardar datos y vuelve a intentarlo.', retry: 'Volver a intentar'
+  },
+  en: {
+    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?' } as Record<string, string>,
+    avatars: { zorro: 'Fox', colibri: 'Hummingbird' } as Record<string, string>,
+    edition: 'Class atlas', expedition: 'EXPEDITION 01', footer: 'Your progress is saved on this device.',
+    who: 'Who is coming with you?', whoHelp: 'Choose a friend to explore with.',
+    activities: 'Activities', goingWith: (name: string) => 'You are with ' + name + '. Tap an activity to start.',
+    next: 'Next', start: 'Start', done: 'Done', minutes: 'min', changeAvatar: 'Change friend',
+    back: '← Activities', continue: 'Continue', needsReview: 'This activity needs review.', goBack: 'Back',
+    yourOrder: 'Your order', firstStep: 'What is the first step?', wrongStep: 'Not this one yet. Try another step.',
+    nextStep: 'Good! What comes next?', tryAgain: 'You can choose again.',
+    wellDone: (name: string) => 'Well done, ' + name + '!', seal: 'Valley stamp',
+    seals: (done: number, total: number) => 'Your stamps: ' + done + ' of ' + total,
+    nextActivity: 'Next activity', allActivities: 'See all activities',
+    storageTitle: 'Progress cannot be saved',
+    storageHelp: 'Check that the browser allows saving data and try again.', retry: 'Try again'
+  }
+}
+// The interface follows the language of the approved package; Spanish until one is loaded.
+let t = texts.es
+const avatarName = (avatar: Avatar) => t.avatars[avatar.id]
+
 const kinds: Record<string, { label: string; icon: string }> = {
   story: { label: 'Historia', icon: '<path d="M4 5h5a3 3 0 0 1 3 3v11a2 2 0 0 0-2-2H4z"/><path d="M20 5h-5a3 3 0 0 0-3 3v11a2 2 0 0 1 2-2h6z"/>' },
   choice: { label: 'Elige', icon: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/>' },
@@ -78,7 +117,7 @@ function seals(done: number, total: number) {
   const row = document.createElement('div')
   row.className = 'seals'
   const text = document.createElement('strong')
-  text.textContent = 'Tus sellos: ' + done + ' de ' + total
+  text.textContent = t.seals(done, total)
   const dots = document.createElement('span')
   dots.className = 'dots'
   dots.setAttribute('aria-hidden', 'true')
@@ -111,14 +150,14 @@ function button(label: string, action: () => void | Promise<void>) {
 }
 
 function storageError() {
-  screen('No se puede acceder al progreso', 'Comprueba que el navegador permite guardar datos y vuelve a intentarlo.')
-  button('Volver a intentar', () => location.reload())
+  screen(t.storageTitle, t.storageHelp)
+  button(t.retry, () => location.reload())
 }
 
 function choose() {
-  screen('¿Quién va contigo?', 'Elige un compañero para explorar el valle.')
+  screen(t.who, t.whoHelp)
   for (const avatar of avatars) {
-    const card = button(avatar.label, () => activities(avatar))
+    const card = button(avatarName(avatar), () => activities(avatar))
     card.className = 'avatar'
     const portrait = new Image()
     portrait.src = avatar.portrait
@@ -135,7 +174,7 @@ async function activities(avatar: Avatar) {
     if (choice) return play(avatar, choice)
   }
   const done = await completedIds(avatar)
-  screen('Actividades', 'Vas con ' + avatar.label + '. Toca una actividad para empezar.')
+  screen(t.activities, t.goingWith(avatarName(avatar)))
   lesson.append(seals(items.filter(item => done.has(item.id)).length, items.length))
   const list = document.createElement('div')
   list.className = 'activities'
@@ -148,7 +187,7 @@ async function activities(avatar: Avatar) {
     const text = document.createElement('span')
     text.className = 'activity-text'
     const label = document.createElement('small')
-    label.textContent = kinds[item.type].label + (item === next ? ' · Siguiente' : '')
+    label.textContent = t.kinds[item.type] + (item === next ? ' · ' + t.next : '')
     const title = document.createElement('span')
     title.className = 'activity-title'
     title.textContent = item.prompt
@@ -157,20 +196,20 @@ async function activities(avatar: Avatar) {
     if (finished) {
       const state = document.createElement('span')
       state.className = 'sr-only'
-      state.textContent = 'Completada'
+      state.textContent = t.done
       text.append(state)
     } else if (item === next) {
       end.className = 'pill'
-      end.textContent = 'Empezar'
+      end.textContent = t.start
     } else {
       end.className = 'time'
-      end.textContent = item.durationMin ? item.durationMin + ' min' : ''
+      end.textContent = item.durationMin ? item.durationMin + ' ' + t.minutes : ''
     }
     card.append(icon(kinds[item.type].icon, 'tile'), text, end)
     list.append(card)
   }
   lesson.append(list)
-  button('Cambiar de avatar', choose).classList.add('secondary')
+  button(t.changeAvatar, choose).classList.add('secondary')
 }
 
 async function play(avatar: Avatar, activity: Activity) {
@@ -182,11 +221,11 @@ async function play(avatar: Avatar, activity: Activity) {
     request.onerror = () => reject(request.error)
   })
   if (saved) return complete(avatar, activity)
-  screen(activity.prompt, kinds[activity.type]?.label ?? '')
+  screen(activity.prompt, t.kinds[activity.type] ?? '')
   if (!technicalPreview) {
     const back = document.createElement('button')
     back.className = 'back'
-    back.textContent = '← Actividades'
+    back.textContent = t.back
     back.onclick = () => activities(avatar).catch(storageError)
     lesson.prepend(back)
   }
@@ -211,13 +250,13 @@ async function play(avatar: Avatar, activity: Activity) {
   }
   const options = activity.options ?? []
   if (activity.type === 'story') {
-    button('Continuar', finish)
+    button(t.continue, finish)
   } else if (activity.type === 'order') {
     const sequence = activity.correct
     if (!Array.isArray(sequence) || sequence.length !== options.length ||
         new Set(sequence).size !== options.length || !options.every(option => sequence.includes(option.id))) {
-      screen('Esta actividad necesita revisión.')
-      button('Volver', () => activities(avatar))
+      screen(t.needsReview)
+      button(t.goBack, () => activities(avatar))
       return
     }
     let step = 0
@@ -226,7 +265,7 @@ async function play(avatar: Avatar, activity: Activity) {
     const shown = [...ordered.slice(1), ordered[0]]
     const slots = document.createElement('ol')
     slots.className = 'slots'
-    slots.setAttribute('aria-label', 'Tu orden')
+    slots.setAttribute('aria-label', t.yourOrder)
     const slotText = sequence.map((_, index) => {
       const item = document.createElement('li')
       const number = document.createElement('b')
@@ -239,11 +278,11 @@ async function play(avatar: Avatar, activity: Activity) {
     const grid = document.createElement('div')
     grid.className = 'steps'
     lesson.append(slots, hint, grid)
-    hint.textContent = '¿Cuál es el primer paso?'
+    hint.textContent = t.firstStep
     for (const option of shown) {
       const answer = button(option.text, async () => {
         if (option.id !== sequence[step]) {
-          hint.textContent = 'Ese no va ahora. Prueba otro paso.'
+          hint.textContent = t.wrongStep
           return
         }
         slotText[step].textContent = option.text
@@ -251,7 +290,7 @@ async function play(avatar: Avatar, activity: Activity) {
         step++
         answer.disabled = true
         if (step === sequence.length) await finish()
-        else hint.textContent = '¡Bien! ¿Cuál va después?'
+        else hint.textContent = t.nextStep
       })
       grid.append(answer)
     }
@@ -262,7 +301,7 @@ async function play(avatar: Avatar, activity: Activity) {
         if (Array.isArray(correct) ? correct.includes(option.id) : correct === option.id) {
           await finish()
         } else {
-          hint.textContent = option.feedback || 'Puedes volver a elegir.'
+          hint.textContent = option.feedback || t.tryAgain
         }
       })
       answer.className = 'answer'
@@ -275,31 +314,31 @@ async function play(avatar: Avatar, activity: Activity) {
     }
   }
   if (!hint.isConnected) lesson.append(hint)
-  if (technicalPreview) button('Cambiar de avatar', choose)
+  if (technicalPreview) button(t.changeAvatar, choose)
 }
 
 async function complete(avatar: Avatar, activity: Activity) {
-  screen('¡Buen trabajo, ' + avatar.label + '!', activity.feedback)
+  screen(t.wellDone(avatarName(avatar)), activity.feedback)
   lesson.className = 'celebrate'
   const seal = document.createElement('div')
   seal.className = 'seal'
   seal.setAttribute('role', 'img')
-  seal.setAttribute('aria-label', 'Sello del valle')
+  seal.setAttribute('aria-label', t.seal)
   seal.innerHTML = sealArt
   const badge = document.createElement('strong')
   badge.className = 'badge'
-  badge.textContent = 'Sello del valle'
+  badge.textContent = t.seal
   lesson.prepend(seal, badge)
   if (technicalPreview) {
-    button('Cambiar de avatar', choose)
+    button(t.changeAvatar, choose)
     return
   }
   const items = pack.modules.flatMap(module => module.activities).filter(playable)
   const done = await completedIds(avatar)
   lesson.append(seals(items.filter(item => done.has(item.id)).length, items.length))
   const next = items.find(item => !done.has(item.id))
-  if (next) button('Siguiente actividad', () => play(avatar, next))
-  const all = button('Ver todas las actividades', () => activities(avatar))
+  if (next) button(t.nextActivity, () => play(avatar, next))
+  const all = button(t.allActivities, () => activities(avatar))
   if (next) all.classList.add('secondary')
 }
 
@@ -353,6 +392,15 @@ function teacherPanel() {
   })
   button('Actualizar contadores', refresh)
   lesson.append(status, totals)
+  const authorTitle = document.createElement('h2')
+  authorTitle.textContent = 'Preparar material'
+  const authorHelp = document.createElement('p')
+  authorHelp.textContent = 'Adapta un módulo a otra comunidad con ayuda de la IA y apruébalo antes de que llegue al alumnado.'
+  const authorLink = document.createElement('a')
+  authorLink.className = 'button-link'
+  authorLink.href = '/autoria'
+  authorLink.textContent = 'Preparar material nuevo'
+  lesson.append(authorTitle, authorHelp, authorLink)
   void refresh()
 }
 
@@ -363,6 +411,12 @@ if (technicalPreview) {
   document.querySelector('footer')!.textContent = 'Ejemplo técnico en borrador · Solo para pruebas del equipo.'
 }
 if (location.pathname === '/docente') teacherPanel()
+else if (location.pathname === '/autoria') {
+  document.body.classList.add('teacher')
+  document.querySelector('.edition')!.textContent = 'Espacio docente'
+  document.querySelector('footer')!.textContent = 'La preparación de material necesita conexión con el servidor de MOCHILA.'
+  authoring(lesson)
+}
 else if (reviewRoute && !technicalPreview) screen('Página no disponible')
 else if (technicalPreview) {
   pack = demo
@@ -374,6 +428,10 @@ else if (technicalPreview) {
     if (!downloaded) return screen('No hay material aprobado para este paquete.')
     pack = downloaded
     document.documentElement.lang = pack.language
+    if (pack.language === 'en') t = texts.en
+    document.querySelector('.edition')!.textContent = t.edition
+    document.querySelector('.map-copy small')!.textContent = t.expedition
+    document.querySelector('footer')!.textContent = t.footer
     document.querySelector('.map-copy h2')!.textContent = pack.title
     document.querySelector('.map-copy p')!.textContent = pack.context.country
     choose()
