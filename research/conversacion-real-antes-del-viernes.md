@@ -1,6 +1,6 @@
 # Una conversación real antes del viernes
 
-4 nov 2026 · Mario · Plazo pedido por Sergio: **antes del viernes 6**, objetivo operativo: hoy 4 o jueves 5. **Interlocutor sin identificar; mensaje no enviado; conversación no realizada.** Esta instrucción sustituye la limitación anterior de no hacer entrevistas. Los escenarios ficticios no se convierten en evidencia real.
+4 nov 2026 · Mario · Plazo pedido por Sergio: **antes del viernes 6**, objetivo operativo: hoy 4 o jueves 5. **Cuatro correos institucionales enviados a petición de Mario; interlocutor individual, respuesta y conversación pendientes.** Ver el [registro de envíos](contactos-ong-peru-2026-11-04.md). Esta petición de contacto real sustituye la limitación anterior de no hacer entrevistas. Los escenarios ficticios no se convierten en evidencia real.
 
 ## Acceso propuesto
 
@@ -8,7 +8,7 @@
 2. Usar un contacto docente conocido del equipo. Si trabaja en España y con buena conexión, anotarlo: puede informar sobre preparación y revisión, pero no validar escuelas rurales de Perú o Uganda.
 3. Como alternativa, pedir derivación a REDEC o Fe y Alegría por los canales ya documentados. No depender de una respuesta internacional para cumplir el plazo.
 
-Un mentor generalista aporta su opinión; no sustituye experiencia pertinente de aula o programa. Se ha pedido a Mario en este chat un contacto accesible, pendiente de respuesta. No se han efectuado envíos externos.
+Un mentor generalista aporta su opinión; no sustituye experiencia pertinente de aula o programa. Mario autorizó después el contacto con Manos Solidarias Perú, APRODE-PERU, HIAS y MEP; los cuatro correos constan en Enviado. No hay una conversación realizada registrada. Las derivaciones de MEP o del buzón histórico de HIAS no equivaldrían por sí solas a una entrevista docente.
 
 ## Mensaje listo para Mario
 

@@ -2,7 +2,7 @@
 
 Investigación documental: 4 de noviembre de 2026. Responsable de producto: Mario. Alcance: primaria de 6–10 años, habilidades para la vida y baja conectividad; prioridad Perú y Uganda, con vías de acceso desde España.
 
-Este análisis sustituye el simple registro de tareas pendientes. **No acredita interés comercial, entrevistas, compromisos de financiación ni pilotos realizados.** La instrucción posterior de Sergio, trasladada por Mario, pide conseguir al menos una conversación real antes del viernes 6 de noviembre de 2026 y sustituye la limitación anterior de trabajar sin entrevistas. La conversación sigue pendiente; no hay envíos ni respuestas registrados. Los pilotos continúan siendo propuestas futuras.
+Este análisis sustituye el simple registro de tareas pendientes. **No acredita interés comercial, entrevistas, compromisos de financiación ni pilotos realizados.** La instrucción posterior de Sergio, trasladada por Mario, pide conseguir al menos una conversación real antes del viernes 6 de noviembre de 2026 y sustituye la limitación anterior de trabajar sin entrevistas. La conversación sigue pendiente. A petición de Mario se enviaron cuatro correos a organizaciones peruanas el 4 nov; no hay respuestas registradas. Ver el [registro de contacto](contactos-ong-peru-2026-11-04.md). Los envíos no constituyen una conversación ni validación de mercado. Los pilotos continúan siendo propuestas futuras.
 
 ## 1. Resultado y recomendación
 
