@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
+    "seed:approved-packs": "tsx src/seed-approved-packs.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

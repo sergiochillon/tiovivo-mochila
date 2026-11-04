@@ -25,6 +25,19 @@ lote de progreso. El directorio local está ignorado por Git. No hay paquetes
 aprobados precargados en esta rama; el ejemplo del contrato está en `draft` y
 no se sirve al reproductor.
 
+Después de que Carlos apruebe paquetes en `content/packs/`, cárgalos antes de
+arrancar el servidor:
+
+```sh
+npm run seed:approved-packs
+npm start
+```
+
+El comando valida cada archivo con pack-v0.1, importa solo los que ya tienen
+`review.status: "approved"` y sello válido, y omite los `draft`. Nunca cambia
+el estado de revisión. Si usas `MOCHILA_DATA_DIR`, ejecuta la carga y el
+servidor con el mismo valor.
+
 ## Endpoints
 
 - `POST /api/generate`: valida JSON asistido y guarda un paquete como `draft`.
