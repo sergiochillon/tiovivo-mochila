@@ -1,0 +1,102 @@
+{
+  "packVersion": "0.1",
+  "id": "food-altiplano-es",
+  "title": "Alimentos en el Altiplano",
+  "language": "es",
+  "context": {
+    "country": "Bolivia",
+    "region": "Altiplano (contexto sintético de prueba)",
+    "communityType": "A VALIDAR",
+    "foods": [
+      "quinua",
+      "papa",
+      "haba",
+      "oca",
+      "huevo"
+    ],
+    "resources": [
+      "A VALIDAR"
+    ],
+    "culturalNotes": [
+      "A VALIDAR: confirmar alimentos, disponibilidad y vocabulario con revisores locales."
+    ],
+    "ageRange": "6-10"
+  },
+  "review": {
+    "status": "approved",
+    "notes": "Revisión pedagógica aprobada por Carlos Herrero el 4 nov 2026. Validación cultural local pendiente. Generado con IA, contexto sintético. No probado con niños",
+    "reviewedBy": "Carlos Herrero",
+    "reviewedAt": "2026-11-04T17:22:30.990Z"
+  },
+  "modules": [
+    {
+      "id": "modulo-alimentos",
+      "topic": "food",
+      "title": "Alimentos de la comunidad",
+      "activities": [
+        {
+          "id": "historia-almuerzo",
+          "type": "story",
+          "prompt": "Lucía y su familia preparan el almuerzo en casa con quinua y papas. Hoy lo acompañan con habas. Otra familia puede acompañarlo con otros alimentos.",
+          "audioText": "Lucía y su familia preparan el almuerzo en casa con quinua y papas. Hoy lo acompañan con habas. Otra familia puede acompañarlo con otros alimentos.",
+          "feedback": "Cada familia combina los alimentos disponibles de distintas formas según sus gustos.",
+          "safetyTag": "none",
+          "teacherNotes": "A VALIDAR: revisar el contenido y confirmar vocabulario y contexto local.",
+          "durationMin": 2
+        },
+        {
+          "id": "eleccion-higiene",
+          "type": "choice",
+          "prompt": "¿Qué es importante hacer con las manos antes de tocar los alimentos?",
+          "audioText": "¿Qué es importante hacer con las manos antes de tocar los alimentos?",
+          "options": [
+            {
+              "id": "lavar-manos",
+              "text": "Lavarlas bien con agua limpia",
+              "feedback": "¡Muy bien! Lavarse las manos ayuda a mantener limpios los alimentos."
+            },
+            {
+              "id": "sacudir-manos",
+              "text": "Sacudirlas en la ropa",
+              "feedback": "Limpiarse en la ropa no quita la suciedad. Es mejor usarlas bien lavadas."
+            }
+          ],
+          "correct": "lavar-manos",
+          "feedback": "Lavar las manos con agua limpia es un hábito sencillo para cuidar la higiene.",
+          "safetyTag": "hygiene",
+          "teacherNotes": "A VALIDAR: revisar el contenido y confirmar vocabulario y contexto local.",
+          "durationMin": 2
+        },
+        {
+          "id": "orden-preparacion",
+          "type": "order",
+          "prompt": "Ordena los pasos sencillos para preparar un alimento en casa:",
+          "audioText": "Ordena los pasos sencillos para preparar un alimento en casa:",
+          "options": [
+            {
+              "id": "paso-lavar-alimento",
+              "text": "Lavar la papa con agua limpia"
+            },
+            {
+              "id": "paso-pedir-ayuda",
+              "text": "Pedir ayuda a una persona adulta para cocinar"
+            },
+            {
+              "id": "paso-servir-plato",
+              "text": "Servir la comida en un plato limpio"
+            }
+          ],
+          "correct": [
+            "paso-lavar-alimento",
+            "paso-pedir-ayuda",
+            "paso-servir-plato"
+          ],
+          "feedback": "¡Excelente trabajo! Preparar los alimentos con cuidado y apoyo es una buena costumbre.",
+          "safetyTag": "food-safety",
+          "teacherNotes": "A VALIDAR: revisar el contenido y confirmar vocabulario y contexto local.",
+          "durationMin": 3
+        }
+      ]
+    }
+  ]
+}
