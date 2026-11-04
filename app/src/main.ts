@@ -1,5 +1,6 @@
 import demo from './demo.json'
 import { loadPack, type Pack, type Activity } from './packs'
+import { authoring } from './autoria'
 import './style.css'
 import { classTotals, sendProgress, type Progress } from './sync'
 import fox from './zorro.svg'
@@ -391,6 +392,15 @@ function teacherPanel() {
   })
   button('Actualizar contadores', refresh)
   lesson.append(status, totals)
+  const authorTitle = document.createElement('h2')
+  authorTitle.textContent = 'Preparar material'
+  const authorHelp = document.createElement('p')
+  authorHelp.textContent = 'Adapta un módulo a otra comunidad con ayuda de la IA y apruébalo antes de que llegue al alumnado.'
+  const authorLink = document.createElement('a')
+  authorLink.className = 'button-link'
+  authorLink.href = '/autoria'
+  authorLink.textContent = 'Preparar material nuevo'
+  lesson.append(authorTitle, authorHelp, authorLink)
   void refresh()
 }
 
@@ -401,6 +411,12 @@ if (technicalPreview) {
   document.querySelector('footer')!.textContent = 'Ejemplo técnico en borrador · Solo para pruebas del equipo.'
 }
 if (location.pathname === '/docente') teacherPanel()
+else if (location.pathname === '/autoria') {
+  document.body.classList.add('teacher')
+  document.querySelector('.edition')!.textContent = 'Espacio docente'
+  document.querySelector('footer')!.textContent = 'La preparación de material necesita conexión con el servidor de MOCHILA.'
+  authoring(lesson)
+}
 else if (reviewRoute && !technicalPreview) screen('Página no disponible')
 else if (technicalPreview) {
   pack = demo
