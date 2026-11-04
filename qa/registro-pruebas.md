@@ -51,6 +51,7 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 - **Dispositivo:** iPhone 17 con iOS 27.2.
 - **Navegador:** Safari.
 - **Conexión y URL:** comenzó con Wi-Fi y HTTPS; después activó modo avión, cerró la pestaña y reabrió la misma URL.
+- **URL usada:** `https://jam-rush-seeking-copied.trycloudflare.com/revision` (túnel temporal, ya cerrado; no es una URL vigente).
 - **Ruta:** `/revision`.
 - **Versión probada:** commit `24f7cf2`.
 - **Actividad y progreso:** completó una actividad con el avatar Zorro antes de desconectar. No se especificó el paquete utilizado.
