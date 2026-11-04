@@ -21,6 +21,8 @@ export default defineConfig({
     registerType: 'autoUpdate',
     // The header logo and install icons live in public/: precache them so they do not break offline.
     includeAssets: ['mochila.svg', 'mochila-180.png'],
+    // Fonts are bundled locally (OFL) and must be precached so the design holds offline.
+    workbox: { globPatterns: ['**/*.{js,css,html,svg,png,woff2}'] },
     manifest: {
       name: 'MOCHILA · Aprender sin conexión',
       short_name: 'MOCHILA',

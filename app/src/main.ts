@@ -2,6 +2,10 @@ import { readingControl, stopReading } from './audio'
 import demo from './demo.json'
 import { loadPack, type Pack, type Activity } from './packs'
 import { authoring } from './autoria'
+import '@fontsource/baloo-2/latin-700.css'
+import '@fontsource/baloo-2/latin-800.css'
+import '@fontsource/atkinson-hyperlegible/latin-400.css'
+import '@fontsource/atkinson-hyperlegible/latin-700.css'
 import './style.css'
 import { classTotals, sendProgress, type Progress } from './sync'
 import fox from './zorro.svg'
@@ -129,9 +133,9 @@ const kinds: Record<string, { label: string; icon: string }> = {
 }
 const checkIcon = '<path d="M5 12l5 5 9-10"/>'
 const knownPacks = [
-  { id: 'alimentacion-andes-es', title: 'Elegimos con lo que hay', place: 'Perú · Andes', language: 'Español', note: 'Revisión pedagógica aprobada' },
-  { id: 'food-northern-uganda-en', title: 'Choosing from what is available', place: 'Uganda · Norte', language: 'English', note: 'Revisión pedagógica aprobada' },
-  { id: 'food-altiplano-es', title: 'Alimentos en el Altiplano', place: 'Bolivia · Altiplano (contexto sintético)', language: 'Español', note: 'Propuesta de IA revisada por el equipo' }
+  { id: 'alimentacion-andes-es', title: 'Elegimos con lo que hay', place: 'Andes, Perú', language: 'Español', note: 'Revisión pedagógica aprobada' },
+  { id: 'food-northern-uganda-en', title: 'Choosing from what is available', place: 'Norte de Uganda', language: 'English', note: 'Revisión pedagógica aprobada' },
+  { id: 'food-altiplano-es', title: 'Alimentos en el Altiplano', place: 'Altiplano, Bolivia (contexto sintético)', language: 'Español', note: 'Propuesta de IA revisada por el equipo' }
 ]
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 const sealArt = '<svg viewBox="0 0 210 210"><circle cx="105" cy="105" r="100" fill="#fbe9c0"/><circle cx="105" cy="105" r="78" fill="#f3c76b"/><circle cx="105" cy="105" r="78" fill="none" stroke="#174c43" stroke-width="4" stroke-dasharray="6 7"/><circle cx="105" cy="105" r="58" fill="#174c43"/><path d="M70 122 L92 96 L104 110 L118 90 L140 122 Z" fill="#8fb3a0"/><circle cx="128" cy="84" r="8" fill="#f3c76b"/><path d="M84 128 Q100 120 120 122" stroke="#ecd6a6" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
@@ -202,7 +206,7 @@ function storageError() {
 }
 
 async function backpacks() {
-  screen('Mis mochilas', 'Elige una mochila para empezar. Las que llevan ✓ funcionan sin conexión.')
+  screen('¿Qué mochila abrimos hoy?', 'Cada mochila es una misión. Las que llevan ✓ ya están guardadas y funcionan sin conexión.')
   lesson.className = 'backpacks'
   const db = await database
   const cached = await new Promise<Map<string, Pack>>((resolve, reject) => {
@@ -220,7 +224,7 @@ async function backpacks() {
   const entries = [...knownPacks]
   for (const [id, saved] of cached) {
     if (!entries.some(entry => entry.id === id)) {
-      entries.push({ id, title: saved.title, place: saved.context.country + ' · ' + saved.context.region, language: saved.language === 'en' ? 'English' : 'Español', note: 'Material aprobado' })
+      entries.push({ id, title: saved.title, place: saved.context.region + ', ' + saved.context.country, language: saved.language === 'en' ? 'English' : 'Español', note: 'Material aprobado' })
     }
   }
   const grid = document.createElement('div')
@@ -234,7 +238,7 @@ async function backpacks() {
     const title = document.createElement('strong')
     title.textContent = cached.get(entry.id)?.title ?? entry.title
     const place = document.createElement('span')
-    place.textContent = entry.place + ' · ' + entry.language
+    place.textContent = entry.place + ' — ' + entry.language
     const state = document.createElement('small')
     state.className = 'backpack-state'
     state.textContent = ready ? '✓ Lista sin conexión' : 'Necesita conexión la primera vez'
