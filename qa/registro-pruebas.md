@@ -43,3 +43,19 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 - **Resultado:** correcto para el alcance probado: la aplicación reabre y conserva progreso local en Safari con el servidor inaccesible.
 - **Límite:** servidor parado no equivale a una prueba física de modo avión en móvil. No comprueba el recorrido integrado de autoría, aprobación, exportación ni sincronización.
 - **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
+
+## 2026-11-04 — Reapertura en modo avión y recuperación de progreso en iPhone
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** iPhone 17 con iOS 27.2.
+- **Navegador:** Safari.
+- **Conexión y URL:** comenzó con Wi-Fi y HTTPS; después activó modo avión, cerró la pestaña y reabrió la misma URL.
+- **URL usada:** `https://jam-rush-seeking-copied.trycloudflare.com/revision` (túnel temporal, ya cerrado; no es una URL vigente).
+- **Ruta:** `/revision`.
+- **Versión probada:** commit `24f7cf2`.
+- **Actividad y progreso:** completó una actividad con el avatar Zorro antes de desconectar. No se especificó el paquete utilizado.
+- **Acciones y resultado observado:** al reabrir en modo avión apareció el selector de avatares; al elegir Zorro, se recuperó «¡Buen trabajo, Zorro!».
+- **Resultado:** correcto para el alcance probado: la app reabre sin red y recupera el progreso guardado localmente.
+- **Límite:** la actividad se completó antes de desconectar. Esta prueba no demuestra que se pueda completar una actividad nueva offline ni que la sincronización funcione al volver la red.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
