@@ -129,3 +129,83 @@ button.wrong{animation:nudge .35s ease;border-color:#c98a5e!important;background
 .role:nth-child(2){border-color:#174c43}
 .pending-line{font-weight:700;color:#174c43}
 @media(max-width:480px){a.backpack{display:grid;grid-template-columns:56px 1fr;column-gap:12px;align-items:center;padding:14px}a.backpack .backpack-art{grid-row:span 4;width:56px;height:56px;margin:0}a.backpack strong{font-size:1.12rem}.backpack-state{margin-top:4px}}
+/* Mochi, avatares, efectos y tablet */
+.guide{display:flex;align-items:flex-end;gap:10px;margin:6px 0 14px;max-width:640px}
+.guide-art{flex:none;width:64px;height:70px}.guide-art svg{width:100%;height:100%}
+.guide-bubble{position:relative;margin:0;background:#fff;border:2px solid #e2d8bf;border-radius:18px;padding:10px 14px;font-weight:700;color:#174c43;box-shadow:0 3px 0 #e2d8bf}
+.guide-bubble::before{content:"";position:absolute;left:-10px;bottom:14px;border:8px solid transparent;border-right-color:#e2d8bf}
+.guide.hop .guide-art{animation:hop .5s ease}
+.guide.wiggle .guide-art{animation:wiggle .45s ease}
+.guide.wiggle .guide-bubble{border-color:#c98a5e;background:#fbeee4;color:#7a3414}
+@keyframes hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-14px)}}
+@keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg)}75%{transform:rotate(8deg)}}
+.avatar-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.avatar-grid button.avatar{width:100%;margin:0;background:var(--avatar-bg,#fbe3bd)}
+.avatar-grid button.avatar+button.avatar{margin-left:0}
+.avatar-grid .avatar img{height:clamp(70px,14vw,110px)}
+.avatar-stamps{display:block;margin-top:6px;font:800 .82rem/1.2 "Avenir Next",system-ui,sans-serif;letter-spacing:0;text-transform:none;color:#5b4a2e}
+.avatar::after{content:none}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:50}
+.confetti i{position:absolute;top:-12px;width:10px;height:14px;border-radius:3px;animation:fall 1.5s cubic-bezier(.2,.6,.4,1) forwards}
+@keyframes fall{to{transform:translate(var(--drift),105vh) rotate(var(--spin));opacity:.9}}
+.sound-toggle{margin:0 0 0 10px;min-height:40px;padding:6px 12px;border-radius:999px;background:#fffdf5;color:#174c43;border:1.5px solid #d8cfb5;font-size:1.1rem}
+header{gap:8px}
+.scene-savanna aside{background-color:#fbd99a;background-position:center;background-size:cover}
+#lesson>*{animation:rise .35s ease both}
+#lesson>*:nth-child(2){animation-delay:.04s}#lesson>*:nth-child(3){animation-delay:.08s}#lesson>*:nth-child(4){animation-delay:.12s}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (min-width:700px){
+  :root{font-size:112%}
+  .avatar-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .backpack-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .choices{grid-template-columns:repeat(2,minmax(0,1fr));max-width:none}
+  .steps{max-width:none;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .activities{grid-template-columns:repeat(2,minmax(0,1fr));max-width:none}
+  .guide-art{width:84px;height:92px}
+  .activity-screen h1,.kind-story h1{max-width:none}
+}
+@media (min-width:1000px){.choices,.steps{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (prefers-reduced-motion:reduce){#lesson>*,.guide.hop .guide-art,.guide.wiggle .guide-art{animation:none}}
+/* Dinámicas: parejas y plato */
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:760px}
+.pairs-column{display:grid;gap:10px;align-content:start}
+button.pair-card{width:100%;margin:0;min-height:64px;background:#fff;color:#193f34;border:2px solid #e2d8bf;box-shadow:0 3px 0 #e2d8bf;border-radius:16px;font-size:1.02rem}
+button.pair-card.picked{border-color:#174c43;box-shadow:0 0 0 4px #f3c76b,0 3px 0 #174c43}
+button.pair-card.wrong{animation:nudge .35s ease;border-color:#c98a5e}
+button.pair-done{opacity:1!important;color:#fff;border-color:transparent;box-shadow:none}
+.pair-0{background:#174c43!important}.pair-1{background:#a5552a!important}.pair-2{background:#3a6b8c!important}.pair-3{background:#6b5b95!important}
+.plate{position:relative;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:8px;width:min(300px,78vw);aspect-ratio:1;margin:6px auto 14px;padding:42px;border-radius:50%;background:radial-gradient(circle,#fff 0 56%,#f2ebdc 57% 63%,#fff 64%);border:3px solid #e2d8bf;box-shadow:0 8px 0 #e2d8bf}
+.tray{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:760px;margin:0 auto}
+button.food-token{margin:0;min-height:56px;border-radius:999px;background:#fbe9c0;color:#5b3a12;border:2px solid #e9c67a;box-shadow:0 3px 0 #e9c67a;padding:10px 18px}
+button.food-token span{margin-right:6px}
+button.food-token.wrong{animation:nudge .35s ease;background:#fbeee4;border-color:#c98a5e}
+button.food-token.on-plate{opacity:1;min-height:40px;padding:6px 12px;font-size:.9rem;background:#dff0e3;border-color:#174c43;color:#174c43;box-shadow:none;animation:pop .4s cubic-bezier(.2,1.4,.4,1)}
+@media (prefers-reduced-motion:reduce){button.food-token.on-plate,button.pair-card.wrong{animation:none}}
+button.food-token.on-plate:disabled{opacity:1}
+/* Autoría rediseñada */
+.reopen-bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;background:#f6f2e4;border-radius:16px;padding:10px 14px;margin:0 0 6px}
+.reopen-label{font-weight:700;color:#4f5d58}
+.reopen-bar input{flex:1 1 220px;font:inherit;padding:9px 12px;border:1.5px solid #cfc6aa;border-radius:12px;background:#fff}
+.reopen-bar button{margin:0}
+.topic-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:4px 0 14px}
+button.topic-card{display:flex;flex-direction:column;align-items:flex-start;gap:3px;margin:0;min-height:110px;text-align:left;background:#fff;color:#193f34;border:2px solid #e2d8bf;box-shadow:0 3px 0 #e2d8bf;border-radius:18px;padding:12px}
+button.topic-card small{font:600 .8rem/1.3 "Avenir Next",system-ui,sans-serif;letter-spacing:0;text-transform:none;color:#4f5d58}
+.topic-emoji{font-size:1.6rem}
+button.topic-card[aria-pressed=true]{border-color:#174c43;background:#eef6f0;box-shadow:0 3px 0 #174c43}
+.preset-row{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 12px}
+button.preset-chip{margin:0;min-height:40px;padding:6px 14px;border-radius:999px;background:#fbe9c0;color:#5b3a12;border:1.5px solid #e9c67a;font-size:.92rem}
+button.primary-ai{min-height:58px;padding:14px 26px;font-size:1.1rem;border-radius:16px;background:linear-gradient(#215a49,#174c43);box-shadow:0 4px 0 #0f342e}
+button.primary-ai.working{opacity:.75;cursor:progress}
+.plan-b details{background:#fbf8ee;border:1.5px dashed #d8cfb5;border-radius:16px;padding:10px 14px}
+.plan-b summary{cursor:pointer;font-weight:800;color:#174c43;min-height:32px}
+.authoring>h1{max-width:none}
+/* Panel docente en tarjetas */
+.panel-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:6px}
+.panel-card{position:relative;background:#fff;border:1.5px solid #e2d8bf;border-radius:20px;padding:18px 18px 16px;box-shadow:0 4px 0 #e2d8bf}
+.panel-card h2{font:700 1.3rem/1.2 Georgia,serif;color:#174c43;margin:0 0 6px;padding-right:44px}
+.panel-card p{margin:.4rem 0 .8rem;color:#4f5d58}
+.panel-icon{position:absolute;top:14px;right:14px;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:#fbe9c0;font-size:1.25rem}
+.panel-author{border-color:#174c43;box-shadow:0 4px 0 #174c43;background:#f4faf6}
+.panel-progress{grid-row:span 2}
+.teacher .metrics{margin:8px 0}
+.teacher-home>h1{max-width:none}

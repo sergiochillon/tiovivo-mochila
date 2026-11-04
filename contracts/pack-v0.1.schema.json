@@ -58,7 +58,7 @@
       "required": ["id", "topic", "title", "activities"],
       "properties": {
         "id": { "$ref": "#/$defs/slug" },
-        "topic": { "enum": ["food", "help", "emotions"] },
+        "topic": { "enum": ["food", "help", "emotions", "hygiene", "coexistence", "safety", "autonomy"] },
         "title": { "type": "string", "minLength": 1, "maxLength": 120 },
         "activities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Activity" } }
       }

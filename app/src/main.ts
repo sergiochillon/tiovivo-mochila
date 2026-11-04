@@ -6,14 +6,42 @@ import './style.css'
 import { classTotals, sendProgress, type Progress } from './sync'
 import fox from './zorro.svg'
 import bird from './colibri.svg'
-const avatars = [
-  { id: 'zorro', label: 'Zorro', portrait: fox },
-  { id: 'colibri', label: 'Colibrí', portrait: bird }
-] as const
+import { extraAvatars, mochi, savanna } from './art'
+import { confetti, isMuted, setMuted, soundRight, soundStamp, soundTap, soundWrong } from './fx'
+// Each explorer is a child's identity on a shared device, without personal data: progress is kept per avatar.
+// label is the legacy display name used only to migrate old progress records.
+const avatars: { id: string; portrait: string; color?: string; label?: string }[] = [
+  { id: 'zorro', label: 'Zorro', portrait: fox, color: '#fbe3bd' },
+  { id: 'colibri', label: 'Colibrí', portrait: bird, color: '#d7eadb' },
+  ...extraAvatars.map(({ id, portrait, color }) => ({ id, portrait, color }))
+]
 
 const lesson = document.querySelector<HTMLElement>('#lesson')!
 let pack: Pack
 type Avatar = typeof avatars[number]
+
+/** Mochi, the guide: a speech bubble whose text and mood can change. */
+function guide(text: string, mood: 'happy' | 'thinking' | 'cheer' = 'happy') {
+  const box = document.createElement('div')
+  box.className = 'guide'
+  const art = document.createElement('span')
+  art.className = 'guide-art'
+  art.innerHTML = mochi(mood)
+  const bubble = document.createElement('p')
+  bubble.className = 'guide-bubble'
+  bubble.setAttribute('role', 'status')
+  bubble.textContent = text
+  box.append(art, bubble)
+  return {
+    box,
+    say(next: string, nextMood: 'happy' | 'thinking' | 'cheer' = 'happy', effect = '') {
+      bubble.textContent = next
+      art.innerHTML = mochi(nextMood)
+      box.classList.remove('wiggle', 'hop'); void box.offsetWidth
+      if (effect) box.classList.add(effect)
+    }
+  }
+}
 const database = new Promise<IDBDatabase>((resolve, reject) => {
   const request = indexedDB.open('mochila-aula', 3)
   request.onupgradeneeded = event => {
@@ -46,10 +74,10 @@ const database = new Promise<IDBDatabase>((resolve, reject) => {
 
 const texts = {
   es: {
-    kinds: { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?' } as Record<string, string>,
-    avatars: { zorro: 'Zorro', colibri: 'Colibrí' } as Record<string, string>,
+    kinds: { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas' } as Record<string, string>,
+    avatars: { zorro: 'Zorro', colibri: 'Colibrí', llama: 'Llama', jirafa: 'Jirafa', tortuga: 'Tortuga', rana: 'Rana' } as Record<string, string>,
     edition: 'Atlas de aula', expedition: 'EXPEDICIÓN 01', footer: 'El progreso se guarda en este dispositivo.',
-    who: '¿Quién va contigo?', whoHelp: 'Elige un compañero para explorar el valle.',
+    who: '¿Quién eres hoy?', whoHelp: 'Cada explorador guarda sus propios sellos. Elige el tuyo.',
     activities: 'Actividades', goingWith: (name: string) => 'Vas con ' + name + '. Toca una actividad para empezar.',
     next: 'Siguiente', start: 'Empezar', done: 'Completada', minutes: 'min', changeAvatar: 'Cambiar de avatar',
     back: '← Actividades', continue: 'Continuar', needsReview: 'Esta actividad necesita revisión.', goBack: 'Volver',
@@ -60,13 +88,17 @@ const texts = {
     nextActivity: 'Siguiente actividad', allActivities: 'Ver todas las actividades',
     storageTitle: 'No se puede acceder al progreso',
     storageHelp: 'Comprueba que el navegador permite guardar datos y vuelve a intentarlo.', retry: 'Volver a intentar',
-    playAgain: 'Volver a jugar', backpacks: '← Mis mochilas', correctAnswer: '¡Muy bien!', listenFirst: 'Escucha o lee la pregunta y elige.'
+    playAgain: 'Volver a jugar', backpacks: '← Mis mochilas', correctAnswer: '¡Muy bien!', listenFirst: 'Escucha o lee la pregunta y elige.',
+    plateHelp: 'Toca todo lo que va en el plato. ¡Llénalo!', plateWrong: 'Eso no va aquí. Prueba con otra cosa.', plateGood: '¡Sí! Sigue llenando el plato.',
+    pairsHelp: 'Toca uno de la izquierda y su pareja de la derecha.', pairsWrong: 'Esa no es su pareja. ¡Inténtalo otra vez!', pairsGood: '¡Pareja encontrada!',
+    hello: '¡Hola! Soy Mochi. Cuando termines una actividad, ganarás un sello.', letsGo: '¡Vamos! Empieza por la estación que brilla.',
+    stamps: (n: number) => n === 1 ? '1 sello' : n + ' sellos', allDone: '¡Has completado todas las estaciones!'
   },
   en: {
-    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?' } as Record<string, string>,
-    avatars: { zorro: 'Fox', colibri: 'Hummingbird' } as Record<string, string>,
+    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs' } as Record<string, string>,
+    avatars: { zorro: 'Fox', colibri: 'Hummingbird', llama: 'Llama', jirafa: 'Giraffe', tortuga: 'Turtle', rana: 'Frog' } as Record<string, string>,
     edition: 'Class atlas', expedition: 'EXPEDITION 01', footer: 'Your progress is saved on this device.',
-    who: 'Who is coming with you?', whoHelp: 'Choose a friend to explore with.',
+    who: 'Who are you today?', whoHelp: 'Each explorer keeps their own stamps. Choose yours.',
     activities: 'Activities', goingWith: (name: string) => 'You are with ' + name + '. Tap an activity to start.',
     next: 'Next', start: 'Start', done: 'Done', minutes: 'min', changeAvatar: 'Change friend',
     back: '← Activities', continue: 'Continue', needsReview: 'This activity needs review.', goBack: 'Back',
@@ -77,7 +109,11 @@ const texts = {
     nextActivity: 'Next activity', allActivities: 'See all activities',
     storageTitle: 'Progress cannot be saved',
     storageHelp: 'Check that the browser allows saving data and try again.', retry: 'Try again',
-    playAgain: 'Play again', backpacks: '← My backpacks', correctAnswer: 'Great!', listenFirst: 'Listen or read the question and choose.'
+    playAgain: 'Play again', backpacks: '← My backpacks', correctAnswer: 'Great!', listenFirst: 'Listen or read the question and choose.',
+    plateHelp: 'Tap everything that goes on the plate. Fill it up!', plateWrong: 'That one does not go here. Try another.', plateGood: 'Yes! Keep filling the plate.',
+    pairsHelp: 'Tap one on the left, then its match on the right.', pairsWrong: 'Not a match. Try again!', pairsGood: 'Match found!',
+    hello: 'Hi! I am Mochi. When you finish an activity, you will earn a stamp.', letsGo: "Let's go! Start with the shining station.",
+    stamps: (n: number) => n === 1 ? '1 stamp' : n + ' stamps', allDone: 'You completed every station!'
   }
 }
 // The interface follows the language of the approved package; Spanish until one is loaded.
@@ -88,7 +124,8 @@ const kinds: Record<string, { label: string; icon: string }> = {
   story: { label: 'Historia', icon: '<path d="M4 5h5a3 3 0 0 1 3 3v11a2 2 0 0 0-2-2H4z"/><path d="M20 5h-5a3 3 0 0 0-3 3v11a2 2 0 0 1 2-2h6z"/>' },
   choice: { label: 'Elige', icon: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/>' },
   order: { label: 'Ordena', icon: '<path d="M10 6h10M10 12h10M10 18h10M4 6h1.5M4 12h1.5M4 18h1.5"/>' },
-  scenario: { label: '¿Qué harías?', icon: '<path d="M4 5h16v10H10l-5 4v-4H4z"/>' }
+  scenario: { label: '¿Qué harías?', icon: '<path d="M4 5h16v10H10l-5 4v-4H4z"/>' },
+  match: { label: 'Parejas', icon: '<rect x="3" y="5" width="7" height="14" rx="2"/><rect x="14" y="5" width="7" height="14" rx="2"/><path d="M10 12h4"/>' }
 }
 const checkIcon = '<path d="M5 12l5 5 9-10"/>'
 const knownPacks = [
@@ -210,8 +247,18 @@ async function backpacks() {
   lesson.append(grid)
 }
 
-function choose() {
+async function choose() {
   screen(t.who, t.whoHelp)
+  lesson.className = 'choose'
+  lesson.append(guide(t.hello).box)
+  const db = await database
+  const records = await new Promise<Progress[]>((resolve, reject) => {
+    const request = db.transaction('progress').objectStore('progress').getAll()
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+  })
+  const grid = document.createElement('div')
+  grid.className = 'avatar-grid'
   if (!technicalPreview) {
     const home = document.createElement('a')
     home.className = 'back'
@@ -220,14 +267,22 @@ function choose() {
     lesson.prepend(home)
   }
   for (const avatar of avatars) {
-    const card = button(avatarName(avatar), () => activities(avatar))
+    const card = button(avatarName(avatar), () => { soundTap(); return activities(avatar) })
     card.className = 'avatar'
+    card.style.setProperty('--avatar-bg', avatar.color ?? '#fbe3bd')
     const portrait = new Image()
     portrait.src = avatar.portrait
     portrait.alt = ''
     card.prepend(portrait)
+    const count = records.filter(record => record.avatarId === avatar.id && pack && record.packId === pack.id).length
+    const stamps = document.createElement('small')
+    stamps.className = 'avatar-stamps'
+    stamps.textContent = '★ ' + t.stamps(count)
+    card.append(stamps)
     card.dataset.avatar = avatar.id
+    grid.append(card)
   }
+  lesson.append(grid)
 }
 
 async function activities(avatar: Avatar) {
@@ -238,6 +293,8 @@ async function activities(avatar: Avatar) {
   }
   const done = await completedIds(avatar)
   screen(t.activities, t.goingWith(avatarName(avatar)))
+  const allDone = items.every(item => done.has(item.id))
+  lesson.append(guide(allDone ? t.allDone : t.letsGo, allDone ? 'cheer' : 'happy').box)
   lesson.append(seals(items.filter(item => done.has(item.id)).length, items.length))
   const list = document.createElement('div')
   list.className = 'activities'
@@ -299,9 +356,9 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     back.onclick = () => activities(avatar).catch(storageError)
     lesson.prepend(back)
   }
-  const hint = document.createElement('p')
-  hint.className = 'hint'
-  hint.setAttribute('role', 'status')
+  // Mochi gives the instructions, the hints and the praise.
+  const coach = guide(t.listenFirst, 'thinking')
+  const hint = coach.box
   async function finish() {
     const event: Progress = {
       eventId: crypto.randomUUID(), avatarId: avatar.id, packId: pack.id,
@@ -316,7 +373,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
       tx.oncomplete = () => resolve()
       tx.onabort = () => reject(tx.error)
     })
-    await complete(avatar, activity)
+    await complete(avatar, activity, true)
   }
   const options = activity.options ?? []
   if (activity.type === 'story') {
@@ -348,27 +405,117 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     const grid = document.createElement('div')
     grid.className = 'steps'
     lesson.append(slots, hint, grid)
-    hint.textContent = t.firstStep
+    coach.say(t.firstStep, 'thinking')
     for (const option of shown) {
       const answer = button(option.text, async () => {
         if (option.id !== sequence[step]) {
-          hint.textContent = t.wrongStep
-          hint.className = 'hint try'
+          coach.say(t.wrongStep, 'thinking', 'wiggle')
+          soundWrong()
           answer.classList.remove('wrong'); void answer.offsetWidth; answer.classList.add('wrong')
           return
         }
-        hint.className = 'hint good'
+        soundRight()
         slotText[step].textContent = option.text
         slotText[step].parentElement!.classList.add('filled')
         step++
         answer.disabled = true
         if (step === sequence.length) { await delay(450); await finish() }
-        else hint.textContent = t.nextStep
+        else coach.say(t.nextStep, 'happy', 'hop')
       })
       grid.append(answer)
     }
+  } else if (activity.type === 'match') {
+    // Pairs: correct holds "leftId:rightId"; ids never contain ":" (schema slug).
+    const pairs = (Array.isArray(activity.correct) ? activity.correct : []).map(pair => pair.split(':'))
+    const byId = new Map(options.map(option => [option.id, option]))
+    if (!pairs.length || pairs.some(pair => pair.length !== 2 || !byId.has(pair[0]) || !byId.has(pair[1]))) {
+      screen(t.needsReview)
+      button(t.goBack, () => activities(avatar))
+      return
+    }
+    coach.say(t.pairsHelp, 'thinking')
+    const board = document.createElement('div')
+    board.className = 'pairs'
+    const left = document.createElement('div')
+    const right = document.createElement('div')
+    left.className = right.className = 'pairs-column'
+    board.append(left, right)
+    lesson.append(hint, board)
+    let selected: { id: string; element: HTMLButtonElement } | undefined
+    let found = 0
+    const card = (id: string, column: HTMLElement, side: 'left' | 'right') => {
+      const element = document.createElement('button')
+      element.className = 'pair-card'
+      element.textContent = byId.get(id)!.text
+      element.onclick = async () => {
+        soundTap()
+        if (side === 'left') {
+          selected?.element.classList.remove('picked')
+          selected = { id, element }
+          element.classList.add('picked')
+          return
+        }
+        if (!selected) return coach.say(t.pairsHelp, 'thinking', 'wiggle')
+        const match = pairs.some(([a, b]) => a === selected!.id && b === id)
+        if (!match) {
+          element.classList.remove('wrong'); void element.offsetWidth; element.classList.add('wrong')
+          setTimeout(() => element.classList.remove('wrong'), 700)
+          coach.say(t.pairsWrong, 'thinking', 'wiggle')
+          soundWrong()
+          return
+        }
+        const color = 'pair-done pair-' + (found % 4)
+        selected.element.className = 'pair-card ' + color
+        element.className = 'pair-card ' + color
+        selected.element.disabled = element.disabled = true
+        selected = undefined
+        found++
+        soundRight()
+        if (found === pairs.length) { coach.say(t.correctAnswer, 'cheer', 'hop'); await delay(600); await finish() }
+        else coach.say(t.pairsGood, 'happy', 'hop')
+      }
+      column.append(element)
+    }
+    pairs.forEach(([a]) => card(a, left, 'left'))
+    // Right column never in the same order as the left one.
+    const rights = pairs.map(([, b]) => b)
+    ;[...rights.slice(1), rights[0]].forEach(b => card(b, right, 'right'))
+  } else if (Array.isArray(activity.correct) && activity.correct.length > 1) {
+    // "Fill the plate": every correct option must be collected; wrong ones bounce back.
+    const needed = new Set(activity.correct)
+    coach.say(t.plateHelp, 'thinking')
+    const plate = document.createElement('div')
+    plate.className = 'plate'
+    plate.setAttribute('aria-label', t.yourOrder)
+    const tray = document.createElement('div')
+    tray.className = 'tray'
+    lesson.append(hint, plate, tray)
+    options.forEach(option => {
+      const token = button(option.text, async () => {
+        if (!needed.has(option.id)) {
+          token.classList.remove('wrong'); void token.offsetWidth; token.classList.add('wrong')
+          coach.say(option.feedback || t.plateWrong, 'thinking', 'wiggle')
+          soundWrong()
+          return
+        }
+        needed.delete(option.id)
+        token.disabled = true
+        token.classList.add('on-plate')
+        plate.append(token)
+        soundRight()
+        if (needed.size === 0) { coach.say(t.correctAnswer, 'cheer', 'hop'); await delay(700); await finish() }
+        else coach.say(t.plateGood, 'happy', 'hop')
+      })
+      token.className = 'food-token'
+      if (option.icon) {
+        const icon = document.createElement('span')
+        icon.setAttribute('aria-hidden', 'true')
+        icon.textContent = option.icon
+        token.prepend(icon)
+      }
+      tray.append(token)
+    })
   } else {
-    hint.textContent = t.listenFirst
     const choices = document.createElement('div')
     choices.className = 'choices'
     lesson.append(choices, hint)
@@ -377,15 +524,15 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         const correct = activity.correct
         if (Array.isArray(correct) ? correct.includes(option.id) : correct === option.id) {
           answer.classList.add('right')
-          hint.className = 'hint good'
-          hint.textContent = t.correctAnswer
+          coach.say(t.correctAnswer, 'cheer', 'hop')
+          soundRight()
           choices.querySelectorAll('button').forEach(other => { (other as HTMLButtonElement).disabled = true })
           await delay(650)
           await finish()
         } else {
           answer.classList.remove('wrong'); void answer.offsetWidth; answer.classList.add('wrong')
-          hint.className = 'hint try'
-          hint.textContent = option.feedback || t.tryAgain
+          coach.say(option.feedback || t.tryAgain, 'thinking', 'wiggle')
+          soundWrong()
         }
       })
       answer.className = 'answer choice-' + (index % 4)
@@ -407,7 +554,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
   if (technicalPreview) button(t.changeAvatar, choose)
 }
 
-async function complete(avatar: Avatar, activity: Activity) {
+async function complete(avatar: Avatar, activity: Activity, fresh = false) {
   screen(t.wellDone(avatarName(avatar)), activity.feedback)
   lesson.append(readingControl(activity.feedback, pack.language))
   lesson.className = 'celebrate'
@@ -422,6 +569,7 @@ async function complete(avatar: Avatar, activity: Activity) {
   badge.className = 'badge'
   badge.textContent = t.seal
   lesson.prepend(seal, badge)
+  if (fresh) { soundStamp(); confetti(lesson) }
   if (technicalPreview) {
     button(t.changeAvatar, choose)
     return
@@ -456,7 +604,8 @@ async function pendingCount() {
 
 function teacherPanel() {
   teacherHeader('Cuaderno de clase', 'Clase DEMO-01')
-  screen('Cuaderno de clase', 'Seguimiento del progreso · Clase DEMO-01')
+  screen('Cuaderno de clase', 'Clase DEMO-01 · prepara el material, sigue el progreso y deja las tablets listas.')
+  lesson.className = 'teacher-home'
   const metrics = document.createElement('div')
   metrics.className = 'metrics'
   function metric(label: string) {
@@ -543,7 +692,45 @@ function teacherPanel() {
     await showPending()
   })
   reset.classList.add('secondary')
+  // Lay the panel out as three cards: prepare material, class progress, this device.
+  const card = (className: string, icon: string, nodes: Node[]) => {
+    const section = document.createElement('section')
+    section.className = 'panel-card ' + className
+    const badge = document.createElement('span')
+    badge.className = 'panel-icon'
+    badge.setAttribute('aria-hidden', 'true')
+    badge.textContent = icon
+    section.append(badge, ...nodes)
+    return section
+  }
+  const refreshButton = [...lesson.querySelectorAll('button')].find(item => item.textContent === 'Actualizar contadores')!
+  panelTitle.textContent = 'Progreso de la clase'
+  explanation.textContent = 'Cuando vuelva la conexión, envía lo que se hizo sin red. Reenviar nunca duplica.'
+  authorTitle.textContent = 'Preparar material con IA'
+  demoTitle.textContent = 'Este dispositivo'
+  const grid = document.createElement('div')
+  grid.className = 'panel-grid'
+  grid.append(
+    card('panel-author', '✨', [authorTitle, authorHelp, authorLink]),
+    card('panel-progress', '📊', [panelTitle, metrics, explanation, submit, refreshButton, status, totals]),
+    card('panel-device', '📱', [demoTitle, pendingLine, demoHelp, reset])
+  )
+  lesson.append(grid)
   void refresh()
+}
+
+// Sound switch in the header (children's screens only).
+if (!['/docente', '/autoria'].includes(location.pathname)) {
+  const toggle = document.createElement('button')
+  toggle.type = 'button'
+  toggle.className = 'sound-toggle'
+  const paint = () => {
+    toggle.textContent = isMuted() ? '🔇' : '🔊'
+    toggle.setAttribute('aria-label', isMuted() ? 'Activar sonidos' : 'Silenciar sonidos')
+  }
+  toggle.onclick = () => { setMuted(!isMuted()); paint(); soundTap() }
+  paint()
+  document.querySelector('header')!.append(toggle)
 }
 
 const reviewRoute = location.pathname === '/revision'
@@ -591,6 +778,10 @@ else if (technicalPreview) {
     document.querySelector('footer')!.textContent = t.footer
     document.querySelector('.map-copy h2')!.textContent = pack.title
     document.querySelector('.map-copy p')!.textContent = pack.context.country
+    if (/uganda/i.test(pack.context.country)) {
+      document.body.classList.add('scene-savanna')
+      document.querySelector<HTMLElement>('aside')!.style.backgroundImage = 'url("' + savanna + '")'
+    }
     choose()
   }).catch(error => {
     screen('Paquete no disponible', error instanceof Error ? error.message : '')
