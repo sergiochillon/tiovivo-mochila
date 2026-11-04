@@ -42,7 +42,57 @@ const database = new Promise<IDBDatabase>((resolve, reject) => {
   request.onerror = () => reject(request.error)
 })
 
+const kinds: Record<string, { label: string; icon: string }> = {
+  story: { label: 'Historia', icon: '<path d="M4 5h5a3 3 0 0 1 3 3v11a2 2 0 0 0-2-2H4z"/><path d="M20 5h-5a3 3 0 0 0-3 3v11a2 2 0 0 1 2-2h6z"/>' },
+  choice: { label: 'Elige', icon: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/>' },
+  order: { label: 'Ordena', icon: '<path d="M10 6h10M10 12h10M10 18h10M4 6h1.5M4 12h1.5M4 18h1.5"/>' },
+  scenario: { label: '¿Qué harías?', icon: '<path d="M4 5h16v10H10l-5 4v-4H4z"/>' }
+}
+const checkIcon = '<path d="M5 12l5 5 9-10"/>'
+const sealArt = '<svg viewBox="0 0 210 210"><circle cx="105" cy="105" r="100" fill="#fbe9c0"/><circle cx="105" cy="105" r="78" fill="#f3c76b"/><circle cx="105" cy="105" r="78" fill="none" stroke="#174c43" stroke-width="4" stroke-dasharray="6 7"/><circle cx="105" cy="105" r="58" fill="#174c43"/><path d="M70 122 L92 96 L104 110 L118 90 L140 122 Z" fill="#8fb3a0"/><circle cx="128" cy="84" r="8" fill="#f3c76b"/><path d="M84 128 Q100 120 120 122" stroke="#ecd6a6" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
+
+// Static, trusted markup only: never pass package text to this helper.
+function icon(paths: string, className: string) {
+  const wrapper = document.createElement('span')
+  wrapper.className = className
+  wrapper.setAttribute('aria-hidden', 'true')
+  wrapper.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" ' +
+    'stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + paths + '</svg>'
+  return wrapper
+}
+
+const playable = (activity: Activity) => activity.type in kinds
+
+async function completedIds(avatar: Avatar) {
+  const db = await database
+  const records = await new Promise<Progress[]>((resolve, reject) => {
+    const request = db.transaction('progress').objectStore('progress').getAll()
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+  })
+  return new Set(records.filter(record => record.avatarId === avatar.id && record.packId === pack.id)
+    .map(record => record.activityId))
+}
+
+function seals(done: number, total: number) {
+  const row = document.createElement('div')
+  row.className = 'seals'
+  const text = document.createElement('strong')
+  text.textContent = 'Tus sellos: ' + done + ' de ' + total
+  const dots = document.createElement('span')
+  dots.className = 'dots'
+  dots.setAttribute('aria-hidden', 'true')
+  for (let index = 0; index < total; index++) {
+    const dot = document.createElement('i')
+    if (index < done) dot.className = 'on'
+    dots.append(dot)
+  }
+  row.append(text, dots)
+  return row
+}
+
 function screen(title: string, message = '') {
+  lesson.className = ''
   const heading = document.createElement('h1')
   heading.textContent = title
   heading.tabIndex = -1
@@ -78,19 +128,49 @@ function choose() {
   }
 }
 
-function activities(avatar: Avatar) {
-  const items = pack.modules.flatMap(module => module.activities)
+async function activities(avatar: Avatar) {
+  const items = pack.modules.flatMap(module => module.activities).filter(playable)
   if (technicalPreview) {
     const choice = items.find(activity => activity.type === 'choice')
     if (choice) return play(avatar, choice)
   }
-  screen(pack.title, avatar.label)
+  const done = await completedIds(avatar)
+  screen('Actividades', 'Vas con ' + avatar.label + '. Toca una actividad para empezar.')
+  lesson.append(seals(items.filter(item => done.has(item.id)).length, items.length))
+  const list = document.createElement('div')
+  list.className = 'activities'
+  const next = items.find(item => !done.has(item.id))
   for (const item of items) {
-    if (['story', 'choice', 'scenario', 'order'].includes(item.type)) {
-      button(item.prompt, () => play(avatar, item))
+    const finished = done.has(item.id)
+    const card = document.createElement('button')
+    card.className = 'activity' + (finished ? ' done' : '') + (item === next ? ' next' : '')
+    card.onclick = () => play(avatar, item).catch(storageError)
+    const text = document.createElement('span')
+    text.className = 'activity-text'
+    const label = document.createElement('small')
+    label.textContent = kinds[item.type].label + (item === next ? ' · Siguiente' : '')
+    const title = document.createElement('span')
+    title.className = 'activity-title'
+    title.textContent = item.prompt
+    text.append(label, title)
+    const end = finished ? icon(checkIcon, 'status') : document.createElement('span')
+    if (finished) {
+      const state = document.createElement('span')
+      state.className = 'sr-only'
+      state.textContent = 'Completada'
+      text.append(state)
+    } else if (item === next) {
+      end.className = 'pill'
+      end.textContent = 'Empezar'
+    } else {
+      end.className = 'time'
+      end.textContent = item.durationMin ? item.durationMin + ' min' : ''
     }
+    card.append(icon(kinds[item.type].icon, 'tile'), text, end)
+    list.append(card)
   }
-  button('Cambiar de avatar', choose)
+  lesson.append(list)
+  button('Cambiar de avatar', choose).classList.add('secondary')
 }
 
 async function play(avatar: Avatar, activity: Activity) {
@@ -102,8 +182,17 @@ async function play(avatar: Avatar, activity: Activity) {
     request.onerror = () => reject(request.error)
   })
   if (saved) return complete(avatar, activity)
-  screen(activity.prompt, avatar.label)
+  screen(activity.prompt, kinds[activity.type]?.label ?? '')
+  if (!technicalPreview) {
+    const back = document.createElement('button')
+    back.className = 'back'
+    back.textContent = '← Actividades'
+    back.onclick = () => activities(avatar).catch(storageError)
+    lesson.prepend(back)
+  }
   const hint = document.createElement('p')
+  hint.className = 'hint'
+  hint.setAttribute('role', 'status')
   async function finish() {
     const event: Progress = {
       eventId: crypto.randomUUID(), avatarId: avatar.id, packId: pack.id,
@@ -118,7 +207,7 @@ async function play(avatar: Avatar, activity: Activity) {
       tx.oncomplete = () => resolve()
       tx.onabort = () => reject(tx.error)
     })
-    complete(avatar, activity)
+    await complete(avatar, activity)
   }
   const options = activity.options ?? []
   if (activity.type === 'story') {
@@ -135,18 +224,36 @@ async function play(avatar: Avatar, activity: Activity) {
     const ordered = sequence.map(id => options.find(option => option.id === id)!)
     // Present the steps out of order, including when the package lists them in solution order.
     const shown = [...ordered.slice(1), ordered[0]]
-    hint.textContent = 'Elige el primer paso.'
+    const slots = document.createElement('ol')
+    slots.className = 'slots'
+    slots.setAttribute('aria-label', 'Tu orden')
+    const slotText = sequence.map((_, index) => {
+      const item = document.createElement('li')
+      const number = document.createElement('b')
+      number.textContent = String(index + 1)
+      const text = document.createElement('span')
+      item.append(number, text)
+      slots.append(item)
+      return text
+    })
+    const grid = document.createElement('div')
+    grid.className = 'steps'
+    lesson.append(slots, hint, grid)
+    hint.textContent = '¿Cuál es el primer paso?'
     for (const option of shown) {
       const answer = button(option.text, async () => {
         if (option.id !== sequence[step]) {
-          hint.textContent = 'Prueba otro paso.'
+          hint.textContent = 'Ese no va ahora. Prueba otro paso.'
           return
         }
+        slotText[step].textContent = option.text
+        slotText[step].parentElement!.classList.add('filled')
         step++
         answer.disabled = true
         if (step === sequence.length) await finish()
-        else hint.textContent = 'Paso ' + step + ' completado. Elige el siguiente.'
+        else hint.textContent = '¡Bien! ¿Cuál va después?'
       })
+      grid.append(answer)
     }
   } else {
     for (const option of options) {
@@ -167,18 +274,33 @@ async function play(avatar: Avatar, activity: Activity) {
       }
     }
   }
-  lesson.append(hint)
-  button('Cambiar de avatar', choose)
+  if (!hint.isConnected) lesson.append(hint)
+  if (technicalPreview) button('Cambiar de avatar', choose)
 }
 
-function complete(avatar: Avatar, activity: Activity) {
+async function complete(avatar: Avatar, activity: Activity) {
   screen('¡Buen trabajo, ' + avatar.label + '!', activity.feedback)
+  lesson.className = 'celebrate'
+  const seal = document.createElement('div')
+  seal.className = 'seal'
+  seal.setAttribute('role', 'img')
+  seal.setAttribute('aria-label', 'Sello del valle')
+  seal.innerHTML = sealArt
   const badge = document.createElement('strong')
   badge.className = 'badge'
-  badge.textContent = '✦  Sello del valle · Actividad completada'
-  lesson.prepend(badge)
-  if (!technicalPreview) button('Más actividades', () => activities(avatar))
-  button('Cambiar de avatar', choose)
+  badge.textContent = 'Sello del valle'
+  lesson.prepend(seal, badge)
+  if (technicalPreview) {
+    button('Cambiar de avatar', choose)
+    return
+  }
+  const items = pack.modules.flatMap(module => module.activities).filter(playable)
+  const done = await completedIds(avatar)
+  lesson.append(seals(items.filter(item => done.has(item.id)).length, items.length))
+  const next = items.find(item => !done.has(item.id))
+  if (next) button('Siguiente actividad', () => play(avatar, next))
+  const all = button('Ver todas las actividades', () => activities(avatar))
+  if (next) all.classList.add('secondary')
 }
 
 function teacherPanel() {
@@ -252,7 +374,7 @@ else if (technicalPreview) {
     if (!downloaded) return screen('No hay material aprobado para este paquete.')
     pack = downloaded
     document.documentElement.lang = pack.language
-    document.querySelector('.map-copy h2')!.textContent = pack.context.region
+    document.querySelector('.map-copy h2')!.textContent = pack.title
     document.querySelector('.map-copy p')!.textContent = pack.context.country
     choose()
   }).catch(error => {
