@@ -2,16 +2,19 @@ import pack from './demo.json'
 import './style.css'
 import fox from './zorro.svg'
 import bird from './colibri.svg'
-const portraits = { Zorro: fox, Colibrí: bird }
+const avatars = [
+  { id: 'zorro', label: 'Zorro', portrait: fox },
+  { id: 'colibri', label: 'Colibrí', portrait: bird }
+] as const
 
 const lesson = document.querySelector<HTMLElement>('#lesson')!
 const choice = pack.modules.flatMap(module => module.activities).find(item => item.type === 'choice')
 if (!choice?.options || typeof choice.correct !== 'string') throw new Error('Falta la actividad de elección del ejemplo')
 const activity = { ...choice, options: choice.options, correct: choice.correct }
-type Avatar = 'Zorro' | 'Colibrí'
+type Avatar = typeof avatars[number]
 interface Progress {
   eventId: string
-  avatarId: Avatar
+  avatarId: Avatar['id']
   packId: string
   activityId: string
   result: 'correct'
@@ -21,9 +24,30 @@ interface Progress {
 }
 
 const database = new Promise<IDBDatabase>((resolve, reject) => {
-  const request = indexedDB.open('mochila-aula', 1)
-  request.onupgradeneeded = () => request.result.createObjectStore('progress')
-  request.onsuccess = () => resolve(request.result)
+  const request = indexedDB.open('mochila-aula', 2)
+  request.onupgradeneeded = event => {
+    if (event.oldVersion === 0) {
+      request.result.createObjectStore('progress')
+      return
+    }
+    const store = request.transaction!.objectStore('progress')
+    const scan = store.openCursor()
+    scan.onsuccess = () => {
+      const cursor = scan.result
+      if (!cursor) return
+      const record = cursor.value
+      const avatar = avatars.find(item => item.label === record.avatarId)
+      if (avatar) {
+        store.add({ ...record, avatarId: avatar.id }, [avatar.id, record.packId, record.activityId])
+        cursor.delete()
+      }
+      cursor.continue()
+    }
+  }
+  request.onsuccess = () => {
+    request.result.onversionchange = () => request.result.close()
+    resolve(request.result)
+  }
   request.onerror = () => reject(request.error)
 })
 
@@ -52,11 +76,11 @@ function storageError() {
 
 function choose() {
   screen('¿Quién va contigo?', 'Elige un compañero para explorar el valle.')
-  for (const avatar of ['Zorro', 'Colibrí'] as const) {
-    const card = button(avatar, () => play(avatar))
+  for (const avatar of avatars) {
+    const card = button(avatar.label, () => play(avatar))
     card.className = 'avatar'
     const portrait = new Image()
-    portrait.src = portraits[avatar]
+    portrait.src = avatar.portrait
     portrait.alt = ''
     card.prepend(portrait)
   }
@@ -64,14 +88,14 @@ function choose() {
 
 async function play(avatar: Avatar) {
   const db = await database
-  const key = [avatar, pack.id, activity.id]
+  const key = [avatar.id, pack.id, activity.id]
   const saved = await new Promise<Progress | undefined>((resolve, reject) => {
     const request = db.transaction('progress').objectStore('progress').get(key)
     request.onsuccess = () => resolve(request.result)
     request.onerror = () => reject(request.error)
   })
   if (saved) return complete(avatar)
-  screen(activity.prompt, avatar + ' · Elige qué añadir al plato.')
+  screen(activity.prompt, avatar.label + ' · Elige qué añadir al plato.')
   const hint = document.createElement('p')
   activity.options.forEach(option => {
     const answer = button(option.text, async () => {
@@ -80,7 +104,7 @@ async function play(avatar: Avatar) {
       return
     }
     const event: Progress = {
-      eventId: crypto.randomUUID(), avatarId: avatar, packId: pack.id,
+      eventId: crypto.randomUUID(), avatarId: avatar.id, packId: pack.id,
       activityId: activity.id, result: 'correct', type: 'activity_completed',
       ts: new Date().toISOString(), classCode: 'DEMO-01'
     }
@@ -104,7 +128,7 @@ async function play(avatar: Avatar) {
 }
 
 function complete(avatar: Avatar) {
-  screen('¡Buen trabajo, ' + avatar + '!', activity.feedback)
+  screen('¡Buen trabajo, ' + avatar.label + '!', activity.feedback)
   const badge = document.createElement('strong')
   badge.className = 'badge'
   badge.textContent = '★  Actividad completada'
