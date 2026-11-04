@@ -19,6 +19,8 @@ export default defineConfig({
   },
   plugins: [VitePWA({
     registerType: 'autoUpdate',
+    // The header logo and install icons live in public/: precache them so they do not break offline.
+    includeAssets: ['mochila.svg', 'mochila-180.png'],
     manifest: {
       name: 'MOCHILA · Aprender sin conexión',
       short_name: 'MOCHILA',

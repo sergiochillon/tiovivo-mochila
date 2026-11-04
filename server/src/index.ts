@@ -52,9 +52,34 @@ type HttpResult = { status: number; body: JsonRecord };
 const isRecord = (value: unknown): value is JsonRecord =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
+// Checks the schema cannot express: every "correct" answer must point at an existing option,
+// and an "order" activity must list every option exactly once. Otherwise a child could never finish it.
+function semanticDetails(pack: unknown): string[] {
+  const details: string[] = [];
+  const modules = isRecord(pack) && Array.isArray(pack.modules) ? pack.modules : [];
+  modules.forEach((module, moduleIndex) => {
+    const activities = isRecord(module) && Array.isArray(module.activities) ? module.activities : [];
+    activities.forEach((activity, activityIndex) => {
+      if (!isRecord(activity) || activity.correct === undefined) return;
+      const ids = Array.isArray(activity.options)
+        ? activity.options.map((option) => (isRecord(option) ? option.id : undefined))
+        : [];
+      const correct = Array.isArray(activity.correct) ? activity.correct : [activity.correct];
+      const where = `/modules/${moduleIndex}/activities/${activityIndex}/correct`;
+      if (correct.some((id) => !ids.includes(id))) {
+        details.push(`${where}: la respuesta correcta no coincide con ninguna opción`);
+      } else if (activity.type === "order" && (correct.length !== ids.length || new Set(correct).size !== ids.length)) {
+        details.push(`${where}: el orden correcto debe incluir cada opción una sola vez`);
+      }
+    });
+  });
+  return details;
+}
+
 function packValidationDetails(pack: unknown): string[] {
   validatePack(pack);
-  return describeAjvErrors(validatePack.errors);
+  const schemaDetails = describeAjvErrors(validatePack.errors);
+  return schemaDetails.length > 0 ? schemaDetails : semanticDetails(pack);
 }
 
 app.post("/api/generate", async (req: Request, res: Response) => {
@@ -203,7 +228,17 @@ app.post("/api/review/approve", async (req: Request, res: Response) => {
     const reviewedAt = new Date().toISOString();
     const approvedPack: Pack = {
       ...pack,
-      review: { ...pack.review, status: "approved", reviewedBy: reviewer, reviewedAt },
+      // Rewrite the notes: draft notes ("pending pedagogical review") must not survive the seal.
+      review: {
+        ...pack.review,
+        status: "approved",
+        reviewedBy: reviewer,
+        reviewedAt,
+        notes:
+          `Revisión pedagógica aprobada por ${reviewer} el ${reviewedAt.slice(0, 10)}. ` +
+          "La validación cultural local sigue pendiente. No probado con niños." +
+          (String(pack.review.notes ?? "").includes("IA") ? " Propuesta generada con IA y revisada por una persona." : ""),
+      },
     };
     const details = packValidationDetails(approvedPack);
     if (details.length > 0) {

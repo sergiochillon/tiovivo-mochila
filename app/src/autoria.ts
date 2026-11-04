@@ -6,7 +6,7 @@ import { approved as isApprovedPack, draftErrors } from './packs'
 const api = import.meta.env.VITE_API_BASE_URL || '/api'
 
 type Option = { id: string; text: string }
-type DraftActivity = { id: string; type: string; prompt: string; feedback: string; options?: Option[]; safetyTag: string; teacherNotes?: string }
+type DraftActivity = { id: string; type: string; prompt: string; feedback: string; options?: Option[]; correct?: string | string[]; audioText?: string; safetyTag: string; teacherNotes?: string }
 type Draft = {
   id: string; title: string; language: string
   review: { status: string; [key: string]: unknown }
@@ -101,7 +101,17 @@ export function authoring(lesson: HTMLElement) {
   const heading = element('h1', '', 'Preparar material')
   heading.tabIndex = -1
   const intro = element('p', '', 'Adapta el módulo de alimentación a otra comunidad con ayuda de la IA. Nada llega al alumnado hasta que una persona lo revisa y lo aprueba.')
-  lesson.replaceChildren(heading, intro)
+  const roles = element('div', 'roles')
+  for (const [title, text] of [
+    ['1 · La IA propone', 'Adapta las actividades al contexto que describes: idioma, alimentos y comunidad. Es solo un borrador.'],
+    ['2 · Tú decides', 'Lees, corriges y apruebas con tu nombre. Sin tu aprobación no llega nada al alumnado.'],
+    ['3 · El alumnado recibe', 'Solo el paquete aprobado, que se guarda en el dispositivo y funciona sin conexión.']
+  ]) {
+    const card = element('div', 'role')
+    card.append(element('strong', '', title), element('p', '', text))
+    roles.append(card)
+  }
+  lesson.replaceChildren(heading, intro, roles)
   heading.focus()
 
   // 1 · Context, then either generate on the server or copy the instructions
@@ -231,6 +241,8 @@ export function authoring(lesson: HTMLElement) {
   function collect(): Draft {
     for (const editor of editors) {
       editor.activity.prompt = editor.prompt.value.trim()
+      // The audio must repeat the statement (pedagogical rules): keep it in step with the edited text.
+      if (editor.activity.audioText !== undefined) editor.activity.audioText = editor.activity.prompt
       editor.activity.feedback = editor.feedback.value.trim()
       for (const [option, control] of editor.options) option.text = control.value.trim()
     }
@@ -260,7 +272,13 @@ export function authoring(lesson: HTMLElement) {
       const options: [Option, HTMLInputElement][] = (activity.options ?? []).map(option => [option, input(option.text)])
       if (options.length) {
         const list = element('div', 'option-list')
-        options.forEach(([, control], position) => list.append(field('Opción ' + (position + 1), control)))
+        const correct = activity.correct
+        options.forEach(([option, control], position) => {
+          let label = 'Opción ' + (position + 1)
+          if (activity.type === 'order' && Array.isArray(correct)) label += ' · va en el paso ' + (correct.indexOf(option.id) + 1)
+          else if (Array.isArray(correct) ? correct.includes(option.id) : correct === option.id) label += ' · ✓ respuesta correcta'
+          list.append(field(label, control))
+        })
         card.append(list)
       }
       card.append(field('Mensaje al terminar', feedbackEditor))

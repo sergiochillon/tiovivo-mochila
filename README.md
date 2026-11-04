@@ -4,8 +4,7 @@
 
 Equipo **TIOVIVO.exe** · Hack4Edu 2026 (VII edición, ProFuturo + UPSA) · Reto 02 «Aprender sin conexión» (Reto ProFuturo)
 
-> **Estado real (actualizar en cada hito):** fase de organización. **No hay código ni funcionalidad terminada.** Todo lo que aparece abajo como «funcionamiento» o «características» es el **diseño objetivo del MVP**, no algo ya construido. Cada documento distingue entre **Decidido**, **Hipótesis** y **Pendiente**.
-
+> **Estado real (4–5 nov 2026):** MOCHILA funciona de principio a fin en local: la docente prepara un módulo con ayuda de la IA, lo revisa y lo aprueba; el alumnado lo descarga una vez y lo usa **sin conexión**; el progreso se envía después al panel docente sin duplicados. Probado en navegador de escritorio y, según el registro del equipo (`qa/registro-pruebas.md`), en un iPhone en modo avión con el paquete real de los Andes. Lo que **no** está hecho: validación cultural con las comunidades, pruebas con niños, cuentas de usuario y despliegue público.
 ---
 
 ## Problema
@@ -47,16 +46,44 @@ MOCHILA separa dos momentos:
 
 | Prioridad | Característica | Estado |
 |---|---|---|
-| Imprescindible | Esquema de paquete + 1 módulo (alimentación local) en 2 contextos (Andes/ES, norte de Uganda/EN) | Pendiente |
-| Imprescindible | Flujo de autoría: contexto → IA → revisión humana → exportar | Pendiente |
-| Imprescindible | Reproductor PWA que funciona en modo avión | Pendiente |
-| Imprescindible | Progreso local con avatares + sincronización manual a panel docente | Pendiente |
-| Importante | Módulos «pedir ayuda a un adulto» y «emociones» | Pendiente |
-| Prescindible | IA local en el navegador, voz neuronal offline, exportación a Kolibri | Pendiente |
+| Imprescindible | Esquema de paquete v0.1 y módulo de alimentación en 2 contextos (Andes/ES, norte de Uganda/EN) | Hecho: revisión pedagógica aprobada; validación cultural local pendiente |
+| Imprescindible | Autoría: contexto → IA (Gemini o asistente externo) → revisión humana → aprobación → descarga JSON | Hecho; un módulo generado con IA (Altiplano, contexto sintético) revisado y aprobado |
+| Imprescindible | Reproductor PWA sin conexión (selector de mochilas, actividades, sellos) | Hecho; probado en iPhone en modo avión según `qa/` |
+| Imprescindible | Progreso local con avatares y sincronización manual al panel docente | Hecho, idempotente |
+| Importante | Escuchar actividades con voces del dispositivo (ES/EN) | En revisión (PR 34); depende de las voces instaladas |
+| Importante | Módulos «pedir ayuda a un adulto» y «emociones» | Borradores sin aprobar (PR 35) |
+| Prescindible | IA local en el navegador, voz neuronal offline, exportación a Kolibri | No empezado |
 
 ## Ejecución
 
-> Pendiente: aún no existe código. Cuando haya algo ejecutable, el responsable de cada área añadirá aquí el comando exacto (`app/README.md`, `server/README.md`). Hasta entonces no se documentan comandos que nadie haya probado.
+Comandos probados en un MacBook (Node instalado). La clave de Gemini es opcional: sin ella se usa el flujo de copiar y pegar con cualquier asistente de IA.
+
+**1. Servidor** (en `server/`):
+
+```bash
+cd server && npm ci
+npm run seed:approved-packs   # con el servidor parado: carga content/packs en la caché local
+npm run start                 # API en http://127.0.0.1:3001
+```
+
+Opcional: copiar `server/.env.example` a `server/.env` y poner `GEMINI_API_KEY` (nunca subirla al repositorio).
+
+**2. App** (en `app/`, en otra terminal):
+
+```bash
+cd app && npm ci
+VITE_API_BASE_URL=http://127.0.0.1:3001/api npm run build
+npm run preview -- --host 127.0.0.1 --port 4173
+```
+
+**3. Recorrido de la demo** (http://127.0.0.1:4173):
+
+1. `/autoria`: describir la comunidad → «Generar propuesta con IA» o «Preparar instrucciones» → revisar y corregir → lista de revisión y nombre → «Aprobar y publicar».
+2. `/`: «Mis mochilas» → abrir una mochila con conexión (queda «✓ Lista sin conexión») → elegir avatar → actividades.
+3. Sin conexión: recargar y seguir jugando; el progreso se guarda en el dispositivo.
+4. `/docente`: «Enviar progreso» al volver la conexión; los contadores suben sin duplicar.
+
+Para probar en un móvil real hace falta HTTPS: ver `docs/decisions/ADR-003-https-pruebas-movil.md`.
 
 ## Licencia
 

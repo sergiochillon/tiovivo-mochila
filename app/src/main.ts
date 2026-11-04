@@ -59,7 +59,8 @@ const texts = {
     seals: (done: number, total: number) => 'Tus sellos: ' + done + ' de ' + total,
     nextActivity: 'Siguiente actividad', allActivities: 'Ver todas las actividades',
     storageTitle: 'No se puede acceder al progreso',
-    storageHelp: 'Comprueba que el navegador permite guardar datos y vuelve a intentarlo.', retry: 'Volver a intentar'
+    storageHelp: 'Comprueba que el navegador permite guardar datos y vuelve a intentarlo.', retry: 'Volver a intentar',
+    playAgain: 'Volver a jugar', backpacks: '← Mis mochilas', correctAnswer: '¡Muy bien!', listenFirst: 'Escucha o lee la pregunta y elige.'
   },
   en: {
     kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?' } as Record<string, string>,
@@ -75,7 +76,8 @@ const texts = {
     seals: (done: number, total: number) => 'Your stamps: ' + done + ' of ' + total,
     nextActivity: 'Next activity', allActivities: 'See all activities',
     storageTitle: 'Progress cannot be saved',
-    storageHelp: 'Check that the browser allows saving data and try again.', retry: 'Try again'
+    storageHelp: 'Check that the browser allows saving data and try again.', retry: 'Try again',
+    playAgain: 'Play again', backpacks: '← My backpacks', correctAnswer: 'Great!', listenFirst: 'Listen or read the question and choose.'
   }
 }
 // The interface follows the language of the approved package; Spanish until one is loaded.
@@ -89,6 +91,12 @@ const kinds: Record<string, { label: string; icon: string }> = {
   scenario: { label: '¿Qué harías?', icon: '<path d="M4 5h16v10H10l-5 4v-4H4z"/>' }
 }
 const checkIcon = '<path d="M5 12l5 5 9-10"/>'
+const knownPacks = [
+  { id: 'alimentacion-andes-es', title: 'Elegimos con lo que hay', place: 'Perú · Andes', language: 'Español', note: 'Revisión pedagógica aprobada' },
+  { id: 'food-northern-uganda-en', title: 'Choosing from what is available', place: 'Uganda · Norte', language: 'English', note: 'Revisión pedagógica aprobada' },
+  { id: 'food-altiplano-es', title: 'Alimentos en el Altiplano', place: 'Bolivia · Altiplano (contexto sintético)', language: 'Español', note: 'Propuesta de IA revisada por el equipo' }
+]
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 const sealArt = '<svg viewBox="0 0 210 210"><circle cx="105" cy="105" r="100" fill="#fbe9c0"/><circle cx="105" cy="105" r="78" fill="#f3c76b"/><circle cx="105" cy="105" r="78" fill="none" stroke="#174c43" stroke-width="4" stroke-dasharray="6 7"/><circle cx="105" cy="105" r="58" fill="#174c43"/><path d="M70 122 L92 96 L104 110 L118 90 L140 122 Z" fill="#8fb3a0"/><circle cx="128" cy="84" r="8" fill="#f3c76b"/><path d="M84 128 Q100 120 120 122" stroke="#ecd6a6" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
 
 // Static, trusted markup only: never pass package text to this helper.
@@ -156,8 +164,61 @@ function storageError() {
   button(t.retry, () => location.reload())
 }
 
+async function backpacks() {
+  screen('Mis mochilas', 'Elige una mochila para empezar. Las que llevan ✓ funcionan sin conexión.')
+  lesson.className = 'backpacks'
+  const db = await database
+  const cached = await new Promise<Map<string, Pack>>((resolve, reject) => {
+    const store = db.transaction('packs').objectStore('packs')
+    const map = new Map<string, Pack>()
+    const cursor = store.openCursor()
+    cursor.onsuccess = () => {
+      const current = cursor.result
+      if (!current) return resolve(map)
+      map.set(String(current.key), current.value as Pack)
+      current.continue()
+    }
+    cursor.onerror = () => reject(cursor.error)
+  })
+  const entries = [...knownPacks]
+  for (const [id, saved] of cached) {
+    if (!entries.some(entry => entry.id === id)) {
+      entries.push({ id, title: saved.title, place: saved.context.country + ' · ' + saved.context.region, language: saved.language === 'en' ? 'English' : 'Español', note: 'Material aprobado' })
+    }
+  }
+  const grid = document.createElement('div')
+  grid.className = 'backpack-grid'
+  entries.forEach((entry, index) => {
+    const ready = cached.has(entry.id)
+    const card = document.createElement('a')
+    card.className = 'backpack backpack-' + (index % 3) + (ready ? ' ready' : '')
+    card.href = '/alumno?pack=' + encodeURIComponent(entry.id)
+    const art = icon('<path d="M9 6V5a3 3 0 0 1 6 0v1"/><rect x="5" y="6" width="14" height="15" rx="4"/><path d="M9 13h6"/>', 'backpack-art')
+    const title = document.createElement('strong')
+    title.textContent = cached.get(entry.id)?.title ?? entry.title
+    const place = document.createElement('span')
+    place.textContent = entry.place + ' · ' + entry.language
+    const state = document.createElement('small')
+    state.className = 'backpack-state'
+    state.textContent = ready ? '✓ Lista sin conexión' : 'Necesita conexión la primera vez'
+    const note = document.createElement('small')
+    note.className = 'backpack-note'
+    note.textContent = entry.note
+    card.append(art, title, place, state, note)
+    grid.append(card)
+  })
+  lesson.append(grid)
+}
+
 function choose() {
   screen(t.who, t.whoHelp)
+  if (!technicalPreview) {
+    const home = document.createElement('a')
+    home.className = 'back'
+    home.href = '/'
+    home.textContent = t.backpacks
+    lesson.prepend(home)
+  }
   for (const avatar of avatars) {
     const card = button(avatarName(avatar), () => activities(avatar))
     card.className = 'avatar'
@@ -207,14 +268,19 @@ async function activities(avatar: Avatar) {
       end.className = 'time'
       end.textContent = item.durationMin ? item.durationMin + ' ' + t.minutes : ''
     }
-    card.append(icon(kinds[item.type].icon, 'tile'), text, end)
+    const tile = icon(kinds[item.type].icon, 'tile')
+    const number = document.createElement('b')
+    number.className = 'station'
+    number.textContent = String(items.indexOf(item) + 1)
+    tile.append(number)
+    card.append(tile, text, end)
     list.append(card)
   }
   lesson.append(list)
   button(t.changeAvatar, choose).classList.add('secondary')
 }
 
-async function play(avatar: Avatar, activity: Activity) {
+async function play(avatar: Avatar, activity: Activity, replay = false) {
   const db = await database
   const key = [avatar.id, pack.id, activity.id]
   const saved = await new Promise<Progress | undefined>((resolve, reject) => {
@@ -222,8 +288,9 @@ async function play(avatar: Avatar, activity: Activity) {
     request.onsuccess = () => resolve(request.result)
     request.onerror = () => reject(request.error)
   })
-  if (saved) return complete(avatar, activity)
+  if (saved && !replay) return complete(avatar, activity)
   screen(activity.prompt, t.kinds[activity.type] ?? '')
+  lesson.className = 'activity-screen kind-' + activity.type
   lesson.append(readingControl(activity.audioText || activity.prompt, pack.language))
   if (!technicalPreview) {
     const back = document.createElement('button')
@@ -286,35 +353,55 @@ async function play(avatar: Avatar, activity: Activity) {
       const answer = button(option.text, async () => {
         if (option.id !== sequence[step]) {
           hint.textContent = t.wrongStep
+          hint.className = 'hint try'
+          answer.classList.remove('wrong'); void answer.offsetWidth; answer.classList.add('wrong')
           return
         }
+        hint.className = 'hint good'
         slotText[step].textContent = option.text
         slotText[step].parentElement!.classList.add('filled')
         step++
         answer.disabled = true
-        if (step === sequence.length) await finish()
+        if (step === sequence.length) { await delay(450); await finish() }
         else hint.textContent = t.nextStep
       })
       grid.append(answer)
     }
   } else {
-    for (const option of options) {
+    hint.textContent = t.listenFirst
+    const choices = document.createElement('div')
+    choices.className = 'choices'
+    lesson.append(choices, hint)
+    options.forEach((option, index) => {
       const answer = button(option.text, async () => {
         const correct = activity.correct
         if (Array.isArray(correct) ? correct.includes(option.id) : correct === option.id) {
+          answer.classList.add('right')
+          hint.className = 'hint good'
+          hint.textContent = t.correctAnswer
+          choices.querySelectorAll('button').forEach(other => { (other as HTMLButtonElement).disabled = true })
+          await delay(650)
           await finish()
         } else {
+          answer.classList.remove('wrong'); void answer.offsetWidth; answer.classList.add('wrong')
+          hint.className = 'hint try'
           hint.textContent = option.feedback || t.tryAgain
         }
       })
-      answer.className = 'answer'
+      answer.className = 'answer choice-' + (index % 4)
+      const letter = document.createElement('b')
+      letter.className = 'letter'
+      letter.setAttribute('aria-hidden', 'true')
+      letter.textContent = 'ABCD'[index] ?? ''
+      answer.prepend(letter)
+      choices.append(answer)
       if (option.icon) {
         const icon = document.createElement('span')
         icon.setAttribute('aria-hidden', 'true')
         icon.textContent = option.icon
         answer.prepend(icon)
       }
-    }
+    })
   }
   if (!hint.isConnected) lesson.append(hint)
   if (technicalPreview) button(t.changeAvatar, choose)
@@ -329,6 +416,8 @@ async function complete(avatar: Avatar, activity: Activity) {
   seal.setAttribute('role', 'img')
   seal.setAttribute('aria-label', t.seal)
   seal.innerHTML = sealArt
+  const stations = pack.modules.flatMap(module => module.activities).filter(playable)
+  seal.style.setProperty('--seal-hue', String((stations.indexOf(activity) * 47) % 360) + 'deg')
   const badge = document.createElement('strong')
   badge.className = 'badge'
   badge.textContent = t.seal
@@ -344,11 +433,29 @@ async function complete(avatar: Avatar, activity: Activity) {
   if (next) button(t.nextActivity, () => play(avatar, next))
   const all = button(t.allActivities, () => activities(avatar))
   if (next) all.classList.add('secondary')
+  button(t.playAgain, () => play(avatar, activity, true)).classList.add('secondary')
+}
+
+function teacherHeader(title: string, subtitle: string) {
+  document.body.classList.add('teacher')
+  document.querySelector('.edition')!.textContent = 'Espacio docente'
+  document.querySelector('.map-copy small')!.textContent = 'DOCENTE'
+  document.querySelector('.map-copy h2')!.textContent = title
+  document.querySelector('.map-copy p')!.textContent = subtitle
+}
+
+async function pendingCount() {
+  const db = await database
+  const records = await new Promise<Progress[]>((resolve, reject) => {
+    const request = db.transaction('progress').objectStore('progress').getAll()
+    request.onsuccess = () => resolve(request.result)
+    request.onerror = () => reject(request.error)
+  })
+  return { total: records.length, pending: records.filter(record => !record.sent).length }
 }
 
 function teacherPanel() {
-  document.body.classList.add('teacher')
-  document.querySelector('.edition')!.textContent = 'Espacio docente'
+  teacherHeader('Cuaderno de clase', 'Clase DEMO-01')
   screen('Cuaderno de clase', 'Seguimiento del progreso · Clase DEMO-01')
   const metrics = document.createElement('div')
   metrics.className = 'metrics'
@@ -388,14 +495,23 @@ function teacherPanel() {
       status.textContent = await sendProgress(await database)
       await refresh()
     } catch (error) {
-      status.textContent = 'El progreso sigue guardado. ' +
-        (error instanceof Error ? error.message : '') + ' Puedes volver a enviarlo.'
+      const reason = error instanceof TypeError ? 'No hay conexión con el servidor.'
+        : error instanceof Error ? error.message + '.' : ''
+      status.textContent = 'El progreso sigue guardado en este dispositivo. ' + reason + ' Puedes volver a enviarlo cuando haya conexión.'
     } finally {
       submit.disabled = false
+      void showPending()
     }
   })
   button('Actualizar contadores', refresh)
-  lesson.append(status, totals)
+  const pendingLine = document.createElement('p')
+  pendingLine.className = 'pending-line'
+  async function showPending() {
+    const { total, pending } = await pendingCount()
+    pendingLine.textContent = 'En este dispositivo: ' + total + ' actividades completadas, ' + pending + ' pendientes de enviar.'
+  }
+  lesson.append(status, totals, pendingLine)
+  void showPending()
   const authorTitle = document.createElement('h2')
   authorTitle.textContent = 'Preparar material'
   const authorHelp = document.createElement('p')
@@ -405,6 +521,28 @@ function teacherPanel() {
   authorLink.href = '/autoria'
   authorLink.textContent = 'Preparar material nuevo'
   lesson.append(authorTitle, authorHelp, authorLink)
+  const demoTitle = document.createElement('h2')
+  demoTitle.textContent = 'Preparar este dispositivo para otra sesión'
+  const demoHelp = document.createElement('p')
+  demoHelp.textContent = 'Borra el progreso guardado en este dispositivo (no borra las mochilas descargadas ni lo ya enviado al servidor).'
+  lesson.append(demoTitle, demoHelp)
+  const reset = button('Borrar progreso de este dispositivo', async () => {
+    const { pending } = await pendingCount()
+    const warning = pending > 0
+      ? 'Hay ' + pending + ' actividades sin enviar que se perderán. ¿Borrar igualmente?'
+      : '¿Borrar el progreso guardado en este dispositivo?'
+    if (!confirm(warning)) return
+    const db = await database
+    await new Promise<void>((resolve, reject) => {
+      const tx = db.transaction('progress', 'readwrite')
+      tx.objectStore('progress').clear()
+      tx.oncomplete = () => resolve()
+      tx.onabort = () => reject(tx.error)
+    })
+    status.textContent = 'Progreso de este dispositivo borrado.'
+    await showPending()
+  })
+  reset.classList.add('secondary')
   void refresh()
 }
 
@@ -416,8 +554,7 @@ if (technicalPreview) {
 }
 if (location.pathname === '/docente') teacherPanel()
 else if (location.pathname === '/autoria') {
-  document.body.classList.add('teacher')
-  document.querySelector('.edition')!.textContent = 'Espacio docente'
+  teacherHeader('Preparar material', 'Adaptar un módulo con ayuda de la IA')
   document.querySelector('footer')!.textContent = 'La preparación de material necesita conexión con el servidor de MOCHILA.'
   authoring(lesson)
 }
@@ -425,11 +562,27 @@ else if (reviewRoute && !technicalPreview) screen('Página no disponible')
 else if (technicalPreview) {
   pack = demo
   choose()
+} else if (!new URLSearchParams(location.search).get('pack')) {
+  document.querySelector('.map-copy small')!.textContent = 'MOCHILA'
+  document.querySelector('.map-copy h2')!.textContent = 'Mis mochilas'
+  document.querySelector('.map-copy p')!.textContent = 'Aprender sin conexión'
+  backpacks().catch(storageError)
 } else {
-  const id = new URLSearchParams(location.search).get('pack') ?? 'alimentacion-andes-es'
+  const id = new URLSearchParams(location.search).get('pack')!
+  // Neutral header until the package says where it belongs (the static HTML shows the Andes).
+  document.querySelector('.map-copy h2')!.textContent = 'Tu mochila'
+  document.querySelector('.map-copy p')!.textContent = 'Aprender sin conexión'
   screen('Buscando material de clase…')
   database.then(db => loadPack(db, id)).then(downloaded => {
-    if (!downloaded) return screen('No hay material aprobado para este paquete.')
+    if (!downloaded) {
+      screen('No hay material aprobado para este paquete.')
+      const home = document.createElement('a')
+      home.className = 'button-link'
+      home.href = '/'
+      home.textContent = '← Mis mochilas'
+      return lesson.append(home)
+    }
+    document.title = 'MOCHILA · ' + downloaded.title
     pack = downloaded
     document.documentElement.lang = pack.language
     if (pack.language === 'en') t = texts.en
@@ -442,6 +595,11 @@ else if (technicalPreview) {
   }).catch(error => {
     screen('Paquete no disponible', error instanceof Error ? error.message : '')
     button('Volver a intentar', () => location.reload())
+    const home = document.createElement('a')
+    home.className = 'button-link secondary-link'
+    home.href = '/'
+    home.textContent = '← Mis mochilas'
+    lesson.append(home)
   })
 }
 database.catch(storageError)
