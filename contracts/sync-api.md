@@ -1,7 +1,7 @@
 # API de generación, revisión y sincronización
 
 **Responsable:** Alejandro · **Revisión de frontend:** Rodrigo
-**Estado:** sync y respuesta agregada de progreso confirmados por Rodrigo (revisiones de `2c3286c` y `5c0fa80`); listo para implementar. El esquema y los paquetes de ejemplo fueron validados con AJV 8.17.1 + ajv-formats en modo estricto, según Sergio.
+**Estado:** contrato de sync y progreso confirmado por Rodrigo; edición, aprobación y ocultación de borradores probadas por Rodrigo en la PR 9. El esquema y los paquetes de ejemplo fueron validados con AJV 8.17.1 + ajv-formats en modo estricto, según Sergio.
 
 Base URL local: `/api`. JSON UTF-8 en peticiones y respuestas. No requiere cuentas.
 La API no recibe nombres ni texto libre de menores. Los ejemplos son sintéticos.
@@ -131,11 +131,7 @@ cuentan en `eventsReceived`. Dos avatares que completen la misma actividad
 generan dos finalizaciones. Reenviar un lote idéntico no cambia ninguno de los
 contadores. La respuesta no incluye avatares ni datos personales.
 
-## Límites pendientes
+## Límites conocidos
 
-- Alinear el paquete de `/generate`, `/review/approve` y `/packs/:id` con el
-  esquema pack-v0.1 de Sergio.
 - El almacén es local y de alcance demo; no hay autenticación ni garantía de
   persistencia entre despliegues.
-- Rodrigo debe confirmar la semántica de reemplazar un borrador existente al
-  volver a enviar su mismo `id` en `/api/generate`.
