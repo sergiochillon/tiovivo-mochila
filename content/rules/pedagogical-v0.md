@@ -34,7 +34,11 @@
 
 Devuelve un borrador, no afirmes que está validado ni aprobado. No inventes contexto cultural ni rellenes con estereotipos los datos que falten: deja marcadores `A VALIDAR` en los metadatos para revisión del adulto y evita mostrarlos al niño. Si una actividad no puede tener respuesta correcta única, no la conviertas en pregunta evaluable; pide al responsable técnico el formato de actividad sin puntuación previsto por el contrato.
 
-**Propuesta de valores para `safetyTag` (pendiente de aceptar en el esquema):** `none`, `hygiene`, `food-safety`, `help-adult`, `emotion-self-choice`, `privacy`. Usar una etiqueta principal por actividad; `none` cuando no requiera una consideración específica. La lista no sustituye estas reglas ni el sello humano. `teacherNotes` sería útil como campo opcional de actividad para indicaciones de mediación y validación local; no añadirlo al JSON hasta que el contrato lo admita.
+## Campos de apoyo del paquete
+
+El esquema v0.1 acepta estos valores cerrados para `safetyTag`: `none`, `hygiene`, `food-safety`, `help-adult`, `emotion-self-choice`, `privacy`. Usa una etiqueta principal por actividad; `none` cuando no requiera una consideración específica. La etiqueta no sustituye las reglas ni el sello humano.
+
+`teacherNotes` es opcional y solo para el docente (máximo 500 caracteres; no se muestra al niño). Úsalo para dar una indicación breve de mediación o adaptación local, o para señalar una validación pendiente. No incluyas datos personales. Una nota de validación pendiente no equivale a aprobación del paquete.
 
 ## Temas
 
