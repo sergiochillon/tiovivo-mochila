@@ -1,3 +1,4 @@
+import { readingControl, stopReading } from './audio'
 import demo from './demo.json'
 import { loadPack, type Pack, type Activity } from './packs'
 import { authoring } from './autoria'
@@ -131,6 +132,7 @@ function seals(done: number, total: number) {
 }
 
 function screen(title: string, message = '') {
+  stopReading()
   lesson.className = ''
   const heading = document.createElement('h1')
   heading.textContent = title
@@ -222,6 +224,7 @@ async function play(avatar: Avatar, activity: Activity) {
   })
   if (saved) return complete(avatar, activity)
   screen(activity.prompt, t.kinds[activity.type] ?? '')
+  lesson.append(readingControl(activity.audioText || activity.prompt, pack.language))
   if (!technicalPreview) {
     const back = document.createElement('button')
     back.className = 'back'
@@ -319,6 +322,7 @@ async function play(avatar: Avatar, activity: Activity) {
 
 async function complete(avatar: Avatar, activity: Activity) {
   screen(t.wellDone(avatarName(avatar)), activity.feedback)
+  lesson.append(readingControl(activity.feedback, pack.language))
   lesson.className = 'celebrate'
   const seal = document.createElement('div')
   seal.className = 'seal'
