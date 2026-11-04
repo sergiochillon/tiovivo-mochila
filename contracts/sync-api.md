@@ -1,7 +1,7 @@
 # API de generación, revisión y sincronización
 
 **Responsable:** Alejandro · **Revisión de frontend:** Rodrigo
-**Estado:** borrador; sección de sync revisada por Rodrigo. Alineado con `ProgressEvent` del commit `0ccbce4` de la PR 5. Sergio informa que validó el esquema y los ejemplos con AJV 8.17.1 + ajv-formats en modo estricto.
+**Estado:** contrato de sync confirmado por Rodrigo tras revisar el commit `2c3286c`; listo para implementar. Falta acordar la respuesta agregada de `GET /api/progress/:classCode`. El esquema y los paquetes de ejemplo fueron validados con AJV 8.17.1 + ajv-formats en modo estricto, según Sergio.
 
 Base URL local: `/api`. JSON UTF-8 en peticiones y respuestas. No requiere cuentas.
 La API no recibe nombres ni texto libre de menores. Los ejemplos son sintéticos.
@@ -129,6 +129,7 @@ datos reales de menores.
 
 - Alinear el paquete de `/generate`, `/review/approve` y `/packs/:id` con el
   esquema pack-v0.1 de Sergio.
-- Acordar con Rodrigo la forma final del agregado.
+- Acordar con Rodrigo la forma final de la respuesta agregada de
+  `GET /api/progress/:classCode` antes de implementarla.
 - El almacén es local y de alcance demo; no hay autenticación ni garantía de
   persistencia entre despliegues.
