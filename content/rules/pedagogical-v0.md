@@ -34,6 +34,8 @@
 
 Devuelve un borrador, no afirmes que está validado ni aprobado. No inventes contexto cultural ni rellenes con estereotipos los datos que falten: deja marcadores `A VALIDAR` en los metadatos para revisión del adulto y evita mostrarlos al niño. Si una actividad no puede tener respuesta correcta única, no la conviertas en pregunta evaluable; pide al responsable técnico el formato de actividad sin puntuación previsto por el contrato.
 
+**Propuesta de valores para `safetyTag` (pendiente de aceptar en el esquema):** `none`, `hygiene`, `food-safety`, `help-adult`, `emotion-self-choice`, `privacy`. Usar una etiqueta principal por actividad; `none` cuando no requiera una consideración específica. La lista no sustituye estas reglas ni el sello humano. `teacherNotes` sería útil como campo opcional de actividad para indicaciones de mediación y validación local; no añadirlo al JSON hasta que el contrato lo admita.
+
 ## Temas
 
 **Permitidos en el MVP:** alimentación cotidiana y elecciones de comida; hábitos sencillos de higiene y salud preventiva; reconocer emociones mediante autoelección; convivencia; pedir ayuda a una persona adulta de confianza; seguridad cotidiana no alarmista; autonomía apropiada a la edad.
