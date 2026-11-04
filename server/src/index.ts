@@ -66,7 +66,15 @@ function semanticDetails(pack: unknown): string[] {
         : [];
       const correct = Array.isArray(activity.correct) ? activity.correct : [activity.correct];
       const where = `/modules/${moduleIndex}/activities/${activityIndex}/correct`;
-      if (correct.some((id) => !ids.includes(id))) {
+      if (new Set(ids).size !== ids.length) {
+        details.push(`/modules/${moduleIndex}/activities/${activityIndex}/options: hay opciones con el mismo id`);
+      } else if (activity.type === "match") {
+        // match pairs are "idA:idB" (ids cannot contain ":"): both sides must be existing options.
+        const pairs = correct.map((pair) => String(pair).split(":"));
+        if (pairs.some((pair) => pair.length !== 2 || pair.some((id) => !ids.includes(id)))) {
+          details.push(`${where}: cada pareja debe unir dos opciones existentes («idA:idB»)`);
+        }
+      } else if (correct.some((id) => !ids.includes(id))) {
         details.push(`${where}: la respuesta correcta no coincide con ninguna opción`);
       } else if (activity.type === "order" && (correct.length !== ids.length || new Set(correct).size !== ids.length)) {
         details.push(`${where}: el orden correcto debe incluir cada opción una sola vez`);
@@ -74,6 +82,24 @@ function semanticDetails(pack: unknown): string[] {
     });
   });
   return details;
+}
+
+// Seal note on approval: states what was really done and keeps the draft's specific observations,
+// dropping only the transitional "pending review" sentences that the seal makes obsolete.
+function approvalNotes(reviewer: string, reviewedAt: string, previous: unknown): string {
+  const draft = typeof previous === "string" ? previous : "";
+  const fromAi = /\b(IA|AI)\b/.test(draft);
+  const observations = draft
+    .replace(/(Generado con IA|Propuesta asistida con IA externa|Generated with AI)\.?/gi, "")
+    .replace(/(Pendiente|Pending)[^.]*\.?/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return (
+    `Revisión pedagógica aprobada por ${reviewer} el ${reviewedAt.slice(0, 10)}. ` +
+    "La validación cultural local sigue pendiente. No probado con niños." +
+    (fromAi ? " Propuesta generada con IA y revisada por una persona." : "") +
+    (observations ? ` Observaciones del borrador: ${observations}` : "")
+  );
 }
 
 function packValidationDetails(pack: unknown): string[] {
@@ -234,10 +260,7 @@ app.post("/api/review/approve", async (req: Request, res: Response) => {
         status: "approved",
         reviewedBy: reviewer,
         reviewedAt,
-        notes:
-          `Revisión pedagógica aprobada por ${reviewer} el ${reviewedAt.slice(0, 10)}. ` +
-          "La validación cultural local sigue pendiente. No probado con niños." +
-          (String(pack.review.notes ?? "").includes("IA") ? " Propuesta generada con IA y revisada por una persona." : ""),
+        notes: approvalNotes(reviewer, reviewedAt, pack.review.notes),
       },
     };
     const details = packValidationDetails(approvedPack);

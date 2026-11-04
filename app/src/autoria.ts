@@ -214,7 +214,8 @@ export function authoring(lesson: HTMLElement) {
     try { value = JSON.parse(cleanPaste(pasted.value)) } catch {
       return messages(pasteResult, 'error', ['No es un JSON válido. Copia solo el objeto JSON que devuelve la IA.'])
     }
-    if (value && typeof value === 'object') (value as Draft).review = { status: 'draft' }
+    // Pasted answers always come from an external AI assistant: keep that origin for traceability.
+    if (value && typeof value === 'object') (value as Draft).review = { status: 'draft', notes: 'Propuesta asistida con IA externa. Pendiente de revisión pedagógica y validación local.' }
     const errors = draftErrors(value)
     if (errors.length) return messages(pasteResult, 'error', ['El borrador no cumple el formato:', ...errors])
     try {
