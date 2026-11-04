@@ -21,8 +21,8 @@ export function mochi(mood: 'happy' | 'thinking' | 'cheer' = 'happy') {
     '<rect x="18" y="20" width="84" height="100" rx="30" fill="none" stroke="#c9952f" stroke-width="3"/>' +
     '<rect x="34" y="88" width="52" height="24" rx="10" fill="#e9b04d" stroke="#c9952f" stroke-width="3"/>' +
     '<path d="M50 96 h20" stroke="#9a6a1c" stroke-width="4" stroke-linecap="round"/>' +
-    '<circle cx="46" cy="56" r="8" fill="#fff"/><circle cx="74" cy="56" r="8" fill="#fff"/>' +
-    '<circle cx="47" cy="57" r="4.5" fill="#1d2b27"/><circle cx="75" cy="57" r="4.5" fill="#1d2b27"/>' +
+    '<g class="mochi-eyes"><circle cx="46" cy="56" r="8" fill="#fff"/><circle cx="74" cy="56" r="8" fill="#fff"/>' +
+    '<circle cx="47" cy="57" r="4.5" fill="#1d2b27"/><circle cx="75" cy="57" r="4.5" fill="#1d2b27"/></g>' +
     '<circle cx="35" cy="68" r="5" fill="#f08a6b" opacity=".55"/><circle cx="85" cy="68" r="5" fill="#f08a6b" opacity=".55"/>' +
     brows + mouth + '</svg>'
 }
@@ -80,3 +80,24 @@ export const savanna = svgUrl('<svg xmlns="http://www.w3.org/2000/svg" viewBox="
   '<path d="M356 240 h34 v-18 l-17-14 l-17 14 Z" fill="#b9733a"/><path d="M351 224 l22-20 l22 20 Z" fill="#8a5a2b"/>' +
   '<path d="M80 60 q10-8 20 0 q10-8 20 0" stroke="#7a4f19" stroke-width="3" fill="none"/><path d="M700 40 q8-6 16 0 q8-6 16 0" stroke="#7a4f19" stroke-width="3" fill="none"/>' +
   '</svg>')
+
+const stickerColors = ['#FFC531', '#17A06B', '#B5367D', '#2F7FD8', '#F28C38', '#7BC8E8', '#8E6BBF']
+const stickerEmoji: Record<string, string> = { story: '📖', choice: '⭐', order: '🪜', scenario: '💡', match: '🧩', plate: '🥣' }
+const blobs = [
+  'M60 6 C88 6 112 26 112 58 C112 90 90 114 60 114 C28 114 8 92 8 60 C8 28 30 6 60 6 Z',
+  'M60 4 L73 34 L106 36 L80 57 L90 90 L60 72 L30 90 L40 57 L14 36 L47 34 Z',
+  'M22 14 H98 C106 14 110 18 110 26 V94 C110 102 106 106 98 106 H22 C14 106 10 102 10 94 V26 C10 18 14 14 22 14 Z',
+  'M60 6 L104 32 V88 L60 114 L16 88 V32 Z'
+]
+
+/** A die-cut sticker for one activity: shape and colour vary by position, the emoji by game type. */
+export function sticker(kind: string, index: number) {
+  const color = stickerColors[index % stickerColors.length]
+  const blob = blobs[index % blobs.length]
+  const emoji = stickerEmoji[kind] ?? '⭐'
+  return '<svg viewBox="0 0 120 120" aria-hidden="true">' +
+    '<path d="' + blob + '" fill="#fff" stroke="#fff" stroke-width="14" stroke-linejoin="round"/>' +
+    '<path d="' + blob + '" fill="' + color + '"/>' +
+    '<path d="' + blob + '" fill="none" stroke="rgba(0,0,0,.08)" stroke-width="3"/>' +
+    '<text x="60" y="62" font-size="46" text-anchor="middle" dominant-baseline="central">' + emoji + '</text></svg>'
+}

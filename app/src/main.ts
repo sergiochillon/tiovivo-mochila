@@ -10,7 +10,7 @@ import './style.css'
 import { classTotals, sendProgress, type Progress } from './sync'
 import fox from './zorro.svg'
 import bird from './colibri.svg'
-import { extraAvatars, mochi, savanna } from './art'
+import { extraAvatars, mochi, savanna, sticker } from './art'
 import { confetti, isMuted, setMuted, soundRight, soundStamp, soundTap, soundWrong } from './fx'
 // Each explorer is a child's identity on a shared device, without personal data: progress is kept per avatar.
 // label is the legacy display name used only to migrate old progress records.
@@ -87,16 +87,19 @@ const texts = {
     back: '← Actividades', continue: 'Continuar', needsReview: 'Esta actividad necesita revisión.', goBack: 'Volver',
     yourOrder: 'Tu orden', firstStep: '¿Cuál es el primer paso?', wrongStep: 'Ese no va ahora. Prueba otro paso.',
     nextStep: '¡Bien! ¿Cuál va después?', tryAgain: 'Puedes volver a elegir.',
-    wellDone: (name: string) => '¡Buen trabajo, ' + name + '!', seal: 'Sello del valle',
-    seals: (done: number, total: number) => 'Tus sellos: ' + done + ' de ' + total,
+    wellDone: (name: string) => '¡Buen trabajo, ' + name + '!', seal: 'Pegatina de la estación',
+    seals: (done: number, total: number) => 'Tus pegatinas: ' + done + ' de ' + total,
     nextActivity: 'Siguiente actividad', allActivities: 'Ver todas las actividades',
     storageTitle: 'No se puede acceder al progreso',
     storageHelp: 'Comprueba que el navegador permite guardar datos y vuelve a intentarlo.', retry: 'Volver a intentar',
     playAgain: 'Volver a jugar', backpacks: '← Mis mochilas', correctAnswer: '¡Muy bien!', listenFirst: 'Escucha o lee la pregunta y elige.',
     plateHelp: 'Toca todo lo que va en el plato. ¡Llénalo!', plateWrong: 'Eso no va aquí. Prueba con otra cosa.', plateGood: '¡Sí! Sigue llenando el plato.',
     pairsHelp: 'Toca uno de la izquierda y su pareja de la derecha.', pairsWrong: 'Esa no es su pareja. ¡Inténtalo otra vez!', pairsGood: '¡Pareja encontrada!',
-    hello: '¡Hola! Soy Mochi. Cuando termines una actividad, ganarás un sello.', letsGo: '¡Vamos! Empieza por la estación que brilla.',
-    stamps: (n: number) => n === 1 ? '1 sello' : n + ' sellos', allDone: '¡Has completado todas las estaciones!'
+    hello: '¡Hola! Soy Mochi. Cada actividad que termines te dará una pegatina para tu álbum.', letsGo: '¡Vamos! Empieza por la estación que brilla.',
+    stamps: (n: number) => n === 1 ? '1 pegatina' : n + ' pegatinas', allDone: '¡Has completado todas las estaciones!',
+    album: 'Mi álbum', albumHelp: (name: string) => 'Las pegatinas de ' + name + ' en esta mochila. Cada estación superada pega una nueva.',
+    newSticker: '¡Pegatina nueva!', emptySlot: 'Por conseguir', openAlbum: (n: number, total: number) => '📒 Mi álbum (' + n + '/' + total + ')',
+    helpOption: 'Te ayudo: he quitado una opción que no va.', helpStep: 'Te ayudo: el paso que sigue brilla.', helpPlate: 'Te ayudo: mira lo que brilla.', helpPair: 'Te ayudo: su pareja brilla.'
   },
   en: {
     kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs' } as Record<string, string>,
@@ -108,16 +111,19 @@ const texts = {
     back: '← Activities', continue: 'Continue', needsReview: 'This activity needs review.', goBack: 'Back',
     yourOrder: 'Your order', firstStep: 'What is the first step?', wrongStep: 'Not this one yet. Try another step.',
     nextStep: 'Good! What comes next?', tryAgain: 'You can choose again.',
-    wellDone: (name: string) => 'Well done, ' + name + '!', seal: 'Valley stamp',
-    seals: (done: number, total: number) => 'Your stamps: ' + done + ' of ' + total,
+    wellDone: (name: string) => 'Well done, ' + name + '!', seal: 'Station sticker',
+    seals: (done: number, total: number) => 'Your stickers: ' + done + ' of ' + total,
     nextActivity: 'Next activity', allActivities: 'See all activities',
     storageTitle: 'Progress cannot be saved',
     storageHelp: 'Check that the browser allows saving data and try again.', retry: 'Try again',
     playAgain: 'Play again', backpacks: '← My backpacks', correctAnswer: 'Great!', listenFirst: 'Listen or read the question and choose.',
     plateHelp: 'Tap everything that goes on the plate. Fill it up!', plateWrong: 'That one does not go here. Try another.', plateGood: 'Yes! Keep filling the plate.',
     pairsHelp: 'Tap one on the left, then its match on the right.', pairsWrong: 'Not a match. Try again!', pairsGood: 'Match found!',
-    hello: 'Hi! I am Mochi. When you finish an activity, you will earn a stamp.', letsGo: "Let's go! Start with the shining station.",
-    stamps: (n: number) => n === 1 ? '1 stamp' : n + ' stamps', allDone: 'You completed every station!'
+    hello: 'Hi! I am Mochi. Every activity you finish gives you a sticker for your album.', letsGo: "Let's go! Start with the shining station.",
+    stamps: (n: number) => n === 1 ? '1 sticker' : n + ' stickers', allDone: 'You completed every station!',
+    album: 'My album', albumHelp: (name: string) => name + "'s stickers in this backpack. Every station you finish adds a new one.",
+    newSticker: 'New sticker!', emptySlot: 'Still to win', openAlbum: (n: number, total: number) => '📒 My album (' + n + '/' + total + ')',
+    helpOption: 'Let me help: I removed one option that does not fit.', helpStep: 'Let me help: the next step is shining.', helpPlate: 'Let me help: look at what is shining.', helpPair: 'Let me help: its match is shining.'
   }
 }
 // The interface follows the language of the approved package; Spanish until one is loaded.
@@ -138,7 +144,6 @@ const knownPacks = [
   { id: 'food-altiplano-es', title: 'Alimentos en el Altiplano', place: 'Altiplano, Bolivia (contexto sintético)', language: 'Español', note: 'Propuesta de IA revisada por el equipo' }
 ]
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
-const sealArt = '<svg viewBox="0 0 210 210"><circle cx="105" cy="105" r="100" fill="#fbe9c0"/><circle cx="105" cy="105" r="78" fill="#f3c76b"/><circle cx="105" cy="105" r="78" fill="none" stroke="#174c43" stroke-width="4" stroke-dasharray="6 7"/><circle cx="105" cy="105" r="58" fill="#174c43"/><path d="M70 122 L92 96 L104 110 L118 90 L140 122 Z" fill="#8fb3a0"/><circle cx="128" cy="84" r="8" fill="#f3c76b"/><path d="M84 128 Q100 120 120 122" stroke="#ecd6a6" stroke-width="5" fill="none" stroke-linecap="round"/></svg>'
 
 // Static, trusted markup only: never pass package text to this helper.
 function icon(paths: string, className: string) {
@@ -338,8 +343,40 @@ async function activities(avatar: Avatar) {
     list.append(card)
   }
   lesson.append(list)
+  const albumButton = button(t.openAlbum(items.filter(item => done.has(item.id)).length, items.length), () => album(avatar))
+  albumButton.classList.add('album-button')
   button(t.changeAvatar, choose).classList.add('secondary')
 }
+
+async function album(avatar: Avatar) {
+  const items = pack.modules.flatMap(module => module.activities).filter(playable)
+  const done = await completedIds(avatar)
+  screen(t.album, t.albumHelp(avatarName(avatar)))
+  lesson.className = 'album'
+  const back = document.createElement('button')
+  back.className = 'back'
+  back.textContent = t.back
+  back.onclick = () => activities(avatar).catch(storageError)
+  lesson.prepend(back)
+  const grid = document.createElement('div')
+  grid.className = 'album-grid'
+  items.forEach((item, index) => {
+    const slot = document.createElement('figure')
+    slot.className = 'album-slot' + (done.has(item.id) ? ' won' : '')
+    const art = document.createElement('div')
+    art.className = 'album-sticker'
+    if (done.has(item.id)) art.innerHTML = sticker(stickerKind(item), index)
+    else art.textContent = '?'
+    const caption = document.createElement('figcaption')
+    caption.textContent = done.has(item.id) ? (t.kinds[item.type] ?? '') + ' ' + (index + 1) : t.emptySlot
+    slot.append(art, caption)
+    grid.append(slot)
+  })
+  lesson.append(grid)
+}
+
+const stickerKind = (activity: Activity) =>
+  Array.isArray(activity.correct) && activity.correct.length > 1 && activity.type !== 'order' && activity.type !== 'match' ? 'plate' : activity.type
 
 async function play(avatar: Avatar, activity: Activity, replay = false) {
   const db = await database
@@ -363,6 +400,13 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
   // Mochi gives the instructions, the hints and the praise.
   const coach = guide(t.listenFirst, 'thinking')
   const hint = coach.box
+  // After every second mistake Mochi stops repeating and actually helps (scaffolding, never the answer at once).
+  let mistakes = 0
+  const glow = (element: Element | undefined) => {
+    if (!element) return
+    element.classList.remove('glow'); void (element as HTMLElement).offsetWidth; element.classList.add('glow')
+  }
+  const needsHelp = () => ++mistakes % 2 === 0
   async function finish() {
     const event: Progress = {
       eventId: crypto.randomUUID(), avatarId: avatar.id, packId: pack.id,
@@ -415,6 +459,10 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         if (option.id !== sequence[step]) {
           coach.say(t.wrongStep, 'thinking', 'wiggle')
           soundWrong()
+          if (needsHelp()) {
+            coach.say(t.helpStep, 'happy', 'hop')
+            glow([...grid.querySelectorAll('button')].find(item => item.textContent === ordered[step].text))
+          }
           answer.classList.remove('wrong'); void answer.offsetWidth; answer.classList.add('wrong')
           return
         }
@@ -466,6 +514,11 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
           setTimeout(() => element.classList.remove('wrong'), 700)
           coach.say(t.pairsWrong, 'thinking', 'wiggle')
           soundWrong()
+          if (needsHelp()) {
+            const partner = pairs.find(([a]) => a === selected!.id)?.[1]
+            coach.say(t.helpPair, 'happy', 'hop')
+            glow([...right.querySelectorAll('button')].find(item => item.textContent === byId.get(partner ?? '')?.text))
+          }
           return
         }
         const color = 'pair-done pair-' + (found % 4)
@@ -500,6 +553,11 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
           token.classList.remove('wrong'); void token.offsetWidth; token.classList.add('wrong')
           coach.say(option.feedback || t.plateWrong, 'thinking', 'wiggle')
           soundWrong()
+          if (needsHelp()) {
+            coach.say(t.helpPlate, 'happy', 'hop')
+            const remaining = options.find(item => needed.has(item.id))
+            glow([...tray.querySelectorAll('button')].find(item => item.textContent?.includes(remaining?.text ?? '\u0000')))
+          }
           return
         }
         needed.delete(option.id)
@@ -537,6 +595,14 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
           answer.classList.remove('wrong'); void answer.offsetWidth; answer.classList.add('wrong')
           coach.say(option.feedback || t.tryAgain, 'thinking', 'wiggle')
           soundWrong()
+          if (needsHelp()) {
+            const correct = activity.correct
+            const isRight = (id: string) => Array.isArray(correct) ? correct.includes(id) : correct === id
+            const wrongs = [...choices.querySelectorAll<HTMLButtonElement>('button')].filter((item, index) =>
+              !item.disabled && !isRight(options[index].id))
+            const wrongOne = wrongs.find(item => item !== answer) ?? wrongs[0]
+            if (wrongOne) { wrongOne.disabled = true; wrongOne.classList.add('removed'); coach.say(t.helpOption, 'happy', 'hop') }
+          }
         }
       })
       answer.className = 'answer choice-' + (index % 4)
@@ -566,12 +632,11 @@ async function complete(avatar: Avatar, activity: Activity, fresh = false) {
   seal.className = 'seal'
   seal.setAttribute('role', 'img')
   seal.setAttribute('aria-label', t.seal)
-  seal.innerHTML = sealArt
   const stations = pack.modules.flatMap(module => module.activities).filter(playable)
-  seal.style.setProperty('--seal-hue', String((stations.indexOf(activity) * 47) % 360) + 'deg')
+  seal.innerHTML = sticker(stickerKind(activity), Math.max(0, stations.indexOf(activity)))
   const badge = document.createElement('strong')
   badge.className = 'badge'
-  badge.textContent = t.seal
+  badge.textContent = fresh ? t.newSticker : t.seal
   lesson.prepend(seal, badge)
   if (fresh) { soundStamp(); confetti(lesson) }
   if (technicalPreview) {
