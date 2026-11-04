@@ -76,48 +76,6 @@ function messages(target: HTMLElement, kind: 'ok' | 'error', lines: string[]) {
   target.hidden = lines.length === 0
 }
 
-function instructions(context: Record<string, string>) {
-  const language = context.language === 'en' ? 'inglés' : 'español'
-  return [
-    'Eres un asistente que adapta actividades educativas de habilidades para la vida para niñas y niños de 6 a 10 años que pueden usarlas sin conexión.',
-    '',
-    'Contexto de la comunidad:',
-    '- País: ' + context.country,
-    '- Región: ' + context.region,
-    '- Tipo de comunidad: ' + context.community,
-    '- Alimentos locales y asequibles: ' + context.foods,
-    '- Recursos disponibles: ' + (context.resources || 'no indicados'),
-    '- Idioma de los textos para el niño: ' + language,
-    '',
-    'Tema: alimentación cotidiana con lo que hay disponible, higiene antes de comer y pedir ayuda a una persona adulta de confianza.',
-    '',
-    'Reglas obligatorias:',
-    '- Una idea y una acción por actividad; frases cortas y palabras cotidianas.',
-    '- Tono cálido y sin juicio: no avergonzar, asustar ni culpabilizar; no etiquetar comidas como buenas o malas; sin promesas médicas.',
-    '- 2–4 opciones cortas y claras; feedback breve que anime.',
-    '- No asumir internet, electricidad, nevera, dinero ni alimentos que no estén en el contexto.',
-    '- No inventar datos culturales: si falta información, escribe "A VALIDAR" en context.culturalNotes.',
-    '- El niño solo elige entre respuestas cerradas: no pedir nombre, ubicación, texto libre, fotos ni voz; no inferir emociones.',
-    '- Sin temas de abuso, violencia, armas, sustancias ni dietas terapéuticas.',
-    '- Es un borrador: no afirmes que está validado ni aprobado.',
-    '',
-    'Devuelve SOLO un objeto JSON válido (sin texto alrededor) con esta forma exacta:',
-    '{',
-    '  "packVersion": "0.1",',
-    '  "id": "identificador-en-minusculas-con-guiones",',
-    '  "title": "título corto",',
-    '  "language": "' + (context.language === 'en' ? 'en' : 'es') + '",',
-    '  "context": { "country": "...", "region": "...", "communityType": "...", "foods": ["..."], "resources": ["..."], "culturalNotes": ["..."], "ageRange": "6-10" },',
-    '  "review": { "status": "draft" },',
-    '  "modules": [ { "id": "food", "topic": "food", "title": "...", "activities": [ ... ] } ]',
-    '}',
-    '',
-    'Incluye 5 actividades, en este orden: "story", "choice", "order", "scenario" (pedir ayuda a una persona adulta) y "scenario" (seguridad al cocinar).',
-    'Cada actividad: { "id": "minusculas-con-guiones", "type": "...", "prompt": "máx. 400 caracteres", "options": [ { "id": "...", "text": "..." } ], "correct": "id de la opción correcta" (en "order", la lista de ids en el orden correcto; "story" no lleva options ni correct), "feedback": "máx. 300 caracteres", "safetyTag": uno de "none", "hygiene", "food-safety", "help-adult", "emotion-self-choice", "privacy", "durationMin": número entre 1 y 10 }.',
-    'No añadas campos que no estén en esta forma.'
-  ].join('\n')
-}
-
 function cleanPaste(text: string) {
   return text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '')
 }
@@ -146,13 +104,11 @@ export function authoring(lesson: HTMLElement) {
   lesson.replaceChildren(heading, intro)
   heading.focus()
 
-  // 1 · Context and instructions for the AI
-  const one = step(1, 'Describe la comunidad', 'Con estos datos MOCHILA prepara las instrucciones para el asistente de IA que uses. MOCHILA no envía nada a ningún servicio de IA.')
+  // 1 · Context, then either generate on the server or copy the instructions
+  const one = step(1, 'Describe la comunidad', 'Con estos datos MOCHILA pide a la IA una propuesta adaptada, o te prepara las instrucciones para el asistente que uses. Envía solo estos datos de contexto, nunca datos de alumnos.')
   const country = input('', 'p. ej. Uganda')
   const region = input('', 'p. ej. Norte de Uganda')
-  const community = input('', 'p. ej. comunidad rural')
   const foods = input('', 'p. ej. mijo, sorgo, yuca, frijoles, hojas verdes')
-  const resources = input('', 'p. ej. huerto familiar, pozo comunitario')
   const language = element('select')
   for (const [value, label] of [['es', 'Español'], ['en', 'Inglés']]) {
     const option = element('option', '', label)
@@ -160,8 +116,19 @@ export function authoring(lesson: HTMLElement) {
     language.append(option)
   }
   const grid = element('div', 'field-grid')
-  grid.append(field('País', country), field('Región', region), field('Tipo de comunidad', community),
-    field('Idioma para el niño', language), field('Alimentos locales', foods, 'Separados por comas.'), field('Recursos disponibles', resources))
+  grid.append(field('País', country), field('Región', region), field('Idioma para el niño', language),
+    field('Alimentos locales', foods, 'Separados por comas (máximo 12).'))
+  const contextResult = element('div')
+  contextResult.hidden = true
+  function context() {
+    const list = foods.value.split(',').map(food => food.trim()).filter(Boolean)
+    const missing = [[country.value, 'país'], [region.value, 'región']].filter(([value]) => !value.trim()).map(([, name]) => name)
+    if (!list.length) missing.push('alimentos')
+    if (missing.length) { messages(contextResult, 'error', ['Falta: ' + missing.join(', ') + '.']); return null }
+    if (list.length > 12) { messages(contextResult, 'error', ['Indica como máximo 12 alimentos.']); return null }
+    messages(contextResult, 'error', [])
+    return { country: country.value.trim(), region: region.value.trim(), language: language.value, foods: list }
+  }
   const prompt = area('', 10)
   prompt.readOnly = true
   const promptBox = element('div', 'prompt-box')
@@ -171,33 +138,67 @@ export function authoring(lesson: HTMLElement) {
   const copy = action('Copiar instrucciones', async () => {
     try {
       await navigator.clipboard.writeText(prompt.value)
-      messages(copied, 'ok', ['Copiado. Pégalo en tu asistente de IA y copia aquí su respuesta.'])
+      messages(copied, 'ok', ['Copiado. Pégalo en tu asistente de IA y copia su respuesta en el paso 2.'])
     } catch {
       prompt.select()
       messages(copied, 'ok', ['Selecciona el texto y cópialo manualmente.'])
     }
   }, true)
   promptBox.append(field('Instrucciones para la IA', prompt), copy, copied)
-  const contextError = element('div')
-  contextError.hidden = true
-  one.append(grid, action('Preparar instrucciones', () => {
-    const missing = [[country, 'país'], [region, 'región'], [community, 'tipo de comunidad'], [foods, 'alimentos']]
-      .filter(([control]) => !(control as HTMLInputElement).value.trim()).map(([, name]) => name as string)
-    if (missing.length) return messages(contextError, 'error', ['Falta: ' + missing.join(', ') + '.'])
-    messages(contextError, 'error', [])
-    prompt.value = instructions({
-      country: country.value.trim(), region: region.value.trim(), community: community.value.trim(),
-      foods: foods.value.trim(), resources: resources.value.trim(), language: language.value
-    })
-    promptBox.hidden = false
-  }), contextError, promptBox)
+  const generate = action('Generar propuesta con IA', async () => {
+    const data = context()
+    if (!data) return
+    messages(contextResult, 'ok', ['Pidiendo la propuesta a la IA… puede tardar hasta un minuto.'])
+    try {
+      const { status, data: body } = await send('/generate/ai', { context: data })
+      if (status === 201 || status === 200) {
+        draft = body.pack as Draft
+        messages(contextResult, 'ok', ['Propuesta generada con IA y guardada como borrador: «' + draft.title + '». Revísala en el paso 3.'])
+        renderReview()
+      } else if (body.error === 'ai_not_configured') {
+        messages(contextResult, 'error', ['La IA no está configurada en este servidor. Usa «Preparar instrucciones», pégalas en tu asistente de IA y trae la respuesta al paso 2.'])
+      } else {
+        const details = Array.isArray(body.details) ? body.details.map(String).slice(0, 6) : []
+        messages(contextResult, 'error', ['La IA no devolvió una propuesta válida. Prueba otra vez o usa «Preparar instrucciones».', ...details])
+      }
+    } catch {
+      messages(contextResult, 'error', ['No hay conexión con el servidor de MOCHILA. La preparación de material necesita conexión.'])
+    }
+  })
+  const prepare = action('Preparar instrucciones', async () => {
+    const data = context()
+    if (!data) return
+    const query = new URLSearchParams({ country: data.country, region: data.region, language: data.language })
+    for (const food of data.foods) query.append('foods', food)
+    try {
+      const response = await fetch(api + '/prompt?' + query.toString())
+      const body = await response.json().catch(() => ({})) as Record<string, unknown>
+      if (response.status !== 200 || typeof body.prompt !== 'string') return messages(contextResult, 'error', serverLines(body))
+      prompt.value = body.prompt
+      promptBox.hidden = false
+    } catch {
+      messages(contextResult, 'error', ['No hay conexión con el servidor de MOCHILA.'])
+    }
+  }, true)
+  one.append(grid, generate, prepare, contextResult, promptBox)
 
   // 2 · Paste the AI answer
-  const two = step(2, 'Pega la propuesta de la IA', 'MOCHILA comprueba que cumple el formato y las reglas antes de guardarla como borrador.')
+  const two = step(2, 'O pega la propuesta de tu asistente de IA', 'MOCHILA comprueba que cumple el formato y las reglas antes de guardarla como borrador.')
   const pasted = area('', 8)
   pasted.placeholder = 'Pega aquí el JSON que devuelve la IA'
   const pasteResult = element('div')
   pasteResult.hidden = true
+  const draftId = input('', 'p. ej. demo-generado-…')
+  const reopen = action('Abrir borrador guardado', async () => {
+    if (!draftId.value.trim()) return messages(pasteResult, 'error', ['Escribe el identificador del borrador.'])
+    try {
+      const response = await fetch(api + '/drafts/' + encodeURIComponent(draftId.value.trim()))
+      if (response.status !== 200) return messages(pasteResult, 'error', ['No hay ningún borrador con ese identificador (los aprobados no se pueden editar).'])
+      draft = await response.json() as Draft
+      messages(pasteResult, 'ok', ['Borrador abierto: «' + draft.title + '». Revísalo en el paso 3.'])
+      renderReview()
+    } catch { messages(pasteResult, 'error', ['No hay conexión con el servidor de MOCHILA.']) }
+  }, true)
   two.append(field('Respuesta de la IA', pasted), action('Comprobar borrador', async () => {
     let value: unknown
     try { value = JSON.parse(cleanPaste(pasted.value)) } catch {
@@ -215,7 +216,7 @@ export function authoring(lesson: HTMLElement) {
     } catch {
       messages(pasteResult, 'error', ['No hay conexión con el servidor de MOCHILA. La preparación de material necesita conexión.'])
     }
-  }), pasteResult)
+  }), field('¿Ya tienes un borrador guardado?', draftId, 'Por ejemplo, el que generó la IA antes de la demo.'), reopen, pasteResult)
 
   // 3 · Review and edit · 4 · Approve
   const three = step(3, 'Revisa y corrige', 'Corrige cualquier texto. Los cambios se guardan como borrador.')
