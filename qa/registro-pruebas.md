@@ -73,3 +73,18 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 - **Resultado:** correcto para el recorrido integrado de descarga, actividad local, cola y sincronización con API disponible.
 - **Límite:** no fue modo avión real; el navegador no registró un service worker. No se probó el recorrido integrado en un iPhone. La prueba anterior en iPhone solo cubrió reapertura y recuperación de un resultado completado antes de desconectar.
 - **Fuente del registro:** mensaje de Sergio del 4 nov 2026.
+
+## 2026-11-04 — Actividad nueva en modo avión y sincronización desde iPhone
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** iPhone 17 con iOS 27.2.
+- **Navegador:** Safari.
+- **Conexión:** abrió la app con Wi-Fi y HTTPS; activó modo avión y apagó el Wi-Fi antes de elegir avatar y empezar la actividad.
+- **Rutas:** `/alumno` y, al recuperar la conexión, `/docente`.
+- **Versión probada:** commit `5afc92a`.
+- **Paquete:** paquete sintético aprobado `qa-iphone-nuevo`; no son los paquetes reales de Andes o Uganda.
+- **Acciones y resultado observado:** eligió Zorro, abrió «¿Qué plato tiene más colores?», respondió sin conexión y vio «¡Buen trabajo, Zorro!». Al volver el Wi-Fi, pulsó «Enviar progreso» una vez. En `DEMO-01`, los contadores pasaron de 0 eventos/0 actividades a 1 evento/1 actividad; la API confirmó el mismo resultado.
+- **Resultado:** correcto para el alcance probado: se completa una actividad nueva en modo avión y se sincroniza al recuperar la conexión.
+- **Límite:** se probó un paquete sintético y un evento. No es una prueba con el contenido Andes/Uganda ni con varios eventos.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
