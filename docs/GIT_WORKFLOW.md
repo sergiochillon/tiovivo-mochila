@@ -24,12 +24,12 @@ La regla central: **cada archivo tiene un dueño; solo el dueño (o su IA) lo ed
 
 | Ruta | Dueño | Notas |
 |---|---|---|
-| `app/` | Mario | Su propio `package.json` y lockfile |
+| `app/` | Rodrigo | Su propio `package.json` y lockfile |
 | `server/` | Alejandro | Su propio `package.json`/`requirements` y lockfile |
 | `content/`, `qa/` | Carlos | `content/packs/` es el contenido revisado: fuente de verdad |
-| `pitch/`, `research/`, `docs/PRODUCT_BRIEF.md`, `docs/RESEARCH_AND_VALIDATION.md`, `docs/PITCH_AND_DEMO.md` | Rodrigo | |
-| `contracts/pack*` y esquema | Sergio | Cambios con aviso y aprobación de Mario, Alejandro y Carlos |
-| `contracts/sync-api.md` | Alejandro | Cambios con aviso a Mario |
+| `pitch/`, `research/`, `docs/PRODUCT_BRIEF.md`, `docs/RESEARCH_AND_VALIDATION.md`, `docs/PITCH_AND_DEMO.md` | Mario | |
+| `contracts/pack*` y esquema | Sergio | Cambios con aviso y aprobación de Rodrigo, Alejandro y Carlos |
+| `contracts/sync-api.md` | Alejandro | Cambios con aviso a Rodrigo |
 | `docs/` (resto), `README.md`, `.github/`, `scripts/` | Sergio | `docs/TASK_BOARD.md` solo lo edita Sergio (instantánea; el tablero vivo es GitHub Projects) |
 | `docs/decisions/` | Quien decide | **Solo archivos nuevos** (nunca editar el ADR de otro) |
 
@@ -79,12 +79,12 @@ Tipos: `feat`, `fix`, `docs`, `content`, `test`, `chore`, `refactor`. Commits fr
 
 ## 8. Reglas de colaboración humanos e IAs
 
-1. **Una IA trabaja para su dueño y solo en su carpeta.** La IA de Mario no edita `server/`; la de Alejandro no edita `app/`.
+1. **Una IA trabaja para su dueño y solo en su carpeta.** La IA de Rodrigo no edita `server/`; la de Alejandro no edita `app/`.
 2. **Nunca dos IAs ni dos personas editan el mismo archivo a la vez.** Antes de empezar un archivo compartido, comentar en el Issue «lo cojo».
 3. **Contexto:** la IA debe leer `docs/PROJECT_CONTEXT.md` y `docs/TEAM_ROLES.md` (el humano le pega su contenido si la IA no tiene acceso al repo).
 4. **No cambiar unilateralmente arquitectura, interfaces ni alcance.** Si la IA o el humano detecta un problema: abrir Issue/ADR, **proponer**, esperar aprobación del integrador.
 5. **Interfaces** (esquema del paquete, API de sync): cambio solo por Issue + aviso a las áreas afectadas.
-6. **Nada fuera del MVP** sin aprobación de Sergio (alcance) y Rodrigo (si afecta al pitch).
+6. **Nada fuera del MVP** sin aprobación de Sergio (alcance) y Mario (si afecta al pitch).
 7. **Nada de pago** sin autorización del equipo. **Nada de claves** en el repo ni en chats de IA. **Nada de datos personales reales de menores**: solo sintéticos.
 8. **Las salidas de IA se verifican:** cifras con fuente, código ejecutado, contenido revisado por una persona. «No lo he comprobado» es una respuesta válida y esperable.
 9. **Marcar autoría de IA no es obligatorio**, pero un commit con grandes bloques generados debe haber sido leído y probado por la persona que lo firma.
