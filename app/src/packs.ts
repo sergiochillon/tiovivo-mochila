@@ -53,7 +53,7 @@ export function draftErrors(value: unknown): string[] {
     return describePath(error.instancePath) + ': ' + (reasons[error.keyword] ?? error.message ?? 'valor no válido')
   })
 }
-function approved(value: unknown, id: string): value is Pack {
+export function approved(value: unknown, id: string): value is Pack {
   return valid(value) && value.id === id && value.review.status === 'approved'
 }
 
