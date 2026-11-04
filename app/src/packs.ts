@@ -9,6 +9,7 @@ export interface Activity {
   feedback: string
   options?: { id: string; text: string; icon?: string; feedback?: string }[]
   correct?: string | string[]
+  durationMin?: number
 }
 export interface Pack {
   id: string

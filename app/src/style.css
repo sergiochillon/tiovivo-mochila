@@ -23,4 +23,32 @@ button:focus-visible{outline:3px solid #af501e;outline-offset:3px}button:disable
 footer{padding:14px 3px;font-size:.8rem;color:#455c4c}
 .teacher aside{min-height:110px;background-position:center 58%}.teacher .map-copy{padding:8px 14px}.teacher .map-copy h2{font-size:1.5rem}.teacher section h2{font-size:1.25rem;margin:1.5rem 0 0}.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.metrics div{padding:clamp(14px,2.4vw,26px);border-radius:14px;background:#e4eedf;border-left:5px solid #337155}.metrics div+div{background:#ffedc9;border-color:#bb7b33}.metrics strong,.metrics span{display:block}.metrics strong{font:700 clamp(2rem,5vw,3.5rem)/1.1 Georgia,serif}.metrics span{margin-top:.3rem;font-size:.94rem}
 .teacher button+button{background:#fffdf5;color:#254e3c;border-color:#a9baaa}p:empty{display:none}
+button.secondary,.back{background:#fffdf5;color:#174c43;border:1.5px solid #d8cfb5;box-shadow:none}
+.back{border-radius:999px;min-height:44px;padding:8px 16px;margin:0 0 16px}
+.seals{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fbe9c0;border-radius:16px;padding:10px 14px;margin:0 0 18px;max-width:560px}
+.seals strong{font-size:1rem}.dots{display:flex;gap:6px;flex-wrap:wrap}.dots i{width:18px;height:18px;border-radius:50%;background:#fffdf5;border:2px solid #c9a24a}.dots i.on{background:#174c43;border-color:#174c43}
+.activities{display:grid;gap:10px;margin:0 0 16px;max-width:560px}
+button.activity{display:flex;align-items:center;gap:12px;width:100%;margin:0;text-align:left;background:#fff;color:#193f34;border:1.5px solid #e2d8bf;border-radius:18px;padding:10px 12px;min-height:68px}
+.activity .tile{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:#dcebe4;color:#174c43}
+.activity-text{display:flex;flex-direction:column;min-width:0;flex:1}
+.activity small{font:800 .74rem/1.3 "Avenir Next",system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#4f5d58}
+.activity-title{font-weight:700;font-size:1rem;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+button.activity.next{border:2.5px solid #174c43;background:#fffdf7;box-shadow:0 4px 0 #174c43}.activity.next .tile{background:#f3c76b}.activity.next small{color:#174c43}
+.activity .status{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#174c43;color:#f3c76b}
+.pill{flex:none;background:#174c43;color:#fff;font-weight:800;font-size:.9rem;border-radius:999px;padding:8px 14px}
+.time{flex:none;font-size:.85rem;font-weight:700;color:#4f5d58}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hint{font-weight:700;color:#174c43;min-height:1.5em}
+.slots{list-style:none;margin:0 0 8px;padding:0;display:grid;gap:8px;max-width:520px}
+.slots li{display:flex;align-items:center;gap:12px;min-height:48px}
+.slots b{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:2px dashed #b9a77a;color:#6d5d37}
+.slots span{flex:1;min-height:46px;border:2px dashed #d8cba8;border-radius:14px;padding:11px 14px;font-weight:800}
+.slots li.filled b{border:0;background:#174c43;color:#f3c76b}.slots li.filled span{border:0;background:#dcebe4;color:#174c43}
+.steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;max-width:520px;margin-bottom:12px}
+.steps button{margin:0;min-height:72px;background:#fff;color:#193f34;border:2px solid #e2d8bf;box-shadow:0 3px 0 #e2d8bf;border-radius:18px}
+.steps button:disabled{opacity:.4}
+.celebrate{text-align:center}.celebrate h1{margin:0 auto}.celebrate>p{max-width:34ch;margin-left:auto;margin-right:auto}
+.celebrate .seals{margin:16px auto}.celebrate button{display:block;width:100%;max-width:420px;margin:10px auto 0}
+.seal{width:clamp(140px,38vw,200px);margin:0 auto 12px}.seal svg{display:block;width:100%;height:auto}
+.celebrate .badge{transform:none;background:#174c43;color:#f3c76b;border:0;border-radius:999px;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;padding:6px 14px}
 @media(max-width:480px){header{padding:12px 0}.edition{font-size:.61rem}.map-copy{padding:8px 12px}aside{background-position:58% center}.teacher aside{min-height:90px}.avatar,.answer{width:calc(50% - 4px)}.avatar+.avatar,.answer+.answer{margin-left:8px}.metrics{gap:8px}}
