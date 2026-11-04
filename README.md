@@ -60,8 +60,8 @@ MOCHILA separa dos momentos:
 
 ## Licencia
 
-- **Código y esquemas** (código fuente de `app/` excepto los SVG listados en `LICENSE-CONTENT.md`, además de `server/`, `scripts/` y `contracts/`): **MIT**. Ver [`LICENSE`](LICENSE).
-- **Documentación y contenido** (`docs/`, `content/`, `pitch/`, `research/`, `qa/` y los SVG propios listados en `LICENSE-CONTENT.md`, si Rodrigo confirma su autoría): **CC BY-NC-SA 4.0**. Ver [`LICENSE-CONTENT.md`](LICENSE-CONTENT.md).
+- **Código y esquemas** (código fuente de `app/` excepto las ilustraciones SVG y PNG listadas en `LICENSE-CONTENT.md`, además de `server/`, `scripts/` y `contracts/`): **MIT**. Ver [`LICENSE`](LICENSE).
+- **Documentación y contenido** (`docs/`, `content/`, `pitch/`, `research/`, `qa/` y las ilustraciones SVG/PNG de `app/` listadas en `LICENSE-CONTENT.md`): **CC BY-NC-SA 4.0**. Ver [`LICENSE-CONTENT.md`](LICENSE-CONTENT.md).
 - Las licencias cubren solo el material cuyos derechos tiene el equipo; las dependencias y los materiales de terceros mantienen sus propias licencias.
 - Usos comerciales del contenido: se acuerdan con el equipo.
 

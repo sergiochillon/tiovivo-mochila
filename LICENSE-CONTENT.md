@@ -11,9 +11,9 @@ La documentación y el contenido de este repositorio se publican bajo la licenci
 - `docs/` (incluidas las decisiones en `docs/decisions/`)
 - `content/` (paquetes de actividades y reglas pedagógicas)
 - `pitch/`, `research/` y `qa/`
-- Si Rodrigo confirma su autoría, las ilustraciones SVG `app/src/valle.svg`, `app/src/zorro.svg`, `app/src/colibri.svg` y `app/public/mochila.svg` (valle, avatares y logotipo de MOCHILA). Si alguna no es propia, queda fuera de esta licencia.
+- Las ilustraciones SVG `app/src/valle.svg`, `app/src/zorro.svg`, `app/src/colibri.svg` y `app/public/mochila.svg`, y sus PNG de instalación exportados (`app/public/mochila-180.png`, `app/public/mochila-192.png` y `app/public/mochila-512.png`). Rodrigo confirma que creó los cuatro SVG desde cero para MOCHILA durante el hackatón, con ayuda de Codex en el trabajo de frontend; no usó plantillas, imágenes descargadas ni logotipos de terceros. Los PNG se exportaron del SVG de la mochila.
 
-El código fuente de `app/` (excepto las ilustraciones SVG anteriores), el servidor (`server/`), los scripts (`scripts/`) y los esquemas (`contracts/`) se publican bajo licencia MIT: ver `LICENSE`.
+El código fuente de `app/` (excepto las ilustraciones y exportaciones anteriores), el servidor (`server/`), los scripts (`scripts/`) y los esquemas (`contracts/`) se publican bajo licencia MIT: ver `LICENSE`.
 
 ## Qué no cubre
 Esta licencia solo se aplica al material cuyos derechos tiene el equipo. No cubre:
