@@ -1,7 +1,7 @@
 # API de generación, revisión y sincronización
 
 **Responsable:** Alejandro · **Revisión de frontend:** Rodrigo
-**Estado:** contrato de sync confirmado por Rodrigo tras revisar el commit `2c3286c`; contrato de progreso acordado con Rodrigo el 4 nov. Listo para implementar. El esquema y los paquetes de ejemplo fueron validados con AJV 8.17.1 + ajv-formats en modo estricto, según Sergio.
+**Estado:** sync y respuesta agregada de progreso confirmados por Rodrigo (revisiones de `2c3286c` y `5c0fa80`); listo para implementar. El esquema y los paquetes de ejemplo fueron validados con AJV 8.17.1 + ajv-formats en modo estricto, según Sergio.
 
 Base URL local: `/api`. JSON UTF-8 en peticiones y respuestas. No requiere cuentas.
 La API no recibe nombres ni texto libre de menores. Los ejemplos son sintéticos.
