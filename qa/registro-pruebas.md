@@ -59,3 +59,17 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 - **Resultado:** correcto para el alcance probado: la app reabre sin red y recupera el progreso guardado localmente.
 - **Límite:** la actividad se completó antes de desconectar. Esta prueba no demuestra que se pueda completar una actividad nueva offline ni que la sincronización funcione al volver la red.
 - **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
+
+## 2026-11-04 — Ensayo integrado de carga, uso local y sincronización
+
+- **Ejecutó:** Sergio, con apoyo de Claude Code.
+- **Registro preparado por:** Carlos, a partir del informe de Sergio.
+- **Dispositivo:** MacBook Air.
+- **Navegador:** navegador integrado, tamaño de viewport móvil; versión no indicada.
+- **Entorno:** API local con datos de prueba y `CORS_ORIGINS`; proxy HTTPS de ADR-003.
+- **Versión probada:** `main` en `e39c184`.
+- **Paquetes:** seed cargó los dos paquetes aprobados; Andes y Uganda se descargaron desde `/alumno`.
+- **Acciones y resultado observado:** con la API parada, se reabrió Andes desde la copia local y se completó una actividad nueva. El envío sin API conservó el progreso. Al volver a iniciar la API, se confirmaron 2 eventos y el panel mostró 2/2. Al reenviar, no se crearon duplicados.
+- **Resultado:** correcto para el recorrido integrado de descarga, actividad local, cola y sincronización con API disponible.
+- **Límite:** no fue modo avión real; el navegador no registró un service worker. No se probó el recorrido integrado en un iPhone. La prueba anterior en iPhone solo cubrió reapertura y recuperación de un resultado completado antes de desconectar.
+- **Fuente del registro:** mensaje de Sergio del 4 nov 2026.
