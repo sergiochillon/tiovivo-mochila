@@ -1,0 +1,45 @@
+# Registro de pruebas — MOCHILA
+
+Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se redacta a partir del informe de otra persona, se indica quién ejecutó la prueba y quién comunicó el resultado.
+
+## 2026-11-04 — Bloqueo de paquetes en borrador
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** MacBook Air (modelo no especificado).
+- **Navegador:** Chrome 156.
+- **Servidor:** servidor local disponible durante la prueba.
+- **Ruta:** `/alumno`.
+- **Paquetes:** `content/packs/food-andes-es.json` y `content/packs/food-northern-uganda-en.json` (PR #6, commit `fbc66bf`); ambos con `review.status: "draft"`.
+- **Resultado observado:** en ambos casos se mostró «Este material está pendiente de revisión»; no aparecieron botones ni preguntas.
+- **Resultado:** correcto para el alcance probado: los paquetes en borrador quedan bloqueados para el alumno.
+- **Límite:** la prueba se realizó con el servidor local disponible. No comprueba modo avión, caché offline, reapertura sin red, progreso local ni sincronización.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026. Indicó que el detalle estaba en `app/README.md`, pero esa sección no aparece en la copia de `app/README.md` revisada por Carlos al preparar este registro.
+
+## 2026-11-04 — Actividad disponible en `/alumno` con copia aprobada temporal
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** MacBook Air (modelo y versión de sistema no especificados).
+- **Navegador:** Chrome 156, modo headless.
+- **Servidor:** servidor local disponible durante la prueba.
+- **Ruta:** `/alumno`.
+- **Paquete:** copia temporal del ejemplo técnico de PR #5, modificada para la prueba con `review.status: "approved"`, revisor sintético y fecha sintética. La copia se eliminó al terminar; los paquetes originales de PR #6 siguen en `draft`.
+- **Acciones y resultado observado:** eligió el avatar Zorro, respondió la pregunta del plato y apareció «¡Buen trabajo, Zorro!».
+- **Resultado:** correcto para el alcance probado: el reproductor deja jugar una actividad con una copia que cumple el estado aprobado.
+- **Límite:** no prueba el proceso real de autoría, revisión humana ni aprobación del paquete; tampoco prueba modo avión, persistencia de progreso o sincronización.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
+
+## 2026-11-04 — Reapertura y progreso local con el servidor parado
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** MacBook Air con macOS 26.5.1.
+- **Navegador:** Safari 26.5, ventana privada.
+- **Ruta:** `/revision`.
+- **Paquete:** ejemplo técnico de PR #5.
+- **Versión probada:** frontend local de `app/esqueleto` sobre `b92c0fb`; bundle `index-DBaVmX1j.js`.
+- **Acciones y resultado observado:** detuvo el servidor y comprobó que su dirección ya no respondía; recargó la app, recuperó el resultado de Colibrí, completó la actividad con Zorro y volvió a recargar. Zorro conservó su resultado.
+- **Resultado:** correcto para el alcance probado: la aplicación reabre y conserva progreso local en Safari con el servidor inaccesible.
+- **Límite:** servidor parado no equivale a una prueba física de modo avión en móvil. No comprueba el recorrido integrado de autoría, aprobación, exportación ni sincronización.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
