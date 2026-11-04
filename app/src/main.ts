@@ -73,6 +73,7 @@ function choose() {
     portrait.src = avatar.portrait
     portrait.alt = ''
     card.prepend(portrait)
+    card.dataset.avatar = avatar.id
   }
 }
 
@@ -111,6 +112,7 @@ async function play(avatar: Avatar) {
     const food = document.createElement('span')
     food.setAttribute('aria-hidden', 'true')
     food.textContent = ('icon' in option && option.icon) || ''
+    answer.className = 'answer'
     answer.prepend(food)
   })
   lesson.append(hint)
@@ -121,13 +123,14 @@ function complete(avatar: Avatar) {
   screen('¡Buen trabajo, ' + avatar.label + '!', activity.feedback)
   const badge = document.createElement('strong')
   badge.className = 'badge'
-  badge.textContent = '★  Actividad completada'
+  badge.textContent = '✦  Sello del valle · Actividad completada'
   lesson.prepend(badge)
   button('Cambiar de avatar', choose)
 }
 
 function teacherPanel() {
   document.body.classList.add('teacher')
+  document.querySelector('.edition')!.textContent = 'Espacio docente'
   screen('Cuaderno de clase', 'Seguimiento del progreso · Clase DEMO-01')
   const metrics = document.createElement('div')
   metrics.className = 'metrics'
@@ -181,7 +184,7 @@ function teacherPanel() {
 const reviewRoute = location.pathname === '/revision'
 const technicalPreview = reviewRoute && import.meta.env.MODE === 'revision'
 if (technicalPreview) {
-  document.querySelector('header')!.append(' · Revisión técnica')
+  document.querySelector('.edition')!.textContent = 'Revisión técnica'
   document.querySelector('footer')!.textContent = 'Ejemplo técnico en borrador · Solo para pruebas del equipo.'
 }
 if (location.pathname === '/docente') teacherPanel()

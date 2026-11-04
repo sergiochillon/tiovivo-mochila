@@ -1,26 +1,26 @@
-:root { font: 110%/1.5 ui-rounded, "Avenir Next", system-ui, sans-serif; color:#233d35; background:#faf5e8; }
-* { box-sizing:border-box }
-body { margin:0; background-image:radial-gradient(#d8d4b9 1px,transparent 1px); background-size:20px 20px; min-height:100vh }
-main { max-width:48rem; margin:auto; padding:clamp(1rem,4vw,3rem); }
-header { font-weight:900; letter-spacing:.12em; display:flex; gap:.65rem; align-items:center; margin-bottom:1rem }
-header img { width:2.4rem }
-article { overflow:hidden; background:#fffdf6; border:2px solid #344f42; border-radius:1.6rem; box-shadow:0 6px #d5c9a8 }
-aside { background:#c9e8dc url('./valle.svg') center bottom/cover; min-height:10rem; display:flex; align-items:flex-end; padding:1rem }
-aside div { background:#fff8e5; padding:.55rem 1rem; border-radius:.8rem; transform:rotate(-2deg); box-shadow:2px 3px #34513e33 }
-small { font-size:.64rem; font-weight:850; letter-spacing:.13em }
-h2,aside p { margin:0 }
-aside p { font-size:.85rem }
-section { padding:clamp(1rem,4vw,2rem); }
-h1 { font-size:clamp(1.65rem,4vw,2.35rem); line-height:1.17; margin:0; letter-spacing:-.035em }
-h1:focus { outline:none }
-p { margin:.55rem 0 1rem }
-button { min-height:48px; color:#263c31; background:#fff1cf; border:2px solid #807756; border-radius:1rem; padding:.7rem 1rem; margin:.3rem 0; width:100%; font:inherit; font-weight:750; cursor:pointer; }
-button:hover { border-color:#225a47; box-shadow:0 3px #225a4733 }
-button:focus-visible { outline:3px solid #1768a0; outline-offset:3px }
-button.avatar { width:48%; padding:.5rem; background:#ffebc5; box-shadow:0 4px #debb86 }
-button.avatar + button.avatar { margin-left:4%; background:#d9eee3; box-shadow:0 4px #a6c8b7 }
-.avatar img { display:block; width:100%; height:clamp(5rem,13vw,7rem) }
-button span { margin-right:.7rem }
-section > button:last-child:not(.avatar) { background:#eef3e9 }
-.badge { display:inline-block; background:#fce39a; border-radius:2rem; padding:.3rem .85rem; margin-bottom:.8rem }
-footer { margin-top:1rem; font-size:.85rem }
+:root{font:100%/1.55 "Avenir Next",system-ui,sans-serif;color:#193f34;background:#f5f2e8;font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;background-image:radial-gradient(#9b987b44 .8px,transparent .9px);background-size:12px 12px;min-height:100vh}
+main{max-width:1080px;margin:auto;padding:0 clamp(14px,4vw,52px) 32px}
+header{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #bbc3ad;padding:17px 0;margin-bottom:clamp(14px,3vw,30px)}
+.brand{display:flex;align-items:center;gap:10px;font-size:1.55rem;letter-spacing:-.055em}.brand img{width:38px;height:38px}.edition,small,.map-mark{font:700 .72rem/1.4 ui-monospace,monospace;letter-spacing:.1em;text-transform:uppercase}
+.edition{padding:7px 12px;border:1px solid #a6b6a8;border-radius:30px}
+article{background:#fffdf5;border:1px solid #bdc5ac;border-radius:22px;overflow:hidden;box-shadow:0 8px 0 -4px #d8d8c4,0 18px 36px -28px #364839}
+aside{position:relative;min-height:clamp(150px,24vw,258px);display:flex;align-items:flex-start;padding:clamp(18px,3vw,34px);background:#ffde9c url('./valle.svg') center center/cover;border-bottom:1px solid #91a77e}
+.map-copy{background:#fffae9;padding:12px 20px 14px;box-shadow:3px 4px 0 #384d3930;transform:rotate(-2deg);border-radius:3px}
+.map-copy h2{font:700 clamp(1.7rem,4vw,3.3rem)/1.03 Georgia,serif;letter-spacing:-.055em;margin:.15em 0}.map-copy p{font-size:.82rem;margin:0}.map-mark{position:absolute;right:16px;bottom:14px;background:#fffae9;padding:6px 9px;border-radius:50%}
+section{padding:clamp(18px,3.7vw,40px)}h1{font:700 clamp(1.85rem,4.4vw,3.4rem)/1.04 Georgia,serif;letter-spacing:-.045em;margin:0;max-width:24ch}h1:focus{outline:none}p{margin:.6rem 0 1.1rem}section>p{color:#475c50}
+button{min-height:48px;font:700 1rem/1.35 inherit;font-family:inherit;font-size:1rem;font-weight:700;cursor:pointer;background:#215a49;color:#fffdf0;border:1px solid transparent;border-radius:14px;padding:12px 20px;margin:4px 6px 4px 0}
+button:focus-visible{outline:3px solid #af501e;outline-offset:3px}button:disabled{opacity:.65}button:hover{filter:brightness(.96)}
+.avatar,.answer{vertical-align:top;width:calc(50% - 6px);margin-right:0;position:relative;color:#283f33;border:1px solid #d4b281;background:#fbe3bd;box-shadow:0 3px 0 #cfb58d;text-align:left}
+.avatar+.avatar,.answer+.answer{margin-left:12px}
+.avatar{overflow:hidden;padding:14px clamp(12px,3vw,24px);font:700 clamp(1.25rem,3vw,1.9rem)/1.2 Georgia,serif}
+.avatar[data-avatar=colibri]{background:#d7eadb;border-color:#a0c3af;box-shadow:0 3px 0 #acc6af}
+.avatar img{display:block;width:100%;height:clamp(78px,12vw,132px);background:radial-gradient(ellipse at center,#fff6d58a 0 37%,transparent 38%);margin-bottom:6px}
+.avatar::after{content:'→';float:right;font-family:system-ui;color:#344d3d}
+.answer{background:#f6f0db;border-color:#c3bfa2;box-shadow:0 3px 0 #cbc8b3;text-align:center;padding:14px 8px}
+.answer span{display:grid;place-items:center;margin:0 auto 8px;width:64px;height:64px;border:4px double #b4c4af;border-radius:50%;background:#fffcf3;font-size:2rem}
+.badge{display:inline-block;background:#f7d782;border:1px dashed #96672f;padding:8px 14px;margin-bottom:14px;color:#63411b;border-radius:6px;transform:rotate(-2deg)}
+footer{padding:14px 3px;font-size:.8rem;color:#455c4c}
+.teacher aside{min-height:110px;background-position:center 58%}.teacher .map-copy{padding:8px 14px}.teacher .map-copy h2{font-size:1.5rem}.teacher section h2{font-size:1.25rem;margin:1.5rem 0 0}.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.metrics div{padding:clamp(14px,2.4vw,26px);border-radius:14px;background:#e4eedf;border-left:5px solid #337155}.metrics div+div{background:#ffedc9;border-color:#bb7b33}.metrics strong,.metrics span{display:block}.metrics strong{font:700 clamp(2rem,5vw,3.5rem)/1.1 Georgia,serif}.metrics span{margin-top:.3rem;font-size:.94rem}
+.teacher button+button{background:#fffdf5;color:#254e3c;border-color:#a9baaa}p:empty{display:none}
+@media(max-width:480px){header{padding:12px 0}.edition{font-size:.61rem}.map-copy{padding:8px 12px}aside{background-position:58% center}.teacher aside{min-height:90px}.avatar,.answer{width:calc(50% - 4px)}.avatar+.avatar,.answer+.answer{margin-left:8px}.metrics{gap:8px}}
