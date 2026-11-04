@@ -19,8 +19,8 @@ Adoptar `contracts/pack-v0.1.schema.json` (JSON Schema 2020-12) como contrato, p
 
 ## Puntos abiertos para los revisores
 1. ~~**Rodrigo:** semántica de `correct`~~ **Confirmada** (4 nov): `order` compara la secuencia de ids; `match` son parejas `"idA:idB"` izquierda-derecha, sin importar el orden. No necesita campos nuevos.
-2. **Alejandro:** `ajv` con formatos (`date-time`) y `additionalProperties:false`; ¿le encaja con el generador?
-3. **Carlos:** valores de `safetyTag` (ahora cualquier texto en minúsculas con guiones); ¿cerrar una lista?
+2. ~~**Alejandro:** `ajv`~~ **Validado por Sergio** con ajv 8.17.1 + ajv-formats 3.0.1 (modo estricto): el esquema compila, y el ejemplo y los dos paquetes de Carlos (PR 6, `draft`) lo cumplen. Pruebas negativas OK (approved sin revisor, choice sin `correct`, safetyTag fuera de lista).
+3. ~~**Carlos:** `safetyTag`~~ **Cerrado** a `none, hygiene, food-safety, help-adult, emotion-self-choice, privacy` (una etiqueta principal por actividad). Añadido `teacherNotes` opcional por actividad; no se añade `level`.
 
 ## Alternativas consideradas
 1. Esquema más abierto (`additionalProperties: true`): menos fricción, pero el contenido generado por IA podría colar campos no previstos.
@@ -29,7 +29,7 @@ Adoptar `contracts/pack-v0.1.schema.json` (JSON Schema 2020-12) como contrato, p
 ## Consecuencias
 - Mejora: todos construyen sobre el mismo contrato y validan lo mismo.
 - Empeora: cualquier cambio exige aviso.
-- Estado de verificación: el esquema es JSON válido, pero **no se ha probado todavía con un validador real (ajv)**.
+- Estado de verificación: validado con ajv (ver puntos abiertos). La validación sale del Mac de Sergio; el servidor de Alejandro debe repetirla con su versión de ajv.
 
 ## Actualización (4 nov): ProgressEvent y /api/sync
-Rodrigo y Alejandro detectaron que el `ProgressEvent` del borrador no encajaba con el borrador de `/api/sync`. Cambios propuestos en el esquema (aditivos): `type` opcional (slug), `classCode` opcional en el evento (el contrato lo pone en el lote; si va en ambos deben coincidir) y `classCode` acepta `DEMO01` y `DEMO-01`. Pendiente: Alejandro confirma los valores de `type` y que su `sync-api.md` coincide; no he visto ese borrador en el repo.
+Rodrigo y Alejandro detectaron que el `ProgressEvent` del borrador no encajaba con el borrador de `/api/sync`. Cambios propuestos en el esquema (aditivos): `type` opcional (slug), `classCode` opcional en el evento (el contrato lo pone en el lote; si va en ambos deben coincidir) y `classCode` acepta `DEMO01` y `DEMO-01`. `type` queda como opcional con el único valor del MVP `activity_completed` (acordado por Alejandro). Pendiente: que Alejandro suba `sync-api.md` al repo para que Rodrigo lo vea.

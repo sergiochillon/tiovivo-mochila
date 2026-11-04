@@ -50,7 +50,7 @@
         "notes": { "type": "string" }
       },
       "if": { "properties": { "status": { "const": "approved" } }, "required": ["status"] },
-      "then": { "required": ["status", "reviewedBy", "reviewedAt"] }
+      "then": { "properties": { "reviewedBy": true, "reviewedAt": true }, "required": ["status", "reviewedBy", "reviewedAt"] }
     },
     "Module": {
       "type": "object",
@@ -92,13 +92,14 @@
           "description": "choice/scenario: id de la opción correcta (o varias). order: ids de opciones en orden correcto. match: elementos 'idA:idB' (pareja izquierda-derecha; el orden de las parejas no importa; los ids no admiten ':'). story: se omite. Semántica confirmada por Rodrigo el 4 nov."
         },
         "feedback": { "type": "string", "minLength": 1, "maxLength": 300, "description": "Mensaje al terminar. Tono positivo, sin culpabilizar." },
-        "safetyTag": { "type": "string", "pattern": "^[a-z]+(-[a-z]+)*$", "description": "Etiqueta de seguridad revisada por Carlos. Ej.: none, help-adult, hygiene." },
+        "safetyTag": { "enum": ["none", "hygiene", "food-safety", "help-adult", "emotion-self-choice", "privacy"], "description": "Una etiqueta principal por actividad (lista cerrada propuesta por Carlos)." },
+        "teacherNotes": { "type": "string", "maxLength": 500, "description": "Notas opcionales para el docente (no se muestran al niño)." },
         "durationMin": { "type": "integer", "minimum": 1, "maximum": 10 }
       },
       "allOf": [
         {
           "if": { "properties": { "type": { "enum": ["choice", "scenario", "match", "order"] } }, "required": ["type"] },
-          "then": { "required": ["options", "correct"] }
+          "then": { "properties": { "options": true, "correct": true }, "required": ["options", "correct"] }
         }
       ]
     },
@@ -121,7 +122,7 @@
         "result": { "enum": ["completed", "correct", "incorrect", "skipped"] },
         "ts": { "type": "string", "format": "date-time" },
         "avatarId": { "$ref": "#/$defs/slug" },
-        "type": { "$ref": "#/$defs/slug", "description": "Tipo de evento (opcional). Valores por definir entre Rodrigo y Alejandro en sync-api.md; hasta entonces, cualquier slug." },
+        "type": { "type": "string", "pattern": "^[a-z]+(_[a-z]+)*$", "description": "Tipo de evento (opcional). En el MVP la PWA solo envía activity_completed (acordado con Alejandro y Rodrigo)." },
         "classCode": { "$ref": "#/$defs/ClassCode", "description": "Opcional en el evento: normalmente va en el lote de /api/sync. Si va en ambos, el servidor exige que coincidan." }
       }
     }

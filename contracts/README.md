@@ -5,4 +5,4 @@
 - `sync-api.md` (API de generación, aprobación y sincronización): **dueño Alejandro**; valida Rodrigo.
 
 Regla: los campos se **añaden**, no se renombran ni se quitan sin Issue + aviso a las áreas afectadas.
-Estado: esquema pendiente de validar con `ajv` (solo se ha comprobado que es JSON válido); `sync-api.md` pendiente de crear.
+Estado: esquema validado con ajv 8.17.1 + ajv-formats (ejemplo y paquetes de Carlos incluidos); `sync-api.md` pendiente de subir al repo por Alejandro.
