@@ -1,6 +1,6 @@
 # PROJECT_CONTEXT — contexto completo del proyecto
 
-Última revisión: 4 nov 2026 (arranque de la fase de ejecución). Este archivo es el punto de entrada para humanos e IAs. **Si algo aquí contradice a otro documento, gana este y se corrige el otro.** Responsable: Sergio.
+Última revisión: 4 nov 2026 (arranque de la fase de ejecución; roles de Mario y Rodrigo intercambiados: Mario producto/pitch, Rodrigo frontend). Este archivo es el punto de entrada para humanos e IAs. **Si algo aquí contradice a otro documento, gana este y se corrige el otro.** Responsable: Sergio.
 
 Convención de estados: **[DECIDIDO]** · **[HIPÓTESIS]** (hay que validarla) · **[PENDIENTE]** (nadie lo ha resuelto).
 
@@ -28,24 +28,25 @@ Convención de estados: **[DECIDIDO]** · **[HIPÓTESIS]** (hay que validarla) �
 |---|---|
 | Bases | Ejecución 3 nov 9:00 → 5 nov 23:59. Subida al formulario al terminar el plazo. Resolución local y acta el 5 nov. Día 6: recepción de finalistas. Final el 7. |
 | Comunicado a la sede (según el equipo) | «Dos jornadas, de 9:30 a 20:30, con presentación local el viernes.» |
+| Confirmado con la sede (4 nov, según Sergio) | Desarrollo hasta el **jueves 5 nov a las 23:59**; la entrega puede enviarse hasta esa hora. **Presentación local el viernes 6 nov de 12:00 a 14:00**; el turno concreto de nuestro equipo **no se conoce** y no se puede saber todavía. |
 
-**Discrepancias a resolver con el interlocutor de la sede (no las damos por resueltas):**
+**Estado de las discrepancias (actualizado el 4 nov):**
 
-1. **Viernes = 6 nov**, pero las bases fijan la resolución local el 5 nov. ¿La presentación del viernes es el pitch ante el jurado local o un acto posterior?
-2. **¿Qué dos días son las dos jornadas?** Hoy es miércoles 4 nov. Si fueran 3 y 4, ya estaríamos en la segunda; si son 4 y 5, estamos al inicio de la primera. **El plan se hace asumiendo 4 y 5 nov** (escenario A) y se marca qué recortar si no es así (ver `TASK_BOARD.md`).
-3. **¿La entrega (formulario + GitHub + vídeo) vence el 5 nov a las 23:59?** Asumimos que sí (regla de las bases) y congelamos antes.
-4. Hora y formato exacto de la presentación local del viernes: **desconocidos**. No inventarlos.
+1. **Viernes = 6 nov y bases con resolución local el 5 nov.** La sede indica presentación el viernes 6 de 12:00 a 14:00. Seguimos sin saber si es el pitch ante el jurado local; **[PENDIENTE]** preguntar si el acta se emite igualmente el 5 nov.
+2. **Jornadas de trabajo:** se asumen **miércoles 4 y jueves 5 nov** (escenario A). Se marca qué recortar si no es así (ver `TASK_BOARD.md`).
+3. **Entrega:** vence el jueves 5 nov a las 23:59 (confirmado por la sede). Congelamos funcionalidades el jueves a las 16:30.
+4. **Hora de nuestro turno, duración y formato** de la presentación del viernes: **desconocidos**. No inventarlos.
 
 ## 2. Equipo TIOVIVO.exe
 
-Cinco estudiantes de 4.º, mismo hardware: MacBook Air M1, 16 GB, 512 GB.
+Cinco estudiantes de 4.º. Cuatro con MacBook Air M1 (16 GB, 512 GB); el de Alejandro es un M3.
 
 | Persona | Estudios | Herramientas de IA / infraestructura |
 |---|---|---|
 | Sergio Chillón Sendín | Ing. Informática + ADET | ChatGPT Go, Google AI Pro, Claude Pro, Claude Desktop y Claude Code (autenticados en su Mac), Antigravity en su VPS Oracle. **Único Mac con Git, GitHub CLI, auth GitHub y VS Code confirmados.** |
 | Rodrigo Cabezas Pérez | Ing. Informática + ADET | ChatGPT Plus, acceso temporal a Grok, VPS Oracle propio |
 | Mario Ullán Motellón | Ing. Informática | ChatGPT Plus |
-| Alejandro Estévez | Ing. Informática | ChatGPT Plus |
+| Alejandro Estévez | Ing. Informática | Sin suscripción de IA de pago (herramientas gratuitas; Mac M3) |
 | Carlos Herrero | Ing. Informática | ChatGPT Plus |
 
 - VPS Oracle (Sergio y Rodrigo): Ampere A1, ~24 GB RAM, ~200 GB. **Opcionales**: nada crítico puede depender de ellos.
@@ -112,13 +113,13 @@ Ver §2. Gratuitos a verificar antes de usar: tier gratuito de la API de Gemini 
 
 | ID | Pendiente | Quién lo resuelve | Para cuándo |
 |---|---|---|---|
-| P-01 | Confirmar con la sede las dos jornadas, el viernes y la hora de entrega | Sergio (vía interlocutor) | Hoy, antes de las 13:00 |
+| P-01 | Confirmar con la sede las dos jornadas, el viernes y la hora de entrega. **Parcial:** entrega hasta el jueves 23:59 y presentación el viernes 12:00–14:00 confirmadas; falta el turno (no se puede saber aún) y si el acta sigue siendo el 5 nov | Sergio (vía interlocutor) | Re-preguntar el jueves |
 | P-02 | Modalidad declarada (innovadora/senior) | Sergio | Hoy |
-| P-03 | Estado de GitHub Pro / Student Pack del propietario del repo (protección de `main`) | Sergio | Hoy, bloque 0 |
-| P-04 | Estado de los 4 Macs restantes (diagnóstico) | Cada persona | Hoy, bloque 0 |
-| P-05 | Stack: Vite + TypeScript + PWA (front), Node + TypeScript (server). Ver ADR-001/002 | Sergio con Mario y Alejandro | Hoy, antes de 13:30 |
-| P-06 | Proveedor de IA para generar: Gemini (tier gratuito) vs. flujo manual con paquetes pegados | Alejandro + Sergio | Hoy, antes de 15:00 |
-| P-07 | Hosting del demo con HTTPS para probar en móviles (el service worker exige HTTPS salvo localhost) | Sergio + Mario | Hoy |
+| P-03 | ~~Estado de GitHub Pro / Student Pack~~ **Resuelto:** Sergio tiene GitHub Pro por el Student Pack; `main` está protegida (PR obligatoria, 1 aprobación, sin force push ni borrado) | Sergio | Hecho |
+| P-04 | ~~Estado de los 4 Macs restantes~~ **Resuelto (según Sergio):** entornos listos; todos están en el repo y han hecho su PR de prueba | Cada persona | Hecho |
+| P-05 | Stack: Node + TypeScript (server): **aprobado (ADR-002)**. Front: propuesta Vite + TypeScript + vite-plugin-pwa; React o vanilla lo decide Rodrigo (ADR-001, pendiente de su respuesta) | Sergio con Rodrigo y Alejandro | Hoy, antes de 13:30 |
+| P-06 | Proveedor de IA: **generación asistida (JSON pegado y validado) desde el inicio**; Gemini gratuito solo como añadido si el equipo lo confirma (ADR-002) | Alejandro + Sergio | Gemini: hoy, antes de 15:00 |
+| P-07 | Hosting del demo con HTTPS para probar en móviles (el service worker exige HTTPS salvo localhost) | Sergio + Rodrigo | Hoy |
 | P-08 | Licencia de código (propuesta: MIT o Apache-2.0) y de contenido (recomendada por bases: CC BY-NC-SA 3.0) y visibilidad del repo en la entrega | Sergio, con todos | Antes de la entrega |
-| P-09 | Quién del equipo sale a validar con docentes/ONG y a quién | Rodrigo | Hoy |
-| P-10 | Revisión pedagógica externa (alguien de Educación), si es posible | Carlos + Rodrigo | Mañana |
+| P-09 | Quién del equipo sale a validar con docentes/ONG y a quién | Mario | Hoy |
+| P-10 | Revisión pedagógica externa (alguien de Educación), si es posible | Carlos + Mario | Mañana |
