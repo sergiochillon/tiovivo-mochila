@@ -60,12 +60,12 @@ MOCHILA separa dos momentos:
 
 ## Licencia
 
-- **Código y esquemas** (`app/`, `server/`, `scripts/`, `contracts/`): **MIT**. Ver [`LICENSE`](LICENSE).
-- **Documentación y contenido** (`docs/`, `content/`, `pitch/`, `research/`, `qa/` e ilustraciones propias): **CC BY-NC-SA 4.0**. Ver [`LICENSE-CONTENT.md`](LICENSE-CONTENT.md).
+- **Código y esquemas** (código fuente de `app/` excepto los SVG listados en `LICENSE-CONTENT.md`, además de `server/`, `scripts/` y `contracts/`): **MIT**. Ver [`LICENSE`](LICENSE).
+- **Documentación y contenido** (`docs/`, `content/`, `pitch/`, `research/`, `qa/` y los SVG propios listados en `LICENSE-CONTENT.md`, si Rodrigo confirma su autoría): **CC BY-NC-SA 4.0**. Ver [`LICENSE-CONTENT.md`](LICENSE-CONTENT.md).
 - Las licencias cubren solo el material cuyos derechos tiene el equipo; las dependencias y los materiales de terceros mantienen sus propias licencias.
 - Usos comerciales del contenido: se acuerdan con el equipo.
 
-Las bases (Base 9) piden liberar el trabajo con licencia libre y recomiendan CC BY-NC-SA 3.0 para documentación; usamos la 4.0, con las mismas condiciones. Decisión: `docs/decisions/ADR-005-licencias-y-visibilidad.md`.
+Las bases (Base 9) exigen una licencia aprobada por OSI para el código y recomiendan CC BY-NC-SA 3.0 para documentación y assets; usamos la versión 4.0. Decisión: `docs/decisions/ADR-005-licencias-y-visibilidad.md`.
 
 ## Mapa del repositorio
 
