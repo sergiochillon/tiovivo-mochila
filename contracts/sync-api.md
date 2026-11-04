@@ -1,7 +1,7 @@
 # API de generación, revisión y sincronización
 
 **Responsable:** Alejandro · **Revisión de frontend:** Rodrigo
-**Estado:** contrato de sync y progreso confirmado por Rodrigo; edición, aprobación y ocultación de borradores probadas por Rodrigo en la PR 9. El esquema y los paquetes de ejemplo fueron validados con AJV 8.17.1 + ajv-formats en modo estricto, según Sergio.
+**Estado:** contrato de sync y progreso confirmado por Rodrigo; edición, aprobación y ocultación de borradores probadas por Rodrigo en la PR 9. Sergio también probó sync/progress localmente con curl sobre `3c7e210` (no en móvil). El esquema y los paquetes de ejemplo fueron validados con AJV 8.17.1 + ajv-formats en modo estricto, según Sergio.
 
 Base URL local: `/api`. JSON UTF-8 en peticiones y respuestas. No requiere cuentas.
 La API no recibe nombres ni texto libre de menores. Los ejemplos son sintéticos.
@@ -88,6 +88,10 @@ rechaza el lote completo con `409 Conflict` (`event_id_conflict`). El front
 conserva el lote ante `409`, `422` o cualquier respuesta no exitosa. Si se
 pierde una respuesta `200`, reenvía el mismo lote; los duplicados idénticos se
 reconocen y no vuelven a contarse.
+
+Prueba local reportada por Sergio con `curl` sobre `3c7e210`: envío y reenvío
+sin duplicar, `409` por conflicto de ID, `422` por `avatarId` inválido y
+contadores de progreso correctos. No se ha probado en móvil.
 
 Respuesta `200 OK`:
 

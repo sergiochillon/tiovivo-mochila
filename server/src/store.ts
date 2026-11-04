@@ -23,8 +23,8 @@ export type StoredEvent = { classCode: string; event: ProgressEvent };
 
 export type StoreState = {
   version: 1;
-  packs: Record<string, Pack>;
-  events: Record<string, StoredEvent>;
+  packs: Map<string, Pack>;
+  events: Map<string, StoredEvent>;
 };
 
 const dataDir = process.env.MOCHILA_DATA_DIR
@@ -32,7 +32,7 @@ const dataDir = process.env.MOCHILA_DATA_DIR
   : resolve(dirname(fileURLToPath(import.meta.url)), "../data");
 const storePath = resolve(dataDir, "store.json");
 
-const emptyState = (): StoreState => ({ version: 1, packs: {}, events: {} });
+const emptyState = (): StoreState => ({ version: 1, packs: new Map(), events: new Map() });
 const isRecord = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null && !Array.isArray(value);
 
@@ -49,7 +49,11 @@ async function loadState(): Promise<StoreState> {
     ) {
       throw new Error("Formato de almacenamiento incompatible");
     }
-    return parsed as StoreState;
+    return {
+      version: 1,
+      packs: new Map(Object.entries(parsed.packs) as Array<[string, Pack]>),
+      events: new Map(Object.entries(parsed.events) as Array<[string, StoredEvent]>),
+    };
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return emptyState();
     throw error;
@@ -61,7 +65,12 @@ let writeQueue: Promise<void> = Promise.resolve();
 
 async function persist(next: StoreState): Promise<void> {
   const temporaryPath = `${storePath}.${process.pid}.tmp`;
-  await writeFile(temporaryPath, `${JSON.stringify(next, null, 2)}\n`, "utf8");
+  const serializable = {
+    version: next.version,
+    packs: Object.fromEntries(next.packs),
+    events: Object.fromEntries(next.events),
+  };
+  await writeFile(temporaryPath, `${JSON.stringify(serializable, null, 2)}\n`, "utf8");
   await rename(temporaryPath, storePath);
 }
 

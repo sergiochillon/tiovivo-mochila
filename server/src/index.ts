@@ -7,7 +7,10 @@ const app = express();
 app.disable("x-powered-by");
 
 const allowedOrigins = new Set(
-  (process.env.CORS_ORIGINS ?? "http://localhost:5173,http://127.0.0.1:5173")
+  (
+    process.env.CORS_ORIGINS ??
+    "http://localhost:5173,http://127.0.0.1:5173,http://localhost:4173,http://127.0.0.1:4173"
+  )
     .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean),
@@ -80,11 +83,11 @@ app.post("/api/generate", async (req: Request, res: Response) => {
   }
 
   const result = await transact<HttpResult>((state) => {
-    const existing = state.packs[pack.id];
+    const existing = state.packs.get(pack.id);
     if (existing?.review.status === "approved") {
       return { value: { status: 409 as const, body: { error: "pack_already_approved" } }, changed: false };
     }
-    state.packs[pack.id] = pack;
+    state.packs.set(pack.id, pack);
     return {
       value: { status: 200 as const, body: { pack, source: "assisted" as const } },
       changed: true,
@@ -102,7 +105,7 @@ app.post("/api/review/approve", async (req: Request, res: Response) => {
   }
 
   const result = await transact<HttpResult>((state) => {
-    const pack = state.packs[packId];
+    const pack = state.packs.get(packId);
     if (!pack) return { value: { status: 404 as const, body: { error: "pack_not_found" } }, changed: false };
     if (pack.review.status !== "draft") {
       return { value: { status: 409 as const, body: { error: "pack_not_draft" } }, changed: false };
@@ -120,7 +123,7 @@ app.post("/api/review/approve", async (req: Request, res: Response) => {
         changed: false,
       };
     }
-    state.packs[packId] = approvedPack;
+    state.packs.set(packId, approvedPack);
     return {
       value: {
         status: 200 as const,
@@ -134,7 +137,7 @@ app.post("/api/review/approve", async (req: Request, res: Response) => {
 
 app.get("/api/packs/:id", async (req: Request, res: Response) => {
   const state = await snapshot();
-  const pack = state.packs[String(req.params.id)];
+  const pack = state.packs.get(String(req.params.id));
   if (!pack || pack.review.status !== "approved") {
     res.status(404).json({ error: "approved_pack_not_found" });
     return;
@@ -202,7 +205,7 @@ app.post("/api/sync", async (req: Request, res: Response) => {
     candidates.forEach((candidate, eventIndex) => {
       const eventId = candidate.event.eventId;
       const record: StoredEvent = candidate;
-      const existing = seen.get(eventId) ?? state.events[eventId];
+      const existing = seen.get(eventId) ?? state.events.get(eventId);
       if (existing) {
         if (canonicalJson(existing) !== canonicalJson(record)) {
           conflicts.push({ eventIndex, eventId, reason: "eventId ya existe con contenido distinto" });
@@ -222,7 +225,7 @@ app.post("/api/sync", async (req: Request, res: Response) => {
         changed: false,
       };
     }
-    for (const [eventId, record] of pending) state.events[eventId] = record;
+    for (const [eventId, record] of pending) state.events.set(eventId, record);
     return {
       value: { status: 200 as const, body: { accepted, alreadyPresent } },
       changed: pending.length > 0,
@@ -238,7 +241,7 @@ app.get("/api/progress/:classCode", async (req: Request, res: Response) => {
     return;
   }
   const state = await snapshot();
-  const events = Object.values(state.events).filter((item) => item.classCode === classCode);
+  const events = Array.from(state.events.values()).filter((item) => item.classCode === classCode);
   const activitiesCompleted = events.filter(
     ({ event }) => event.result === "correct" || event.result === "completed",
   ).length;

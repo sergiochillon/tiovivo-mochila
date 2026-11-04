@@ -16,7 +16,8 @@ Por defecto escucha en `http://127.0.0.1:3001`. Configuración opcional:
 - `PORT`: puerto HTTP (por defecto `3001`).
 - `HOST`: interfaz de escucha (por defecto `127.0.0.1`).
 - `CORS_ORIGINS`: lista separada por comas de orígenes permitidos (por defecto
-  los servidores Vite de `localhost:5173` y `127.0.0.1:5173`).
+  Vite en `localhost:5173`, `127.0.0.1:5173`, `localhost:4173` y
+  `127.0.0.1:4173`).
 - `MOCHILA_DATA_DIR`: directorio alternativo para el almacén JSON local.
 
 El servidor crea `data/store.json` al guardar el primer borrador, aprobación o
