@@ -67,21 +67,25 @@ Petición:
 ```
 
 Cada evento incluye `eventId`, `packId`, `activityId`, `result`, `ts` y
-`avatarId`; `type` es opcional y `classCode` se envía una vez en el lote. Si un
-evento incluye también `classCode`, debe coincidir con el del lote. Para la PWA,
-el único valor de `type` usado en el MVP es `activity_completed` (slug).
-`result` describe el resultado final al terminar la
-actividad: `correct` significa que el niño acabó acertando, aunque necesitara
-una pista y varios intentos; no significa que acertara a la primera. Se
-admiten los valores previstos en el esquema: `completed`, `correct`,
-`incorrect`, `skipped`; el significado operativo de los otros tres valores
-queda por confirmar con Rodrigo. No incluir identificadores personales;
-`avatarId` es un seudónimo local.
+`avatarId`; `type` es opcional y `classCode` se envía una vez en el lote. Para
+la demo se usarán `classCode: "DEMO-01"` y los avatares `zorro` o `colibri`.
+Si un evento incluye también `classCode`, debe coincidir con el del lote. Para la PWA,
+el único valor de `type` emitido en el MVP es `activity_completed`.
+
+`result` representa el resultado final, no cada intento: `correct` cuando el
+niño termina acertando, incluso tras usar una pista; `completed` cuando termina
+una actividad sin respuesta evaluable; `skipped` cuando la omite expresamente;
+`incorrect` solo cuando se cierra sin acierto. Un fallo que permite reintentar
+no genera evento final. No incluir identificadores personales; `avatarId` es
+un seudónimo local.
 
 `eventId` identifica inmutablemente el evento. Si ya existe un evento con el
 mismo ID y contenido, se cuenta como duplicado y no impide guardar los eventos
 nuevos del lote. Si el mismo ID llega con contenido distinto, el servidor
-rechaza el lote completo con `409 Conflict` (`event_id_conflict`).
+rechaza el lote completo con `409 Conflict` (`event_id_conflict`). El front
+conserva el lote ante `409`, `422` o cualquier respuesta no exitosa. Si se
+pierde una respuesta `200`, reenvía el mismo lote; los duplicados idénticos se
+reconocen y no vuelven a contarse.
 
 Respuesta `200 OK`:
 
@@ -106,8 +110,8 @@ Si falta `eventId` o no se puede leer, `eventId` será `null`; `eventIndex`
 identifica igualmente la posición inválida dentro de `events`.
 
 Ante conflicto de identidad, no se almacena ningún evento nuevo del lote y se
-devuelve `409` con `eventId` y motivo. El front conserva el lote completo ante
-cualquier error y solo lo retira al recibir `200`.
+devuelve `409` con `eventId` y motivo. El front solo retira el lote completo al
+recibir `200`.
 
 ## `GET /api/progress/:classCode`
 
@@ -125,7 +129,6 @@ datos reales de menores.
 
 - Alinear el paquete de `/generate`, `/review/approve` y `/packs/:id` con el
   esquema pack-v0.1 de Sergio.
-- Confirmar con Rodrigo la semántica asignada a `completed`, `incorrect` y
-  `skipped`, y la forma final del agregado.
+- Acordar con Rodrigo la forma final del agregado.
 - El almacén es local y de alcance demo; no hay autenticación ni garantía de
   persistencia entre despliegues.
