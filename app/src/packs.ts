@@ -43,7 +43,9 @@ export async function loadPack(db: IDBDatabase, id: string): Promise<Pack | unde
     response = await fetch(base + '/packs/' + encodeURIComponent(id), {
       cache: 'no-store', signal: AbortSignal.timeout(6000)
     })
-    if (response.status >= 500) throw new Error('Servidor no disponible')
+    if (response.status !== 200 && response.status !== 404) {
+      throw new Error('No se pudo actualizar el paquete.')
+    }
   } catch {
     const cached = await new Promise<unknown>((resolve, reject) => {
       const request = db.transaction('packs').objectStore('packs').get(id)
@@ -53,11 +55,12 @@ export async function loadPack(db: IDBDatabase, id: string): Promise<Pack | unde
     if (approved(cached, id)) return cached
     throw new Error('Conéctate para descargar este paquete por primera vez.')
   }
-  const data: unknown = response.status === 200 ? await response.json() : undefined
-  if (!approved(data, id)) {
+  if (response.status === 404) {
     await updateCache(db, id)
     return undefined
   }
+  const data: unknown = await response.json()
+  if (!approved(data, id)) return undefined
   await updateCache(db, id, data)
   return data
 }
