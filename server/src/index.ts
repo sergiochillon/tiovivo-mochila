@@ -1,7 +1,11 @@
+import "dotenv/config";
 import express, { type ErrorRequestHandler } from "express";
 import type { Request, Response } from "express";
+import { randomUUID } from "node:crypto";
 import { canonicalJson, describeAjvErrors, validateClassCode, validatePack, validateProgressEvent } from "./validation.js";
 import { snapshot, transact, type Pack, type ProgressEvent, type StoredEvent } from "./store.js";
+import { generateJsonWithGemini, GeminiNotConfiguredError } from "./gemini.js";
+import { buildGenerationPrompt, contextForPack, parseGenerationContext } from "./prompt.js";
 
 const app = express();
 app.disable("x-powered-by");
@@ -94,6 +98,91 @@ app.post("/api/generate", async (req: Request, res: Response) => {
     };
   });
   res.status(result.status).json(result.body);
+});
+
+app.get("/api/prompt", async (req: Request, res: Response) => {
+  const query = new URL(req.originalUrl, "http://localhost").searchParams;
+  const context = parseGenerationContext({
+    country: query.get("country"),
+    region: query.get("region"),
+    language: query.get("language"),
+    foods: query.getAll("foods"),
+  });
+  if (!context) {
+    res.status(422).json({
+      error: "invalid_generation_context",
+      details: ["Indica country, region, language (es|en) y de 1 a 12 foods repetidos como parámetros."],
+    });
+    return;
+  }
+  res.status(200).json({ prompt: await buildGenerationPrompt(context) });
+});
+
+app.post("/api/generate/ai", async (req: Request, res: Response) => {
+  const context = isRecord(req.body) ? parseGenerationContext(req.body.context) : undefined;
+  if (!context) {
+    res.status(422).json({ error: "invalid_generation_context" });
+    return;
+  }
+
+  let generated: unknown;
+  try {
+    generated = await generateJsonWithGemini(await buildGenerationPrompt(context));
+  } catch (error) {
+    if (error instanceof GeminiNotConfiguredError) {
+      res.status(503).json({ error: "ai_not_configured" });
+      return;
+    }
+    res.status(502).json({ error: "ai_generation_failed" });
+    return;
+  }
+
+  if (!isRecord(generated)) {
+    res.status(502).json({ error: "ai_invalid_package" });
+    return;
+  }
+  const pack = structuredClone(generated) as Pack;
+  pack.id = `demo-generado-${randomUUID()}`;
+  pack.packVersion = "0.1";
+  pack.language = context.language;
+  pack.context = contextForPack(context);
+  pack.review = {
+    status: "draft",
+    notes: "Generado con IA. Pendiente de revisión pedagógica y validación local.",
+  };
+  if (Array.isArray(pack.modules)) {
+    for (const module of pack.modules) {
+      if (isRecord(module) && Array.isArray(module.activities)) {
+        for (const activity of module.activities) {
+          if (isRecord(activity)) {
+            activity.teacherNotes = "A VALIDAR: revisar el contenido y confirmar vocabulario y contexto local.";
+          }
+        }
+      }
+    }
+  }
+
+  const details = packValidationDetails(pack);
+  if (details.length > 0) {
+    res.status(502).json({ error: "ai_invalid_package", details });
+    return;
+  }
+
+  await transact((state) => {
+    state.packs.set(pack.id, pack);
+    return { value: undefined, changed: true };
+  });
+  res.status(201).json({ pack, source: "gemini" });
+});
+
+app.get("/api/drafts/:id", async (req: Request, res: Response) => {
+  const state = await snapshot();
+  const pack = state.packs.get(String(req.params.id));
+  if (!pack || pack.review.status !== "draft") {
+    res.status(404).json({ error: "draft_not_found" });
+    return;
+  }
+  res.status(200).json(pack);
 });
 
 app.post("/api/review/approve", async (req: Request, res: Response) => {
