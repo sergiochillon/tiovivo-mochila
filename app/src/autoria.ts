@@ -1,4 +1,4 @@
-import { draftErrors } from './packs'
+import { approved as isApprovedPack, draftErrors } from './packs'
 
 // Authoring runs on the teacher's computer, with a connection to the MOCHILA server.
 // MOCHILA never sends anything to an AI provider: the teacher copies the instructions
@@ -304,8 +304,26 @@ export function authoring(lesson: HTMLElement) {
       const when = new Date(String(data.reviewedAt)).toLocaleString('es-ES', { dateStyle: 'medium', timeStyle: 'short' })
       const open = element('a', 'button-link', 'Abrir como alumno')
       open.href = '/alumno?pack=' + encodeURIComponent(draft!.id)
+      const packId = draft!.id
+      const download = action('Descargar paquete JSON', async () => {
+        try {
+          const response = await fetch(api + '/packs/' + encodeURIComponent(packId), { cache: 'no-store' })
+          if (!response.ok) throw new Error()
+          const pack: unknown = await response.json()
+          if (!isApprovedPack(pack, packId)) throw new Error()
+          const url = URL.createObjectURL(new Blob([JSON.stringify(pack, null, 2)], { type: 'application/json' }))
+          const link = document.createElement('a')
+          link.href = url
+          link.download = packId + '.json'
+          link.click()
+          setTimeout(() => URL.revokeObjectURL(url), 1000)
+          approveResult.hidden = true
+        } catch {
+          messages(approveResult, 'error', ['No se pudo descargar el paquete aprobado. Comprueba la conexión y vuelve a intentarlo.'])
+        }
+      }, true)
       approved.replaceChildren(element('strong', '', 'Aprobado por ' + String(data.reviewedBy) + ' · ' + when),
-        element('p', '', 'El paquete ya está disponible para el alumnado. Abre la app con conexión una vez en cada dispositivo para guardarlo y usarlo sin red.'), open)
+        element('p', '', 'El paquete ya está disponible para el alumnado. Abre la app con conexión una vez en cada dispositivo para guardarlo y usarlo sin red.'), open, download)
       approved.hidden = false
     } catch { messages(approveResult, 'error', ['No hay conexión con el servidor de MOCHILA.']) }
   })
