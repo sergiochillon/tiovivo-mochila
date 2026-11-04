@@ -88,3 +88,18 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 - **Resultado:** correcto para el alcance probado: se completa una actividad nueva en modo avión y se sincroniza al recuperar la conexión.
 - **Límite:** se probó un paquete sintético y un evento. No es una prueba con el contenido Andes/Uganda ni con varios eventos.
 - **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
+
+## 2026-11-04 — Tres actividades del paquete Andes en modo avión y sincronización
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** iPhone 17.
+- **Navegador:** Safari en iOS 27.2.
+- **Conexión:** cargó `/alumno` por Wi-Fi; luego activó modo avión antes de elegir avatar y empezar las actividades.
+- **Ruta de sincronización:** `/docente` al recuperar Wi-Fi.
+- **Versión probada:** commit `0900e78`.
+- **Paquete:** `alimentacion-andes-es`, con revisión pedagógica aprobada; la validación cultural local sigue pendiente.
+- **Acciones y resultado observado:** con Zorro completó sin red la historia de Ana, la elección de papa y habas y la ordenación del lavado de manos. La pantalla mostró «Tus sellos: 3 de 5». En `/docente`, los contadores empezaron en 0 eventos/0 actividades; tras pulsar «Enviar progreso» una vez, pasaron a 3/3. La API confirmó el resultado.
+- **Resultado:** correcto para el alcance probado: tres actividades del paquete Andes se completan en modo avión y se sincronizan al recuperar Wi-Fi.
+- **Límite:** no prueba el paquete de Uganda ni sustituye la validación cultural local o pruebas con niños.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
