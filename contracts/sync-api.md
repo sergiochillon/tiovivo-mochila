@@ -1,7 +1,7 @@
 # API de generación, revisión y sincronización
 
 **Responsable:** Alejandro · **Revisión de frontend:** Rodrigo
-**Estado:** contrato de sync confirmado por Rodrigo tras revisar el commit `2c3286c`; listo para implementar. Falta acordar la respuesta agregada de `GET /api/progress/:classCode`. El esquema y los paquetes de ejemplo fueron validados con AJV 8.17.1 + ajv-formats en modo estricto, según Sergio.
+**Estado:** contrato de sync confirmado por Rodrigo tras revisar el commit `2c3286c`; contrato de progreso acordado con Rodrigo el 4 nov. Listo para implementar. El esquema y los paquetes de ejemplo fueron validados con AJV 8.17.1 + ajv-formats en modo estricto, según Sergio.
 
 Base URL local: `/api`. JSON UTF-8 en peticiones y respuestas. No requiere cuentas.
 La API no recibe nombres ni texto libre de menores. Los ejemplos son sintéticos.
@@ -116,20 +116,22 @@ recibir `200`.
 ## `GET /api/progress/:classCode`
 
 Devuelve agregados de progreso para el panel, nunca filas que identifiquen a un
-niño. `200 OK` (forma ilustrativa):
+niño. Para un código válido sin eventos devuelve ceros. `200 OK`:
 
 ```json
-{ "classCode": "DEMO-01", "eventsReceived": 12, "activitiesCompleted": 9 }
+{ "classCode": "DEMO-01", "eventsReceived": 0, "activitiesCompleted": 0 }
 ```
 
-Los nombres y métricas concretos se ajustarán con el panel. No se incluyen
-datos reales de menores.
+`eventsReceived` cuenta los eventos únicos guardados para esa clase, deduplicados
+por `eventId`. `activitiesCompleted` cuenta los eventos únicos cuyo resultado
+final sea `correct` o `completed`. Los resultados `incorrect` y `skipped` solo
+cuentan en `eventsReceived`. Dos avatares que completen la misma actividad
+generan dos finalizaciones. Reenviar un lote idéntico no cambia ninguno de los
+contadores. La respuesta no incluye avatares ni datos personales.
 
 ## Límites pendientes
 
 - Alinear el paquete de `/generate`, `/review/approve` y `/packs/:id` con el
   esquema pack-v0.1 de Sergio.
-- Acordar con Rodrigo la forma final de la respuesta agregada de
-  `GET /api/progress/:classCode` antes de implementarla.
 - El almacén es local y de alcance demo; no hay autenticación ni garantía de
   persistencia entre despliegues.
