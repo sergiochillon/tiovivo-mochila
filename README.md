@@ -49,9 +49,9 @@ Los paisajes y personajes son **ilustrativos**: no representan a una comunidad c
 
 | Prioridad | Característica | Estado |
 |---|---|---|
-| Imprescindible | Esquema de paquete v0.1 y módulo de alimentación en 2 contextos (Andes/ES, norte de Uganda/EN) | Hecho: revisión pedagógica aprobada; validación cultural local pendiente |
+| Imprescindible | Esquema de paquete v0.1 y seis paquetes aprobados en `content/packs/` (alimentación en Andes, norte de Uganda y Altiplano; misiones de cocina 5–8 en ES y EN; expedición al mercado 9–12), en tres tramos de edad (5–8, 6–10, 9–12) | Hecho: revisión pedagógica interna; validación local pendiente; no probado con niños |
 | Imprescindible | Autoría: contexto → IA (Gemini o asistente externo) → revisión humana → aprobación → descarga JSON | Hecho; un módulo generado con IA (Altiplano, contexto sintético) revisado y aprobado |
-| Imprescindible | Reproductor PWA sin conexión (selector de mochilas con filtro por edad, menú en español o inglés, seis exploradores, ocho juegos: historia, elige, llena el plato, ordena, parejas, clasifica, memoria y verdad o mentira; tres intentos, álbum de pegatinas, ayuda de Mochi) | Hecho; probado en iPhone en modo avión según `qa/` (versión anterior al sprint final) |
+| Imprescindible | Reproductor PWA sin conexión (selector de mochilas con filtro por edad, menú en español o inglés, seis exploradores, nueve tipos de actividad: historia, elige, llena el plato, ordena, parejas, ¿qué harías?, clasifica, memoria y verdad o mentira; tres intentos, álbum de pegatinas, ayuda de Mochi) | Hecho; probado en iPhone en modo avión según `qa/` (versión anterior al sprint final) |
 | Imprescindible | Progreso local con avatares y sincronización al panel docente (automática al volver la red, o manual); el panel muestra por explorador qué resolvió a la primera, con ayuda o sin resolver | Hecho, idempotente (sin duplicados al reenviar) |
 | Importante | Escuchar actividades con voces del dispositivo (ES/EN) | Hecho; según el registro de `qa/`, se oye sin conexión en iPhone (no con el modo silencio); depende de las voces instaladas |
 | Importante | Módulos «pedir ayuda a un adulto» y «emociones» | Borradores en `content/drafts/`, sin aprobar |

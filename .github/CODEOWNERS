@@ -1,5 +1,5 @@
-# Propietarios por carpeta. Sustituir @usuario por el usuario real de GitHub de cada persona
-# cuando Sergio haya recibido los usuarios (T-03). Hasta entonces este archivo es solo documentación.
+# Propietarios por carpeta (usuarios reales de GitHub). Las reglas de revisión de la rama main
+# no dependen de este archivo: exigen la aprobación de otra persona distinta de quien abre la PR.
 #
 # Roles: Sergio = integración · Mario = producto/pitch · Rodrigo = front · Alejandro = back/IA · Carlos = contenido/QA
 

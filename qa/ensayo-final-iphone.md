@@ -1,6 +1,6 @@
-# Ensayo final v0.9-freeze: iPhone sin conexión y sincronización
+# Ensayo final en iPhone: sin conexión y sincronización
 
-Hoja de ejecución para la versión que Sergio etiquete `v0.9-freeze`. Cada caso comienza como **Pendiente**. No copiar resultados de otra versión o dispositivo.
+Hoja de ejecución para la versión final de la demo (anota abajo el commit o la etiqueta exacta que pruebes). Cada caso comienza como **Pendiente**. No copiar resultados de otra versión o dispositivo.
 
 ## Datos de la sesión
 
