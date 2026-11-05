@@ -1,0 +1,89 @@
+{
+  "packVersion": "0.1",
+  "id": "juegos-andes-es",
+  "title": "La cocina de Ana",
+  "language": "es",
+  "context": {
+    "country": "Perú",
+    "region": "Andes rurales (contexto ilustrativo)",
+    "communityType": "A VALIDAR: comunidad rural andina concreta",
+    "foods": ["papa", "habas", "quinua", "huevo"],
+    "resources": ["A VALIDAR: agua disponible en casa", "A VALIDAR: cocina de leña o gas"],
+    "culturalNotes": ["A VALIDAR: confirmar alimentos, nombres y forma de cocinar con una persona de la comunidad."],
+    "ageRange": "6-10"
+  },
+  "review": {
+    "status": "draft",
+    "notes": "Borrador asistido con IA (Claude) para estrenar las dinámicas de plato y parejas. Pendiente de revisión pedagógica y de validación cultural local. No probado con niños."
+  },
+  "modules": [
+    {
+      "id": "cocina-ana",
+      "topic": "food",
+      "title": "La cocina de Ana",
+      "activities": [
+        {
+          "id": "historia-cocina",
+          "type": "story",
+          "prompt": "Hoy Ana ayuda en la cocina. En la mesa hay papa, habas, quinua y un huevo. Su abuelo le dice: «Vamos a preparar el almuerzo juntos».",
+          "audioText": "Hoy Ana ayuda en la cocina. En la mesa hay papa, habas, quinua y un huevo. Su abuelo le dice: «Vamos a preparar el almuerzo juntos».",
+          "feedback": "¡Ana está lista para cocinar con su abuelo!",
+          "safetyTag": "none",
+          "teacherNotes": "A VALIDAR: cambiar los alimentos por los que haya de verdad en la comunidad.",
+          "durationMin": 1
+        },
+        {
+          "id": "arma-plato",
+          "type": "choice",
+          "prompt": "¿Qué hay en la mesa de Ana? Pon en el plato todo lo que viste en la historia.",
+          "audioText": "¿Qué hay en la mesa de Ana? Pon en el plato todo lo que viste en la historia.",
+          "options": [
+            { "id": "papa", "text": "Papa", "icon": "🥔" },
+            { "id": "habas", "text": "Habas", "icon": "🫘" },
+            { "id": "quinua", "text": "Quinua", "icon": "🌾" },
+            { "id": "huevo", "text": "Huevo", "icon": "🥚" },
+            { "id": "pescado", "text": "Pescado", "icon": "🐟", "feedback": "El pescado no estaba hoy en la mesa de Ana. Recuerda la historia." }
+          ],
+          "correct": ["papa", "habas", "quinua", "huevo"],
+          "feedback": "¡Plato completo! Ana usa lo que tiene en casa.",
+          "safetyTag": "none",
+          "teacherNotes": "Actividad de memoria y vocabulario: no valora alimentos como buenos o malos.",
+          "durationMin": 2
+        },
+        {
+          "id": "parejas-cocina",
+          "type": "match",
+          "prompt": "Une cada cosa que hace Ana con lo que necesita.",
+          "audioText": "Une cada cosa que hace Ana con lo que necesita.",
+          "options": [
+            { "id": "lavar-manos", "text": "Lavarse las manos" },
+            { "id": "cocinar", "text": "Cocinar en el fuego" },
+            { "id": "servir", "text": "Servir la comida" },
+            { "id": "agua-jabon", "text": "Agua y jabón" },
+            { "id": "persona-adulta", "text": "Una persona adulta" },
+            { "id": "plato-limpio", "text": "Un plato limpio" }
+          ],
+          "correct": ["lavar-manos:agua-jabon", "cocinar:persona-adulta", "servir:plato-limpio"],
+          "feedback": "¡Muy bien! Con ayuda y cuidado, cocinar es más seguro.",
+          "safetyTag": "food-safety",
+          "teacherNotes": "A VALIDAR: si en la comunidad no hay jabón a mano, adaptar la pareja.",
+          "durationMin": 2
+        },
+        {
+          "id": "decide-fuego",
+          "type": "scenario",
+          "prompt": "El abuelo sale un momento y la olla está en el fuego. ¿Qué hace Ana?",
+          "audioText": "El abuelo sale un momento y la olla está en el fuego. ¿Qué hace Ana?",
+          "options": [
+            { "id": "esperar-adulto", "text": "Espera al abuelo o llama a otra persona adulta", "icon": "🙋" },
+            { "id": "mover-olla", "text": "Mueve la olla ella sola", "icon": "🍲", "feedback": "La olla quema. Mejor espera o llama a una persona adulta." }
+          ],
+          "correct": "esperar-adulto",
+          "feedback": "¡Bien pensado! Con el fuego, siempre con una persona adulta.",
+          "safetyTag": "help-adult",
+          "durationMin": 2
+        }
+      ]
+    }
+  ]
+}

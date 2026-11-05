@@ -33,3 +33,6 @@ Adoptar `contracts/pack-v0.1.schema.json` (JSON Schema 2020-12) como contrato, p
 
 ## Actualización (4 nov): ProgressEvent y /api/sync
 Rodrigo y Alejandro detectaron que el `ProgressEvent` del borrador no encajaba con el borrador de `/api/sync`. Cambios propuestos en el esquema (aditivos): `type` opcional (slug), `classCode` opcional en el evento (el contrato lo pone en el lote; si va en ambos deben coincidir) y `classCode` acepta `DEMO01` y `DEMO-01`. `type` queda como opcional con el único valor del MVP `activity_completed` (acordado por Alejandro). Pendiente: que Alejandro suba `sync-api.md` al repo para que Rodrigo lo vea.
+
+## Actualización (4 nov, noche): temas de módulo
+Cambio aditivo en `module.topic`: además de `food`, `help` y `emotions`, se aceptan `hygiene`, `coexistence`, `safety` y `autonomy` (las habilidades para la vida de `PROJECT_CONTEXT.md §4`). No se renombra ni se quita nada; los paquetes existentes siguen siendo válidos. Propuesto por Sergio en la PR 37; pendiente del visto bueno de Rodrigo, Alejandro y Carlos.

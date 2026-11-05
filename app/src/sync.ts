@@ -3,7 +3,7 @@ const api = import.meta.env.VITE_API_BASE_URL || '/api'
 
 export interface Progress {
   eventId: string
-  avatarId: 'zorro' | 'colibri'
+  avatarId: string
   packId: string
   activityId: string
   result: 'correct' | 'completed'
