@@ -20,8 +20,8 @@ Hoja de ejecución para la versión que Sergio etiquete `v0.9-freeze`. Cada caso
 
 1. Confirma y anota el commit o etiqueta exacta de la versión congelada.
 2. Con el iPhone conectado a internet, abre MOCHILA en Safari y añádela a la pantalla de inicio.
-3. Abre `/docente` y registra los contadores iniciales del identificador de demo usado.
-4. Desde Safari, abre MOCHILA, elige una mochila aprobada y carga una actividad.
+3. Desde un Mac u otro equipo con acceso al servidor, abre `/docente` y registra los contadores iniciales del identificador de demo usado.
+4. Abre MOCHILA desde el icono de inicio, elige una mochila aprobada y carga una actividad.
 5. Activa el modo avión real desde Ajustes o Centro de control. Verifica que Wi-Fi esté apagado.
 6. Cierra la app desde el selector de apps y vuelve a abrirla tocando su icono de inicio.
 7. Completa una actividad. Anota si el contenido se abrió y el progreso quedó guardado localmente.
@@ -47,7 +47,5 @@ Hoja de ejecución para la versión que Sergio etiquete `v0.9-freeze`. Cada caso
 ## Incidencias y observaciones
 
 Pendiente de ejecución. No se ha probado por quien prepara esta hoja en un iPhone ni en modo avión real.
-
-**Nota para Sergio:** en el emparejamiento de parejas, la primera respuesta incorrecta muestra un aviso genérico; el contenido no permite personalizar esa respuesta por pareja. La interfaz revela la pareja correcta tras el segundo error. Para dar una pista útil en el primer fallo haría falta un cambio en `app/`, fuera del carril de contenido y QA de esta tarea.
 
 Revisión de contenido: **pedagógica interna; validación cultural local pendiente; no probado con niños**.
