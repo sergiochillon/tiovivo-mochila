@@ -67,7 +67,7 @@ Criterios de elección: velocidad de desarrollo, funcionar en Mac M1, facilidad 
 ```
 Pack {
   packVersion: "0.1", id, title, language: "es"|"en",
-  context: { country, region, communityType, foods[], resources[], culturalNotes[], ageRange: "6-10" },
+  context: { country, region, communityType, foods[], resources[], culturalNotes[], ageRange: "5-8" | "6-10" | "9-12" },
   review:  { status: "draft"|"approved", reviewedBy, reviewedAt, notes },
   modules: [ { id, topic: "food"|"help"|"emotions", title, activities: [Activity] } ]
 }

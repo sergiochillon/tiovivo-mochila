@@ -20,7 +20,7 @@ const kindLabels: Record<string, string> = { story: 'Historia', choice: 'Elige',
 // [id the server checks (contracts/sync-api.md), text the reviewer reads]
 const checklist: [string, string][] = [
   ['una-idea-por-actividad', 'He leído el paquete completo y cada actividad enseña una sola idea.'],
-  ['lenguaje-6-10', 'El vocabulario y la longitud son adecuados para 6–10 años.'],
+  ['lenguaje-6-10', 'El vocabulario y la longitud son adecuados para la edad elegida (5–8, 6–10 o 9–12).'],
   ['feedback-amable', 'Las opciones son claras y el feedback es amable, sin culpabilizar.'],
   ['contexto-local-marcado', 'Alimentos, recursos e idioma están revisados o marcados como pendientes de validación local.'],
   ['sin-estereotipos', 'No hay estereotipos ni se atribuyen las mismas prácticas a toda una comunidad.'],
