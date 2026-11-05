@@ -29,7 +29,7 @@ El offline y la sincronización son la parte mejor hecha del proyecto. Esta skil
 ## Qué no afirmar
 - «Funciona sin conexión» porque la página abierta sigue funcionando al activar el modo avión: eso lo hace cualquier SPA. La prueba válida es cerrar y arrancar en frío.
 - Que se ha probado en iPhone o tableta si no se ha hecho: di dispositivo, sistema, navegador, commit y quién lo ejecutó, o escribe «no probado».
-- Antes de dar por buena la regresión en cualquier navegador (incluido el integrado de Claude Code), comprueba que `navigator.serviceWorker.controller` no es `null`: sin service worker activo la prueba no vale. Para el iPhone o la tableta, usa el dispositivo real.
+- Antes de dar por buena la regresión en cualquier navegador (incluido el navegador integrado de un asistente de código), comprueba que `navigator.serviceWorker.controller` no es `null`: sin service worker activo la prueba no vale. Para el iPhone o la tableta, usa el dispositivo real.
 
 ## Informe
 Termina con tres listas: probado por mí (con la salida), inferido del código, no probado.

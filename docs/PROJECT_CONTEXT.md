@@ -43,7 +43,7 @@ Cinco estudiantes de 4.º. Cuatro con MacBook Air M1 (16 GB, 512 GB); el de Alej
 
 | Persona | Estudios | Herramientas de IA / infraestructura |
 |---|---|---|
-| Sergio Chillón Sendín | Ing. Informática + ADET | ChatGPT Go, Google AI Pro, Claude Pro, Claude Desktop y Claude Code (autenticados en su Mac), Antigravity en su VPS Oracle. **Único Mac con Git, GitHub CLI, auth GitHub y VS Code confirmados.** |
+| Sergio Chillón Sendín | Ing. Informática + ADET | ChatGPT Go, Google AI Pro y un asistente de código de pago (autenticados en su Mac), Antigravity en su VPS Oracle. **Único Mac con Git, GitHub CLI, auth GitHub y VS Code confirmados.** |
 | Rodrigo Cabezas Pérez | Ing. Informática + ADET | ChatGPT Plus, acceso temporal a Grok, VPS Oracle propio |
 | Mario Ullán Motellón | Ing. Informática | ChatGPT Plus |
 | Alejandro Estévez | Ing. Informática | Sin suscripción de IA de pago (herramientas gratuitas; Mac M3) |
@@ -51,7 +51,7 @@ Cinco estudiantes de 4.º. Cuatro con MacBook Air M1 (16 GB, 512 GB); el de Alej
 
 - VPS Oracle (Sergio y Rodrigo): Ampere A1, ~24 GB RAM, ~200 GB. **Opcionales**: nada crítico puede depender de ellos.
 - GitHub Student Developer Pack y herramientas gratuitas de estudiante: **[PENDIENTE] comprobar quién lo tiene activo** (condiciona la protección de `main`, ver `GIT_WORKFLOW.md`).
-- Claude Pro/Code solo los tiene Sergio. Nadie está obligado a contratar nada.
+- El asistente de código de pago solo lo tiene Sergio. Nadie está obligado a contratar nada.
 
 ## 3. Reto elegido
 
@@ -94,7 +94,7 @@ Qué implementamos de verdad en el MVP (**[DECIDIDO]**): ver `PRODUCT_BRIEF.md`.
 
 ## 8. Recursos disponibles
 
-Ver §2. Gratuitos a verificar antes de usar: tier gratuito de la API de Gemini (existe; los límites los fija Google y cambian; **en el tier gratuito el contenido enviado puede usarse para mejorar productos de Google**, así que solo enviar contenido sin datos personales), GitHub Copilot Student y Pack de estudiantes (solo si cada persona lo tiene verificado). Las suscripciones de chat (ChatGPT, Claude, Google AI Pro) **no equivalen a crédito de API** (hasta donde sabemos; comprobar).
+Ver §2. Gratuitos a verificar antes de usar: tier gratuito de la API de Gemini (existe; los límites los fija Google y cambian; **en el tier gratuito el contenido enviado puede usarse para mejorar productos de Google**, así que solo enviar contenido sin datos personales), GitHub Copilot Student y Pack de estudiantes (solo si cada persona lo tiene verificado). Las suscripciones de chat (ChatGPT, Google AI Pro y similares) **no equivalen a crédito de API** (hasta donde sabemos; comprobar).
 
 ## 9. Decisiones tomadas
 

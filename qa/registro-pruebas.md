@@ -62,7 +62,7 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 
 ## 2026-11-04 — Ensayo integrado de carga, uso local y sincronización
 
-- **Ejecutó:** Sergio, con apoyo de Claude Code.
+- **Ejecutó:** Sergio, con apoyo de un asistente de IA.
 - **Registro preparado por:** Carlos, a partir del informe de Sergio.
 - **Dispositivo:** MacBook Air.
 - **Navegador:** navegador integrado, tamaño de viewport móvil; versión no indicada.
@@ -135,7 +135,7 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 
 ## 2026-11-05 — Arranque en frío sin servidor en Safari (simulador de iPhone)
 
-- **Ejecutó:** Sergio, con Claude Code (asistente de IA) sobre el Simulator de Xcode. **No es un dispositivo físico.**
+- **Ejecutó:** Sergio, con un asistente de IA sobre el Simulator de Xcode. **No es un dispositivo físico.**
 - **Dispositivo:** simulador iPhone 16, iOS 18.5, Safari (WebKit real). No cubre modo avión real, la voz, el modo silencio ni el hardware.
 - **Versión probada:** `main` en `8675115` (compilada contra una API local temporal con los tres paquetes aprobados; datos temporales, borrados después).
 - **Conexión:** con la API y el servidor de la app encendidos (`localhost`), abrió «Mis mochilas», entró en «Elegimos con lo que hay» (Andes) y eligió Zorro; abrió la actividad 1 (historia). Después **paró API y servidor** y **cerró Safari del todo** (`simctl terminate`).
