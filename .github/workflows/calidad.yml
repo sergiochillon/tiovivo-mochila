@@ -1,0 +1,48 @@
+name: Calidad
+
+# Puerta mínima en cada PR y en main: la app compila (tsc + vite + service worker),
+# el servidor pasa el typecheck (y sus tests, cuando existan) y todo el contenido
+# cumple el esquema del paquete. Sin secretos: no se llama a Gemini ni a ninguna API.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  app:
+    name: App (build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+
+  server:
+    name: Servidor y contenido
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      - run: npm run typecheck
+      - run: npm test --if-present
+      - name: Contenido conforme al esquema
+        run: npx tsx ../scripts/validate-content.mts

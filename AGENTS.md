@@ -25,4 +25,4 @@ PWA offline-first para niños de 6 a 10 años (habilidades para la vida). La IA 
 - Una prueba en dispositivo se anota en `qa/` con quién, dispositivo, sistema, commit y resultado.
 
 ## Skills del proyecto
-`mochila-offline-invariants` (antes de tocar `packs.ts`, `sync.ts`, `vite.config.ts` o el service worker) · `mochila-pack-review` (crear o revisar paquetes de contenido) · `impeccable` (revisión de diseño; solo `critique`, `audit`, `adapt`, `harden`, `polish`; nunca `document`, `live`, `bolder`, `overdrive` ni `delight`) · `mobile-native` (fallos de web en iPhone y tableta).
+`mochila-offline-invariants` (antes de tocar `packs.ts`, `sync.ts`, `vite.config.ts` o el service worker) · `mochila-pack-review` (crear o revisar paquetes de contenido) · `impeccable` (no viene en el repo: solo si está instalada en tu perfil; revisión de diseño; solo `critique`, `audit`, `adapt`, `harden`, `polish`; nunca `document`, `live`, `bolder`, `overdrive` ni `delight`) · `mobile-native` (fallos de web en iPhone y tableta).
