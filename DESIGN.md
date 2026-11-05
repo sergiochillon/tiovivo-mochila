@@ -45,8 +45,10 @@ Escenarios (sección 6) añaden su propio par de colores de suelo y cielo.
 - **Botón secundario**: blanco con borde `--cielo-2`, misma forma.
 - **Tarjeta de juego**: blanco, radio 24 px, borde 3 px del color de su función y sombra sólida desplazada (no difusa gris).
 - **Pegatina**: borde blanco 5–6 px alrededor de la forma, sombra `0 6px 0 rgba(28,43,75,.18)`, rotación leve (−3° a 3°).
-- **Opciones de respuesta**: tarjetas grandes con la letra en una ficha de color (A verde, B baya, C lago, D amarillo); alto ≥ 76 px.
-- **Mochi**: siempre a la izquierda del bocadillo; el bocadillo es el canal de instrucciones, pistas y elogios.
+- **Opciones de respuesta**: tarjetas grandes con la letra en una ficha de color (A verde, B baya, C lago, D amarillo); alto ≥ 76 px. El emoji de la opción, si lo hay, va delante del texto en todos los juegos.
+- **Juegos sin trucos**: el orden de las opciones es nuevo en cada intento, para que la respuesta nunca esté en un sitio memorizable: en «Elige» la correcta no es siempre la A; en «Ordena» el primer paso nunca sale primero; en «Parejas» ninguna tarjeta queda a la altura de su pareja.
+- **«Llena el plato»**: una actividad con varias respuestas correctas y al menos una incorrecta se juega llenando el plato, y así se llama en la lista y en la revisión docente. Si todas las opciones son correctas (autoelección, como en emociones), cualquiera vale y se juega como «Elige».
+- **Mochi**: siempre a la izquierda del bocadillo; el bocadillo es el canal de instrucciones, pistas y elogios. Cuando piensa o da una pista pone cara de curiosidad (una ceja levantada y la cabeza inclinada), nunca de enfado. En «Parejas», el primer fallo nombra las dos tarjetas que no son pareja; cada dos fallos, Mochi ayuda de verdad (quita una opción o hace brillar la buena).
 - **Progreso**: fila de huecos de pegatina; los conseguidos se rellenan con la pegatina de color.
 
 ## 5. Estados de interacción
@@ -77,6 +79,8 @@ Las ilustraciones son **ilustrativas**: no representan una comunidad concreta ni
 - Objetivo principal: **tablet en horizontal** (1024×768 a 1280×800). A partir de 900 px en horizontal: escenario a la izquierda (con el título de la misión) y juego a la derecha.
 - Vertical y móvil: escenario como franja superior baja y juego debajo.
 - Zonas táctiles ≥ 56 px; separación ≥ 12 px entre opciones.
+- Sensación de app instalada: sin destello gris al tocar, respuesta inmediata (`touch-action: manipulation`), el texto de los botones no se selecciona al mantener pulsado, sin «tirar para recargar», contenido apartado de la muesca (`viewport-fit=cover` + `env(safe-area-inset-*)`) y alturas con `dvh`. Nunca se bloquea el zoom.
+- Accesibilidad: cada pantalla pone el foco en su título; Mochi anuncia pistas y aciertos (`role=status`); en «Parejas» la tarjeta elegida y las parejas encontradas se anuncian, no solo se colorean.
 - Una columna de lectura ≤ 70 caracteres.
 
 ## 9. Docente
