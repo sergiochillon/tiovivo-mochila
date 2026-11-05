@@ -49,7 +49,7 @@
         {
           "id": "pasos-manos-limpias",
           "type": "order",
-          "prompt": "Si hay agua y jabón, ordena cómo lavarte las manos.",
+          "prompt": "Ordena estos pasos para lavarte las manos antes de comer, si hay agua y jabón disponibles.",
           "options": [
             { "id": "mojar", "text": "Mojar las manos" },
             { "id": "jabon", "text": "Frotar con jabón" },
@@ -57,7 +57,7 @@
             { "id": "secar", "text": "Secar con un paño limpio si hay uno" }
           ],
           "correct": ["mojar", "jabon", "enjuagar", "secar"],
-          "feedback": "Lavarse las manos antes de comer es un hábito de higiene. Si falta agua o jabón, pide ayuda a una persona adulta. Puede ayudarte a buscar una opción segura.",
+          "feedback": "Lavarse las manos antes de comer es un hábito de higiene. Si falta agua o jabón, pide ayuda a una persona adulta para buscar una opción segura.",
           "safetyTag": "hygiene",
           "durationMin": 3
         },
@@ -70,7 +70,7 @@
             { "id": "probar-sin-preguntar", "text": "Probarlo sin preguntar" }
           ],
           "correct": "preguntar-adulto",
-          "feedback": "Pedir ayuda está bien. Pregunta a una persona adulta si ese alimento se cocina. Pídele ayuda para prepararlo con seguridad.",
+          "feedback": "Pedir ayuda está bien. Pregunta a una persona adulta de confianza cómo averiguar si ese alimento necesita cocinarse y cómo prepararlo con seguridad.",
           "safetyTag": "help-adult",
           "durationMin": 2
         },
@@ -83,7 +83,7 @@
             { "id": "solo-cocina", "text": "Usarlos sin ayuda" }
           ],
           "correct": "ayuda-cocina",
-          "feedback": "Pide ayuda para usar cuchillos o fuego.",
+          "feedback": "Bien: pide a una persona adulta que te acompañe con cuchillos y fuego.",
           "safetyTag": "food-safety",
           "durationMin": 2
         }

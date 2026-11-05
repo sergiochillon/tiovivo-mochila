@@ -29,7 +29,7 @@
           "type": "story",
           "prompt": "Ayo helps prepare a meal with their family. Today they use food they have at home. Another family may choose different foods.",
           "audioText": "Ayo helps prepare a meal with their family. Today they use food they have at home. Another family may choose different foods.",
-          "feedback": "Families choose from the foods they have.",
+          "feedback": "Families make choices based on what they have and what they usually eat.",
           "safetyTag": "none",
           "durationMin": 1
         },
@@ -49,7 +49,7 @@
         {
           "id": "clean-hands-order",
           "type": "order",
-          "prompt": "If water and soap are available, put these handwashing steps in order.",
+          "prompt": "Put these steps in order for washing your hands before eating, if water and soap are available.",
           "options": [
             { "id": "wet", "text": "Wet your hands" },
             { "id": "soap", "text": "Rub with soap" },
@@ -57,7 +57,7 @@
             { "id": "dry", "text": "Dry with a clean cloth if one is available" }
           ],
           "correct": ["wet", "soap", "rinse", "dry"],
-          "feedback": "Washing hands before eating is a hygiene habit. If water or soap is missing, ask an adult for help. They can find a safe option.",
+          "feedback": "Washing hands before eating is a hygiene habit. If water or soap is not available, ask an adult to help find a safe option.",
           "safetyTag": "hygiene",
           "durationMin": 3
         },
@@ -70,7 +70,7 @@
             { "id": "try-without-asking", "text": "Try it without asking" }
           ],
           "correct": "ask-trusted-adult",
-          "feedback": "It is okay to ask for help. Ask a trusted adult if the food needs cooking. Ask how to prepare it safely.",
+          "feedback": "It is okay to ask for help. Ask a trusted adult to help you find out whether the food needs cooking and how to prepare it safely.",
           "safetyTag": "help-adult",
           "durationMin": 2
         },
@@ -83,7 +83,7 @@
             { "id": "use-alone", "text": "Use them without help" }
           ],
           "correct": "ask-cooking-help",
-          "feedback": "Good choice. Ask an adult to help when using knives or fire.",
+          "feedback": "Good choice. Ask an adult to stay with you when knives or fire are needed.",
           "safetyTag": "food-safety",
           "durationMin": 2
         }
