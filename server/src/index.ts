@@ -71,8 +71,13 @@ function semanticDetails(pack: unknown): string[] {
       } else if (activity.type === "match") {
         // match pairs are "idA:idB" (ids cannot contain ":"): both sides must be existing options.
         const pairs = correct.map((pair) => String(pair).split(":"));
-        if (pairs.some((pair) => pair.length !== 2 || pair.some((id) => !ids.includes(id)))) {
-          details.push(`${where}: cada pareja debe unir dos opciones existentes («idA:idB»)`);
+        const pairedIds = pairs.flat();
+        if (
+          pairs.some((pair) => pair.length !== 2 || pair[0] === pair[1] || pair.some((id) => !ids.includes(id))) ||
+          pairedIds.length !== ids.length ||
+          new Set(pairedIds).size !== pairedIds.length
+        ) {
+          details.push(`${where}: las parejas deben unir cada opción exactamente una vez («idA:idB»)`);
         }
       } else if (correct.some((id) => !ids.includes(id))) {
         details.push(`${where}: la respuesta correcta no coincide con ninguna opción`);
@@ -256,9 +261,12 @@ app.get("/api/drafts/:id", async (req: Request, res: Response) => {
 
 app.post("/api/review/approve", async (req: Request, res: Response) => {
   const packId = isRecord(req.body) && typeof req.body.packId === "string" ? req.body.packId : "";
-  const reviewer = isRecord(req.body) && typeof req.body.reviewer === "string" ? req.body.reviewer.trim() : "";
-  if (!packId || !reviewer) {
-    res.status(422).json({ error: "invalid_review", details: ["packId y reviewer son obligatorios"] });
+  const reviewerInput = isRecord(req.body) ? req.body.reviewer : undefined;
+  const reviewer = typeof reviewerInput === "string"
+    ? reviewerInput.trim().replace(/[\u0000-\u001f\u007f]/g, " ")
+    : "";
+  if (!packId || !reviewer || reviewer.length > 100) {
+    res.status(422).json({ error: "invalid_review", details: ["packId y reviewer (1–100 caracteres) son obligatorios"] });
     return;
   }
 
