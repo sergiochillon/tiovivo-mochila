@@ -1,6 +1,6 @@
 # PRODUCT_BRIEF — qué construimos y para quién
 
-Responsable: Rodrigo (producto). Estados: **[DECIDIDO]** · **[HIPÓTESIS]** · **[PENDIENTE]**. Nada de lo marcado como hipótesis está validado todavía.
+Responsable: Mario (producto). Estados: **[DECIDIDO]** · **[HIPÓTESIS]** · **[PENDIENTE]**. Nada de lo marcado como hipótesis está validado todavía.
 
 ---
 

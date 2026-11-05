@@ -1,6 +1,6 @@
 # PITCH_AND_DEMO — la historia, el guion y la demo
 
-Responsable: Rodrigo. Todo es **borrador v0**: se reescribe con lo que realmente exista. **No se muestra en la demo nada que no funcione, ni se dice que algo está validado si no lo está.**
+Responsable: Mario. Todo es **borrador v0**: se reescribe con lo que realmente exista. **No se muestra en la demo nada que no funcione, ni se dice que algo está validado si no lo está.**
 
 ---
 
@@ -56,7 +56,7 @@ Flujo en tres pasos: **Prepara → Revisa → Usa sin conexión.** Un esquema (v
 | 4:00–4:30 | Impacto, inclusión y ética | Sin chat, sin PII, revisión humana; limitaciones honestas | Presentador |
 | 4:30–5:00 | Transferencia y siguiente paso | Quién pagaría (hipótesis), piloto con ONG/docentes, cierre | Presentador |
 
-Recomendación (no es una asignación impuesta): **un solo presentador** (Rodrigo, por ser la persona de producto y pitch) y **una persona maneja la demo** (Mario, dueño de la interfaz; Sergio de respaldo). Se puede cambiar si se ensaya y sale mejor.
+Recomendación (no es una asignación impuesta): **un solo presentador** (Mario, por ser la persona de producto y pitch) y **una persona maneja la demo** (Rodrigo, dueño de la interfaz; Sergio de respaldo). Se puede cambiar si se ensaya y sale mejor.
 
 Si el formato de la presentación local del viernes resulta distinto (más o menos tiempo, sin demo en directo), este guion se adapta; **no se conoce todavía** (P-01).
 
@@ -106,8 +106,8 @@ Si el formato de la presentación local del viernes resulta distinto (más o men
 
 | Entregable | Dueño | Límite |
 |---|---|---|
-| Esqueleto de diapositivas (6–8) | Rodrigo | 18:30 hoy |
-| Guion v1 con datos reales de la demo | Rodrigo | 16:30 mañana |
-| Vídeo de 3 min | Rodrigo + quien maneje la demo | 19:00 mañana |
-| Presentación final de 5 min (formato pedido por las bases) | Rodrigo | 19:30 mañana |
+| Esqueleto de diapositivas (6–8) | Mario | 18:30 hoy |
+| Guion v1 con datos reales de la demo | Mario | 16:30 mañana |
+| Vídeo de 3 min | Mario + quien maneje la demo | 19:00 mañana |
+| Presentación final de 5 min (formato pedido por las bases) | Mario | 19:30 mañana |
 | Ensayos con cronómetro (×2 mínimo) | Todos | Mañana tarde y viernes por la mañana |
