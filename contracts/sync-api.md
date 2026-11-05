@@ -145,6 +145,24 @@ cuentan en `eventsReceived`. Dos avatares que completen la misma actividad
 generan dos finalizaciones. Reenviar un lote idéntico no cambia ninguno de los
 contadores. La respuesta no incluye avatares ni datos personales.
 
+
+## `GET /api/progress/:classCode/detail`
+
+Resultados por explorador para el panel docente (5 nov, aditivo). Solo seudónimos
+de avatar (`zorro`, `colibri`…), nunca nombres. Para cada explorador, paquete y
+actividad cuenta el **último** evento: una actividad fallada y resuelta después
+aparece como resuelta. `attempts` es opcional en el evento (1 = a la primera).
+
+```json
+{ "classCode": "DEMO-01", "explorers": [
+  { "avatarId": "zorro", "done": 2, "firstTry": 1, "withHelp": 1, "failed": 1,
+    "results": [ { "packId": "…", "packTitle": "…", "activityId": "…", "activity": "enunciado corto…",
+                   "result": "correct|completed|incorrect", "attempts": 2, "ts": "…" } ] } ] }
+```
+
+`result: "incorrect"` significa que el niño agotó los tres intentos (vio la
+respuesta y pasó a la siguiente actividad).
+
 ## Límites conocidos
 
 - El almacén es local y de alcance demo; no hay autenticación ni garantía de

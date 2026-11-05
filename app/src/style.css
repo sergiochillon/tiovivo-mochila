@@ -29,8 +29,8 @@ header{display:flex;align-items:center;justify-content:space-between;gap:10px;pa
 
 /* Escenario + juego */
 article{position:relative;background:var(--papel);border-radius:32px;overflow:hidden;box-shadow:0 10px 0 rgba(28,43,75,.08)}
-aside{position:relative;min-height:clamp(150px,22vw,230px);display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:10px;padding:clamp(16px,3vw,28px);background:var(--cielo) center 70%/cover no-repeat}
-/* Escenario ilustrativo: la nota se ve siempre, pequeña, sin tapar el título (DESIGN.md §6) */
+aside{position:relative;min-height:clamp(150px,22vw,230px);display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:10px;padding:clamp(16px,3vw,28px);background:var(--cielo) center bottom/100% auto no-repeat}
+/* Escenario ilustrativo: nota breve siempre visible, pequeña, sin tapar el título (DESIGN.md §6) */
 .scene-notice{order:-1;align-self:flex-end;margin-bottom:auto;max-width:min(100%,340px);padding:4px 10px;border-radius:12px;background:rgba(255,255,255,.88);color:var(--tinta-suave);font-size:.78rem;line-height:1.3}
 .map-copy{background:var(--papel);padding:10px 18px 12px;border-radius:20px;box-shadow:var(--pegatina);transform:rotate(-1.5deg)}
 .map-copy small{display:none}
@@ -246,8 +246,7 @@ a.secondary-link{margin-top:18px}
 @media (min-width:900px) and (orientation:landscape){
   :root{font-size:112%}
   body:not(.teacher) article{display:grid;grid-template-columns:minmax(260px,32%) 1fr;min-height:calc(100vh - 120px);min-height:calc(100dvh - 120px)}
-  body:not(.teacher) aside{min-height:100%;justify-content:flex-start;background-position:30% bottom}
-  body:not(.teacher) .scene-notice{position:absolute;bottom:14px;left:14px;right:14px;max-width:none;margin:0}
+  body:not(.teacher) aside{min-height:100%;justify-content:flex-start;background-position:center bottom}
   body:not(.teacher) section{max-height:calc(100vh - 120px);max-height:calc(100dvh - 120px);overflow-y:auto;overscroll-behavior:contain;padding:24px 30px}
   /* Fit one game on one screen: compact heading, Mochi beside the plate. */
   .activity-screen h1{font-size:1.5rem;max-width:none}
@@ -290,3 +289,60 @@ button.removed{opacity:.25;text-decoration:line-through}
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
 .option-icon{font-size:1.5rem;line-height:1;margin-right:.3em}
+
+/* Mis mochilas: edad e idioma */
+.lang-switch{display:flex;gap:4px;margin-left:auto;background:var(--papel);border-radius:999px;padding:4px;border:3px solid var(--cielo-2)}
+.lang-switch button{margin:0;min-height:44px;min-width:52px;padding:4px 12px;border-radius:999px;background:transparent;color:var(--tinta-suave);box-shadow:none;font-size:1rem}
+.lang-switch button[aria-pressed=true]{background:var(--tinta);color:#fff}
+.lang-switch+.edition{margin-left:8px}
+.age-filters{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 14px}
+button.age-chip{margin:0;min-height:48px;padding:6px 18px;border-radius:999px;background:var(--papel);color:var(--tinta);border:3px solid var(--cielo-2);box-shadow:none;font-size:1rem}
+button.age-chip[aria-pressed=true]{background:var(--mochi);border-color:var(--mochi-oscuro);color:var(--tinta)}
+.backpack-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.backpack-tags .backpack-state{margin-top:0}
+.backpack-age{font:800 .9rem/1.2 var(--titulo);background:var(--mochi);color:var(--tinta);border-radius:999px;padding:4px 12px}
+/* Clasifica en cestas */
+.sort-item{display:flex;align-items:center;justify-content:center;gap:10px;min-height:96px;margin:6px auto 16px;max-width:420px;padding:14px 20px;border-radius:24px;background:var(--papel);border:3px solid var(--mochi);box-shadow:0 6px 0 var(--mochi-oscuro);font:800 1.5rem/1.2 var(--titulo);text-align:center}
+.sort-item .option-icon{font-size:2.6rem}
+.baskets{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+button.basket{flex-direction:column;min-height:150px;margin:0;background:#FFF8E1;color:var(--tinta);border:3px dashed var(--mochi-oscuro);box-shadow:0 5px 0 var(--mochi-oscuro);border-radius:24px}
+button.basket.wrong{animation:nudge .4s ease;border-color:var(--intento)}
+.basket-items{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;min-height:32px;font-size:1.5rem}
+/* Memoria */
+.memory{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px}
+button.memory-card{position:relative;margin:0;min-height:120px;padding:10px;background:var(--lago);color:#fff;border-radius:20px;box-shadow:0 5px 0 #1a4c8a;font-size:1rem}
+.memory-back{font:800 2.6rem/1 var(--titulo)}
+.memory-face{display:none;flex-direction:column;align-items:center;gap:6px;color:var(--tinta);font:700 1rem/1.2 var(--titulo)}
+.memory-icon{font-size:2.2rem}
+button.memory-card.open,.memory.peek button.memory-card{background:var(--papel);border:3px solid var(--cielo-2)}
+button.memory-card.open .memory-back,.memory.peek .memory-back{display:none}
+button.memory-card.open .memory-face,.memory.peek .memory-face{display:flex}
+button.memory-card.matched{opacity:1}
+/* ¿Verdad o mentira? */
+.tf-counter{font:800 1rem/1 var(--titulo);color:var(--tinta-suave);text-align:center;margin:4px 0}
+.tf-card{display:flex;align-items:center;justify-content:center;gap:12px;min-height:120px;max-width:560px;margin:6px auto 16px;padding:18px 22px;border-radius:24px;background:var(--papel);border:3px solid var(--cielo-2);box-shadow:0 6px 0 var(--cielo-2);font:800 1.35rem/1.3 var(--titulo);text-align:center}
+.tf-card.right{border-color:var(--verde);box-shadow:0 6px 0 var(--verde-oscuro)}
+.tf-card.wrong{border-color:var(--intento);animation:nudge .4s ease}
+.tf-buttons{display:grid;grid-template-columns:1fr 1fr;gap:14px;max-width:560px;margin:0 auto}
+.tf-buttons button{margin:0;min-height:72px;font-size:1.3rem}
+button.tf-false{background:var(--baya);box-shadow:0 5px 0 #7d2152}
+.pop{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(.92);opacity:.4}100%{transform:scale(1);opacity:1}}
+/* Sin resolver */
+.missed .solution{max-width:560px;margin:8px auto 14px;padding:14px 18px;border-radius:20px;background:#FFF0E2;border:3px solid var(--intento);font:800 1.15rem/1.4 var(--titulo);text-align:center}
+button.activity.failed{border-color:var(--intento)}
+.pill.retry{background:var(--intento);color:var(--tinta)}
+/* Panel docente: resultados por explorador */
+.explorer-results{display:grid;gap:10px;margin:6px 0 18px}
+details.explorer{background:var(--papel);border:3px solid var(--cielo-2);border-radius:18px;padding:10px 14px}
+details.explorer summary{display:flex;flex-wrap:wrap;align-items:center;gap:10px;cursor:pointer;min-height:48px}
+details.explorer summary img{width:44px;height:44px}
+details.explorer summary strong{font:800 1.15rem/1 var(--titulo)}
+.result-chips{display:flex;flex-wrap:wrap;gap:6px}
+.result-chip{font:700 .9rem/1.2 var(--titulo);border-radius:999px;padding:4px 10px;background:var(--cielo)}
+.result-chip.first{background:#DDF5E8}.result-chip.help{background:#FFF1C9}.result-chip.failed{background:#FFE3D1}
+details.explorer ul{margin:8px 0 4px;padding-left:20px}
+details.explorer li{margin:4px 0}
+details.explorer li.failed{color:#8a3b00}
+button.memory-card.matched .memory-face{color:#fff}
+button.memory-card.matched.pair-3 .memory-face{color:var(--tinta)}

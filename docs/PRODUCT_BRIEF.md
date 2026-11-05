@@ -6,7 +6,7 @@ Responsable: Mario (producto). Estados: **[DECIDIDO]** · **[HIPÓTESIS]** · **
 
 ## 1. Problema
 
-En comunidades con Internet lento, caro o inexistente, el material digital de **habilidades para la vida** para niños de 6–10 años es escaso, está en un idioma o contexto que no encaja (p. ej. «come más fruta» donde la fruta no se compra) y no se puede usar sin red. Los docentes tienen poco tiempo para adaptar material a mano. **[HIPÓTESIS]** que esto es un dolor real y priorizado por docentes y ONG: **por validar**.
+En comunidades con Internet lento, caro o inexistente, el material digital de **habilidades para la vida** para niños de 5 a 12 años (tres tramos: 5–8, 6–10 y 9–12) es escaso, está en un idioma o contexto que no encaja (p. ej. «come más fruta» donde la fruta no se compra) y no se puede usar sin red. Los docentes tienen poco tiempo para adaptar material a mano. **[HIPÓTESIS]** que esto es un dolor real y priorizado por docentes y ONG: **por validar**.
 
 Lo que **sí** está respaldado por la auditoría: el aprendizaje fundacional es la brecha medida a escala internacional; no hay datos para ordenar la brecha cognitiva frente a la socioemocional en 6–10 años. No usamos ese argumento.
 
@@ -15,7 +15,7 @@ Lo que **sí** está respaldado por la auditoría: el aprendizaje fundacional es
 | Rol | Quién | Qué necesita |
 |---|---|---|
 | Usuario-configurador | Docente / educador de ONG | Adaptar material a su comunidad rápido, **controlar y aprobar** lo que ven sus alumnos, funcionar sin red |
-| Beneficiario | Niño de 6–10 años | Historias y juegos simples, con audio, en su idioma y con su comida/entorno |
+| Beneficiario | Niño de 5 a 12 años (tramos 5–8, 6–10 y 9–12) | Historias y juegos simples, con audio, en su idioma y con su comida/entorno |
 | Comprador potencial (**[HIPÓTESIS]**) | ONG, fundaciones, programas educativos, administraciones | Impacto medible, coste bajo, seguridad infantil, escalabilidad |
 | Observador | Familias | Confianza: sin datos personales, sin desconocidos |
 

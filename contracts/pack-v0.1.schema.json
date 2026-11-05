@@ -36,7 +36,7 @@
         "foods": { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1, "description": "Alimentos locales y asequibles que pueden aparecer en las actividades." },
         "resources": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "Recursos disponibles en el contexto (fuentes de agua, huerto, mercado, etc.)." },
         "culturalNotes": { "type": "array", "items": { "type": "string", "minLength": 1 } },
-        "ageRange": { "const": "6-10" }
+        "ageRange": { "enum": ["6-10", "5-8", "9-12"], "description": "Grupo de edad al que va dirigido. 6-10 era el único valor inicial; 5-8 y 9-12 se añadieron el 5 nov (aditivo)." }
       }
     },
     "Review": {
@@ -80,7 +80,7 @@
       "required": ["id", "type", "prompt", "feedback", "safetyTag", "durationMin"],
       "properties": {
         "id": { "$ref": "#/$defs/slug" },
-        "type": { "enum": ["story", "choice", "match", "order", "scenario"] },
+        "type": { "enum": ["story", "choice", "match", "order", "scenario", "sort", "memory", "truefalse"], "description": "sort, memory y truefalse se añadieron el 5 nov (aditivo)." },
         "prompt": { "type": "string", "minLength": 1, "maxLength": 400 },
         "audioText": { "type": "string", "maxLength": 400, "description": "Texto para la voz del navegador, si difiere de prompt." },
         "options": { "type": "array", "items": { "$ref": "#/$defs/Option" } },
@@ -89,7 +89,7 @@
             { "$ref": "#/$defs/slug" },
             { "type": "array", "items": { "type": "string", "minLength": 1 }, "minItems": 1 }
           ],
-          "description": "choice/scenario: id de la opción correcta (o varias). order: ids de opciones en orden correcto. match: elementos 'idA:idB' (pareja izquierda-derecha; el orden de las parejas no importa; los ids no admiten ':'). story: se omite. Semántica confirmada por Rodrigo el 4 nov."
+          "description": "choice/scenario: id de la opción correcta (o varias). order: ids de opciones en orden correcto. match y memory: elementos 'idA:idB' (pareja; cada opción una sola vez; los ids no admiten ':'). sort: elementos 'idElemento:idCesta' (cada elemento una vez; las cestas son las opciones que solo aparecen a la derecha; 2 o 3 cestas). truefalse: ids de las afirmaciones VERDADERAS (las demás son falsas). story: se omite."
         },
         "feedback": { "type": "string", "minLength": 1, "maxLength": 300, "description": "Mensaje al terminar. Tono positivo, sin culpabilizar." },
         "safetyTag": { "enum": ["none", "hygiene", "food-safety", "help-adult", "emotion-self-choice", "privacy"], "description": "Una etiqueta principal por actividad (lista cerrada propuesta por Carlos)." },
@@ -98,7 +98,7 @@
       },
       "allOf": [
         {
-          "if": { "properties": { "type": { "enum": ["choice", "scenario", "match", "order"] } }, "required": ["type"] },
+          "if": { "properties": { "type": { "enum": ["choice", "scenario", "match", "order", "sort", "memory", "truefalse"] } }, "required": ["type"] },
           "then": { "properties": { "options": true, "correct": true }, "required": ["options", "correct"] }
         }
       ]
@@ -119,7 +119,8 @@
         "eventId": { "type": "string", "minLength": 8, "description": "Único por evento; el servidor lo usa para idempotencia." },
         "packId": { "$ref": "#/$defs/slug" },
         "activityId": { "$ref": "#/$defs/slug" },
-        "result": { "enum": ["completed", "correct", "incorrect", "skipped"] },
+        "result": { "enum": ["completed", "correct", "incorrect", "skipped"], "description": "correct: resuelta; incorrect: agotó los intentos; completed: historia leída." },
+        "attempts": { "type": "integer", "minimum": 1, "maximum": 20, "description": "Opcional (5 nov, aditivo): intentos usados; 1 = a la primera." },
         "ts": { "type": "string", "format": "date-time" },
         "avatarId": { "$ref": "#/$defs/slug" },
         "type": { "enum": ["activity_completed"], "description": "Tipo de evento (opcional). Único valor del MVP. Se amplía la lista añadiendo valores (aditivo), con aviso a Rodrigo y Alejandro." },

@@ -46,6 +46,9 @@ Escenarios (sección 6) añaden su propio par de colores de suelo y cielo.
 - **Tarjeta de juego**: blanco, radio 24 px, borde 3 px del color de su función y sombra sólida desplazada (no difusa gris).
 - **Pegatina**: borde blanco 5–6 px alrededor de la forma, sombra `0 6px 0 rgba(28,43,75,.18)`, rotación leve (−3° a 3°).
 - **Opciones de respuesta**: tarjetas grandes con la letra en una ficha de color (A verde, B baya, C lago, D amarillo); alto ≥ 76 px. El emoji de la opción, si lo hay, va delante del texto en todos los juegos.
+- **Juegos**: historia, elige (o «encuentra el intruso»), llena el plato, ordena, parejas, **clasifica en cestas** (una cosa cada vez, dos o tres cestas), **memoria** (cartas boca abajo; si se falla mucho, Mochi deja ver todas un momento) y **¿verdad o mentira?** (una frase cada vez; si fallas, explica por qué).
+- **Tres intentos**: al segundo error Mochi ayuda de verdad; al tercero la actividad termina «sin resolver», se enseña la respuesta y se pasa a la siguiente (sin pegatina; se puede volver a intentar). El panel docente lo ve.
+- **Edades**: cada mochila indica su grupo (5–8, 9–12 o 6–10) y «Mis mochilas» filtra por edad.
 - **Juegos sin trucos**: el orden de las opciones es nuevo en cada intento, para que la respuesta nunca esté en un sitio memorizable: en «Elige» la correcta no es siempre la A; en «Ordena» el primer paso nunca sale primero; en «Parejas» ninguna tarjeta queda a la altura de su pareja.
 - **«Llena el plato»**: una actividad con varias respuestas correctas y al menos una incorrecta se juega llenando el plato, y así se llama en la lista y en la revisión docente. Si todas las opciones son correctas (autoelección, como en emociones), cualquiera vale y se juega como «Elige».
 - **Mochi**: siempre a la izquierda del bocadillo; el bocadillo es el canal de instrucciones, pistas y elogios. Cuando piensa o da una pista pone cara de curiosidad (una ceja levantada y la cabeza inclinada), nunca de enfado. En «Parejas», el primer fallo nombra las dos tarjetas que no son pareja; cada dos fallos, Mochi ayuda de verdad (quita una opción o hace brillar la buena).
@@ -65,7 +68,7 @@ Escenarios (sección 6) añaden su propio par de colores de suelo y cielo.
 ## 6. Escenarios por contexto
 
 Cada contexto tiene un escenario: ilustración de fondo (SVG propio), color de suelo y de cielo, registrados en `app/src/scenes.ts`. Hoy: **Andes** (Perú y Bolivia: montañas nevadas, sol, terrazas y río), **sabana del norte de Uganda** (acacias, tierra rojiza) y un **paisaje neutro** para «Mis mochilas», la parte docente y cualquier contexto sin escenario propio. Un contexto nuevo se añade registrando su entrada antes del neutro.
-En las pantallas de un paquete se ve siempre la nota «Paisaje ilustrativo; no representa una comunidad concreta ni está validado por ella» (arriba del escenario en móvil, abajo en tableta).
+El paisaje se ve entero (ancho completo, apoyado abajo; el cielo rellena lo de arriba). Los paisajes son ilustrativos, no representan a una comunidad concreta (lo dice el README) y cada escenario real lleva una nota breve visible, «Paisaje ilustrativo» / «Illustrative landscape» (el paisaje neutro no la lleva).
 Las ilustraciones son **ilustrativas**: no representan una comunidad concreta ni están validadas por ella. Si en el futuro se generan con IA, se preparan antes, se revisan y se guardan como archivos estáticos (nunca se generan en el dispositivo del niño).
 
 ## 7. Movimiento

@@ -1,6 +1,6 @@
 /**
  * Static, original illustrations following DESIGN.md §6 (PR 37).
- * Illustrative only: no scene represents or has been validated by a community.
+ * Illustrative only: no scene represents or has been validated by a community (README and DESIGN.md say so).
  * Add a context by adding an entry before the neutral fallback in scenes.
  * No network, external assets or runtime image generation.
  */
@@ -15,10 +15,6 @@ export interface Scene {
   readonly ilustracion: string
 }
 
-export const sceneNotice = {
-  es: 'Paisaje ilustrativo; no representa una comunidad concreta ni está validado por ella.',
-  en: 'Illustrative landscape; it does not represent a specific community and has not been validated by one.'
-} as const
 
 const normalize = (text: string) => text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase()
 const svg = (sky: string, shapes: string) =>
@@ -81,7 +77,9 @@ export function sceneImage(scene: Scene): string {
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(scene.ilustracion)
 }
 
-/** R3 can attach this visible note beside the scene without changing the registry. */
+/** Short visible note shown on every real scene: the landscape is not validated by a community. */
+export const sceneNotice = { es: 'Paisaje ilustrativo', en: 'Illustrative landscape' } as const
+
 export function sceneCaption(language: string): HTMLElement {
   const caption = document.createElement('small')
   caption.className = 'scene-notice'

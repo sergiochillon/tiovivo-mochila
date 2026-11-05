@@ -7,7 +7,7 @@ import '@fontsource/baloo-2/latin-800.css'
 import '@fontsource/atkinson-hyperlegible/latin-400.css'
 import '@fontsource/atkinson-hyperlegible/latin-700.css'
 import './style.css'
-import { classTotals, sendProgress, type Progress } from './sync'
+import { classResults, classTotals, sendProgress, type Progress } from './sync'
 import fox from './zorro.svg'
 import bird from './colibri.svg'
 import { extraAvatars, mochi, sticker } from './art'
@@ -79,7 +79,7 @@ const database = new Promise<IDBDatabase>((resolve, reject) => {
 
 const texts = {
   es: {
-    kinds: { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas', plate: 'Llena el plato' } as Record<string, string>,
+    kinds: { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas', plate: 'Llena el plato', sort: 'Clasifica', memory: 'Memoria', truefalse: '¿Verdad o mentira?' } as Record<string, string>,
     avatars: { zorro: 'Zorro', colibri: 'Colibrí', llama: 'Llama', jirafa: 'Jirafa', tortuga: 'Tortuga', rana: 'Rana' } as Record<string, string>,
     edition: 'Atlas de aula', expedition: 'EXPEDICIÓN 01', footer: 'El progreso se guarda en este dispositivo.',
     who: '¿Qué explorador eliges hoy?', whoHelp: 'Cada explorador guarda sus propias pegatinas. Elige el tuyo.',
@@ -101,10 +101,28 @@ const texts = {
     stamps: (n: number) => n === 1 ? '1 pegatina' : n + ' pegatinas', allDone: '¡Has completado todas las estaciones!',
     album: 'Mi álbum', albumHelp: (name: string) => 'Las pegatinas de ' + name + ' en esta mochila. Cada estación superada pega una nueva.',
     newSticker: '¡Pegatina nueva!', emptySlot: 'Por conseguir', openAlbum: (n: number, total: number) => '📒 Mi álbum (' + n + '/' + total + ')',
-    helpOption: 'Te ayudo: ahora hay una opción menos. Mira bien las que quedan.', helpStep: 'Te ayudo: el paso que sigue brilla.', helpPlate: 'Te ayudo: mira lo que brilla.', helpPair: 'Te ayudo: su pareja brilla.'
+    helpOption: 'Te ayudo: ahora hay una opción menos. Mira bien las que quedan.', helpStep: 'Te ayudo: el paso que sigue brilla.', helpPlate: 'Te ayudo: mira lo que brilla.', helpPair: 'Te ayudo: su pareja brilla.',
+    sortHelp: 'Mira cada cosa y tócala en su cesta.', sortWrong: (item: string) => '«' + item + '» no va en esa cesta. Prueba en otra.',
+    sortGood: '¡Bien! Ahora la siguiente.', helpSort: 'Te ayudo: su cesta brilla.',
+    memoryHelp: 'Da la vuelta a dos cartas. ¿Hacen pareja?', memoryMiss: 'No son pareja. ¡Recuerda dónde estaban!',
+    memoryHint: 'Te ayudo: mira todas un momento…', memoryCard: 'Carta boca abajo',
+    tfHelp: '¿Es verdad o es mentira? Toca tu respuesta.', tfTrue: '✓ Verdad', tfFalse: '✗ Mentira',
+    tfCount: (n: number, total: number) => n + ' de ' + total, tfRightTrue: '¡Sí, es verdad!', tfRightFalse: '¡Bien visto, es mentira!',
+    tfWasTrue: 'Era verdad.', tfWasFalse: 'Era mentira.', truths: 'Eran verdad:',
+    missedTitle: '¡Casi!', missedHelp: 'Esta vez no salió. No pasa nada: así también se aprende.', missedMochi: 'La respuesta era:',
+    tryItAgain: 'Intentarlo otra vez', tryAgainShort: 'Otra vez',
+    homeTitle: '¿Qué mochila abrimos hoy?', homeHelp: 'Las mochilas con ✓ ya están guardadas y funcionan sin conexión.',
+    ready: '✓ Lista sin conexión', needsNet: 'Necesita conexión la primera vez',
+    notes: { reviewed: 'Revisión pedagógica aprobada', ai: 'Propuesta de IA revisada por el equipo', approved: 'Material aprobado' } as Record<string, string>,
+    langNames: { es: 'Español', en: 'Inglés' } as Record<string, string>,
+    age: (range: string) => range.replace('-', '–') + ' años', allAges: 'Todas las edades',
+    myBackpacks: 'Mis mochilas', learnOffline: 'Aprender sin conexión', yourBackpack: 'Tu mochila',
+    searching: 'Buscando material de clase…', noMaterial: 'No hay material aprobado para esta mochila.',
+    unavailable: 'Mochila no disponible', connectFirst: 'Conéctate una vez para descargar esta mochila; después funcionará sin conexión.',
+    languageLabel: 'Idioma'
   },
   en: {
-    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs', plate: 'Fill the plate' } as Record<string, string>,
+    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs', plate: 'Fill the plate', sort: 'Sort it', memory: 'Memory', truefalse: 'True or false?' } as Record<string, string>,
     avatars: { zorro: 'Fox', colibri: 'Hummingbird', llama: 'Llama', jirafa: 'Giraffe', tortuga: 'Turtle', rana: 'Frog' } as Record<string, string>,
     edition: 'Class atlas', expedition: 'EXPEDITION 01', footer: 'Your progress is saved on this device.',
     who: 'Which explorer do you pick today?', whoHelp: 'Each explorer keeps their own stickers. Choose yours.',
@@ -126,11 +144,39 @@ const texts = {
     stamps: (n: number) => n === 1 ? '1 sticker' : n + ' stickers', allDone: 'You completed every station!',
     album: 'My album', albumHelp: (name: string) => name + "'s stickers in this backpack. Every station you finish adds a new one.",
     newSticker: 'New sticker!', emptySlot: 'Still to win', openAlbum: (n: number, total: number) => '📒 My album (' + n + '/' + total + ')',
-    helpOption: 'Let me help: there is one option fewer now. Look closely at the rest.', helpStep: 'Let me help: the next step is shining.', helpPlate: 'Let me help: look at what is shining.', helpPair: 'Let me help: its match is shining.'
+    helpOption: 'Let me help: there is one option fewer now. Look closely at the rest.', helpStep: 'Let me help: the next step is shining.', helpPlate: 'Let me help: look at what is shining.', helpPair: 'Let me help: its match is shining.',
+    sortHelp: 'Look at each thing and tap its basket.', sortWrong: (item: string) => '"' + item + '" does not go in that basket. Try another.',
+    sortGood: 'Good! Now the next one.', helpSort: 'Let me help: its basket is shining.',
+    memoryHelp: 'Turn over two cards. Are they a pair?', memoryMiss: 'Not a pair. Remember where they were!',
+    memoryHint: 'Let me help: look at them all for a moment…', memoryCard: 'Face-down card',
+    tfHelp: 'Is it true or false? Tap your answer.', tfTrue: '✓ True', tfFalse: '✗ False',
+    tfCount: (n: number, total: number) => n + ' of ' + total, tfRightTrue: 'Yes, it is true!', tfRightFalse: 'Well spotted, it is false!',
+    tfWasTrue: 'It was true.', tfWasFalse: 'It was false.', truths: 'These were true:',
+    missedTitle: 'Almost!', missedHelp: 'It did not work out this time. That is okay: this is how we learn.', missedMochi: 'The answer was:',
+    tryItAgain: 'Try it again', tryAgainShort: 'Try again',
+    homeTitle: 'Which backpack shall we open today?', homeHelp: 'Backpacks with ✓ are saved and work without internet.',
+    ready: '✓ Ready offline', needsNet: 'Needs internet the first time',
+    notes: { reviewed: 'Teaching review approved', ai: 'AI proposal reviewed by the team', approved: 'Approved material' } as Record<string, string>,
+    langNames: { es: 'Spanish', en: 'English' } as Record<string, string>,
+    age: (range: string) => 'Ages ' + range.replace('-', '–'), allAges: 'All ages',
+    myBackpacks: 'My backpacks', learnOffline: 'Learn without internet', yourBackpack: 'Your backpack',
+    searching: 'Looking for class material…', noMaterial: 'There is no approved material for this backpack.',
+    unavailable: 'Backpack not available', connectFirst: 'Connect once to download this backpack; after that it works offline.',
+    languageLabel: 'Language'
   }
 }
 // The interface follows the language of the approved package; Spanish until one is loaded.
-let t = texts.es
+// The menus follow the language chosen on «My backpacks» (remembered on this device); inside a backpack,
+// everything follows the language of its content.
+type Language = 'es' | 'en'
+function uiLanguage(): Language {
+  try {
+    const saved = localStorage.getItem('mochila-idioma')
+    if (saved === 'es' || saved === 'en') return saved
+  } catch { /* storage may be blocked */ }
+  return navigator.language?.toLowerCase().startsWith('en') ? 'en' : 'es'
+}
+let t = texts[uiLanguage()]
 const avatarName = (avatar: Avatar) => t.avatars[avatar.id]
 
 const kinds: Record<string, { label: string; icon: string }> = {
@@ -138,13 +184,20 @@ const kinds: Record<string, { label: string; icon: string }> = {
   choice: { label: 'Elige', icon: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/>' },
   order: { label: 'Ordena', icon: '<path d="M10 6h10M10 12h10M10 18h10M4 6h1.5M4 12h1.5M4 18h1.5"/>' },
   scenario: { label: '¿Qué harías?', icon: '<path d="M4 5h16v10H10l-5 4v-4H4z"/>' },
-  match: { label: 'Parejas', icon: '<rect x="3" y="5" width="7" height="14" rx="2"/><rect x="14" y="5" width="7" height="14" rx="2"/><path d="M10 12h4"/>' }
+  match: { label: 'Parejas', icon: '<rect x="3" y="5" width="7" height="14" rx="2"/><rect x="14" y="5" width="7" height="14" rx="2"/><path d="M10 12h4"/>' },
+  sort: { label: 'Clasifica', icon: '<path d="M4 10h16l-2 9H6z"/><path d="M8 10l4-6 4 6"/>' },
+  memory: { label: 'Memoria', icon: '<rect x="3" y="4" width="8" height="12" rx="2"/><rect x="13" y="8" width="8" height="12" rx="2"/><path d="M7 9v2M17 13v2"/>' },
+  truefalse: { label: '¿Verdad o mentira?', icon: '<path d="M3 12l3 3 5-6"/><path d="M14 9l6 6M20 9l-6 6"/>' }
 }
 const checkIcon = '<path d="M5 12l5 5 9-10"/>'
-const knownPacks = [
-  { id: 'alimentacion-andes-es', title: 'Elegimos con lo que hay', place: 'Andes, Perú', language: 'Español', note: 'Revisión pedagógica aprobada' },
-  { id: 'food-northern-uganda-en', title: 'Choosing from what is available', place: 'Norte de Uganda', language: 'English', note: 'Revisión pedagógica aprobada' },
-  { id: 'food-altiplano-es', title: 'Alimentos en el Altiplano', place: 'Altiplano, Bolivia (contexto sintético)', language: 'Español', note: 'Propuesta de IA revisada por el equipo' }
+type Entry = { id: string; title: string; place: string; language: string; age: string; note: string }
+const knownPacks: Entry[] = [
+  { id: 'misiones-cocina-5-8-es', title: 'Misiones en la cocina de Ana', place: 'Andes, Perú', language: 'es', age: '5-8', note: 'reviewed' },
+  { id: 'kitchen-missions-5-8-en', title: 'Kitchen missions with Ayo', place: 'Northern Uganda', language: 'en', age: '5-8', note: 'reviewed' },
+  { id: 'expedicion-mercado-9-12-es', title: 'Expedición al mercado', place: 'Andes, Perú', language: 'es', age: '9-12', note: 'reviewed' },
+  { id: 'alimentacion-andes-es', title: 'Elegimos con lo que hay', place: 'Andes, Perú', language: 'es', age: '6-10', note: 'reviewed' },
+  { id: 'food-northern-uganda-en', title: 'Choosing from what is available', place: 'Northern Uganda', language: 'en', age: '6-10', note: 'reviewed' },
+  { id: 'food-altiplano-es', title: 'Alimentos en el Altiplano', place: 'Altiplano, Bolivia', language: 'es', age: '6-10', note: 'ai' }
 ]
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 /** A new random order each time, so the answer is never in a position the child can memorise.
@@ -193,16 +246,25 @@ function icon(paths: string, className: string) {
 
 const playable = (activity: Activity) => activity.type in kinds
 
-async function completedIds(avatar: Avatar) {
+async function progressOf(avatar: Avatar) {
   const db = await database
   const records = await new Promise<Progress[]>((resolve, reject) => {
     const request = db.transaction('progress').objectStore('progress').getAll()
     request.onsuccess = () => resolve(request.result)
     request.onerror = () => reject(request.error)
   })
-  return new Set(records.filter(record => record.avatarId === avatar.id && record.packId === pack.id)
-    .map(record => record.activityId))
+  return records.filter(record => record.avatarId === avatar.id && record.packId === pack.id)
 }
+/** Activities solved (or stories read): they give a sticker. A failed try does not. */
+async function completedIds(avatar: Avatar) {
+  return new Set((await progressOf(avatar)).filter(record => record.result !== 'incorrect').map(record => record.activityId))
+}
+async function failedIds(avatar: Avatar) {
+  return new Set((await progressOf(avatar)).filter(record => record.result === 'incorrect').map(record => record.activityId))
+}
+/** Next station: the first not tried yet; when all were tried, the first one still to solve. */
+const nextStation = (items: Activity[], done: Set<string>, failed: Set<string>) =>
+  items.find(item => !done.has(item.id) && !failed.has(item.id)) ?? items.find(item => !done.has(item.id))
 
 function seals(done: number, total: number) {
   const row = document.createElement('div')
@@ -247,7 +309,7 @@ function storageError() {
 }
 
 async function backpacks() {
-  screen('¿Qué mochila abrimos hoy?', 'Las mochilas con ✓ ya están guardadas y funcionan sin conexión.')
+  screen(t.homeTitle, t.homeHelp)
   lesson.className = 'backpacks'
   const db = await database
   const cached = await new Promise<Map<string, Pack>>((resolve, reject) => {
@@ -262,47 +324,112 @@ async function backpacks() {
     }
     cursor.onerror = () => reject(cursor.error)
   })
-  const fromPack = (pack: Pack) => ({
-    id: pack.id, title: pack.title, place: pack.context.region + ', ' + pack.context.country,
-    language: pack.language === 'en' ? 'English' : 'Español', note: 'Material aprobado'
+  const fromPack = (item: Pack): Entry => ({
+    id: item.id, title: item.title, place: item.context.region + ', ' + item.context.country,
+    language: item.language, age: (item.context as { ageRange?: string }).ageRange ?? '6-10', note: 'approved'
   })
   const entries = [...knownPacks]
   for (const saved of cached.values()) {
     if (!entries.some(entry => entry.id === saved.id)) entries.push(fromPack(saved))
   }
+  // Age filter: the teacher (or child) picks the group; remembered on this device.
+  let ageFilter = 'all'
+  try { ageFilter = localStorage.getItem('mochila-edad') ?? 'all' } catch { /* ignore */ }
+  const filters = document.createElement('div')
+  filters.className = 'age-filters'
+  filters.setAttribute('role', 'group')
+  filters.setAttribute('aria-label', t.allAges)
   const grid = document.createElement('div')
   grid.className = 'backpack-grid'
+  const applyFilter = () => {
+    for (const card of grid.querySelectorAll<HTMLElement>('a.backpack')) card.hidden = ageFilter !== 'all' && card.dataset.age !== ageFilter
+    for (const chip of filters.querySelectorAll<HTMLButtonElement>('button')) chip.setAttribute('aria-pressed', String(chip.dataset.age === ageFilter))
+  }
+  const paintFilters = () => {
+    filters.replaceChildren()
+    const ages = [...new Set(entries.map(entry => entry.age))].sort((a, b) => parseInt(a) - parseInt(b))
+    if (ages.length < 2) return
+    if (!ages.includes(ageFilter)) ageFilter = 'all'
+    for (const age of ['all', ...ages]) {
+      const chip = document.createElement('button')
+      chip.type = 'button'
+      chip.className = 'age-chip'
+      chip.dataset.age = age
+      chip.textContent = age === 'all' ? t.allAges : t.age(age)
+      chip.onclick = () => {
+        ageFilter = age
+        try { localStorage.setItem('mochila-edad', age) } catch { /* ignore */ }
+        soundTap()
+        applyFilter()
+      }
+      filters.append(chip)
+    }
+    applyFilter()
+  }
   // Only packages stored on this device are «ready offline»; the rest need a connection the first time.
-  const addCard = (entry: typeof entries[number], index: number) => {
+  const addCard = (entry: Entry, index: number) => {
     const ready = cached.has(entry.id)
     const card = document.createElement('a')
     card.className = 'backpack backpack-' + (index % 3) + (ready ? ' ready' : '')
     card.href = '/alumno?pack=' + encodeURIComponent(entry.id)
+    card.dataset.age = entry.age
     const art = icon('<path d="M9 6V5a3 3 0 0 1 6 0v1"/><rect x="5" y="6" width="14" height="15" rx="4"/><path d="M9 13h6"/>', 'backpack-art')
     const title = document.createElement('strong')
     title.textContent = cached.get(entry.id)?.title ?? entry.title
     const place = document.createElement('span')
-    place.textContent = entry.place + ' — ' + entry.language
+    place.textContent = entry.place + ' — ' + (t.langNames[entry.language] ?? entry.language)
+    const tags = document.createElement('span')
+    tags.className = 'backpack-tags'
+    const age = document.createElement('small')
+    age.className = 'backpack-age'
+    age.textContent = t.age(entry.age)
     const state = document.createElement('small')
     state.className = 'backpack-state'
-    state.textContent = ready ? '✓ Lista sin conexión' : 'Necesita conexión la primera vez'
+    state.textContent = ready ? t.ready : t.needsNet
+    tags.append(age, state)
     const note = document.createElement('small')
     note.className = 'backpack-note'
-    note.textContent = entry.note
-    card.append(art, title, place, state, note)
+    note.textContent = t.notes[entry.note] ?? entry.note
+    card.append(art, title, place, tags, note)
     grid.append(card)
   }
   entries.forEach(addCard)
-  lesson.append(grid)
+  lesson.append(filters, grid)
+  paintFilters()
   // With a connection, also offer the packages approved on the server since (for example, ones prepared
   // with AI and approved by a teacher). Offline this adds nothing and the screen is already complete.
   const offered = await approvedCatalog()
-  for (const pack of offered) {
-    if (!entries.some(entry => entry.id === pack.id)) {
-      entries.push(fromPack(pack))
+  for (const item of offered) {
+    if (!entries.some(entry => entry.id === item.id)) {
+      entries.push(fromPack(item))
       addCard(entries[entries.length - 1], entries.length - 1)
     }
   }
+  paintFilters()
+}
+
+/** ES / EN switch for the menus (home only; inside a backpack the content decides). */
+function languageSwitch(onChange: () => void) {
+  const group = document.createElement('div')
+  group.className = 'lang-switch'
+  group.setAttribute('role', 'group')
+  for (const code of ['es', 'en'] as const) {
+    const option = document.createElement('button')
+    option.type = 'button'
+    option.textContent = code.toUpperCase()
+    option.setAttribute('aria-pressed', String(t === texts[code]))
+    option.setAttribute('aria-label', code === 'es' ? 'Español' : 'English')
+    option.onclick = () => {
+      try { localStorage.setItem('mochila-idioma', code) } catch { /* ignore */ }
+      t = texts[code]
+      document.documentElement.lang = code
+      for (const other of group.querySelectorAll('button')) other.setAttribute('aria-pressed', String(other === option))
+      soundTap()
+      onChange()
+    }
+    group.append(option)
+  }
+  document.querySelector('header')!.insertBefore(group, document.querySelector('.edition'))
 }
 
 async function choose() {
@@ -350,17 +477,18 @@ async function activities(avatar: Avatar) {
     if (choice) return play(avatar, choice)
   }
   const done = await completedIds(avatar)
+  const failed = await failedIds(avatar)
   screen(t.activities, t.goingWith(avatarName(avatar)))
   const allDone = items.every(item => done.has(item.id))
   lesson.append(guide(allDone ? t.allDone : t.letsGo, allDone ? 'cheer' : 'happy').box)
   lesson.append(seals(items.filter(item => done.has(item.id)).length, items.length))
   const list = document.createElement('div')
   list.className = 'activities'
-  const next = items.find(item => !done.has(item.id))
+  const next = nextStation(items, done, failed)
   for (const item of items) {
     const finished = done.has(item.id)
     const card = document.createElement('button')
-    card.className = 'activity' + (finished ? ' done' : '') + (item === next ? ' next' : '')
+    card.className = 'activity' + (finished ? ' done' : '') + (failed.has(item.id) && !finished ? ' failed' : '') + (item === next ? ' next' : '')
     card.onclick = () => play(avatar, item).catch(storageError)
     const text = document.createElement('span')
     text.className = 'activity-text'
@@ -378,7 +506,10 @@ async function activities(avatar: Avatar) {
       text.append(state)
     } else if (item === next) {
       end.className = 'pill'
-      end.textContent = t.start
+      end.textContent = failed.has(item.id) ? t.tryAgainShort : t.start
+    } else if (failed.has(item.id)) {
+      end.className = 'pill retry'
+      end.textContent = t.tryAgainShort
     } else {
       end.className = 'time'
       end.textContent = item.durationMin ? item.durationMin + ' ' + t.minutes : ''
@@ -428,7 +559,7 @@ async function album(avatar: Avatar) {
  *  (self-choice, e.g. emotions), any tap is a good answer and it plays as a normal choice. */
 const isPlate = (activity: Activity) => {
   const correct = activity.correct
-  return Array.isArray(correct) && correct.length > 1 && activity.type !== 'order' && activity.type !== 'match' &&
+  return Array.isArray(correct) && correct.length > 1 && (activity.type === 'choice' || activity.type === 'scenario') &&
     (activity.options ?? []).some(option => !correct.includes(option.id))
 }
 const stickerKind = (activity: Activity) => isPlate(activity) ? 'plate' : activity.type
@@ -443,7 +574,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     request.onsuccess = () => resolve(request.result)
     request.onerror = () => reject(request.error)
   })
-  if (saved && !replay) return complete(avatar, activity)
+  if (saved && saved.result !== 'incorrect' && !replay) return complete(avatar, activity)
   screen(activity.prompt, kindLabel(activity))
   lesson.className = 'activity-screen kind-' + activity.type
   lesson.append(readingControl(activity.audioText || activity.prompt, pack.language))
@@ -463,22 +594,47 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     if (!element) return
     element.classList.remove('glow'); void (element as HTMLElement).offsetWidth; element.classList.add('glow')
   }
-  const needsHelp = () => ++mistakes % 2 === 0
-  async function finish() {
+  // Three tries: the 2nd mistake brings real help from Mochi, the 3rd ends the activity as not solved;
+  // the child sees the answer and moves on (it can try again later, and the teacher sees it).
+  const MAX_MISTAKES = 3
+  let ended = false
+  const needsHelp = () => {
+    mistakes++
+    if (mistakes >= MAX_MISTAKES) { void fail(); return false }
+    return mistakes === 2
+  }
+  async function save(result: Progress['result']) {
+    ended = true
     const event: Progress = {
       eventId: crypto.randomUUID(), avatarId: avatar.id, packId: pack.id,
-      activityId: activity.id, result: activity.type === 'story' ? 'completed' : 'correct', type: 'activity_completed',
+      // Tries used, never more than three: solved at the 1st try → 1; after two mistakes → 3; out of tries → 3.
+      activityId: activity.id, result, attempts: result === 'incorrect' ? MAX_MISTAKES : Math.min(mistakes + 1, MAX_MISTAKES), type: 'activity_completed',
       ts: new Date().toISOString(), classCode: 'DEMO-01'
     }
     await new Promise<void>((resolve, reject) => {
       const tx = db.transaction('progress', 'readwrite')
       const store = tx.objectStore('progress')
       const existing = store.get(key)
-      existing.onsuccess = () => { if (!existing.result) store.add(event, key) }
+      existing.onsuccess = () => {
+        const previous = existing.result as Progress | undefined
+        // A first try is kept; a later success replaces an earlier failure (and is sent again).
+        if (!previous) store.add(event, key)
+        else if (previous.result === 'incorrect' && result !== 'incorrect') store.put(event, key)
+      }
       tx.oncomplete = () => resolve()
       tx.onabort = () => reject(tx.error)
     })
+  }
+  async function finish() {
+    if (ended) return
+    await save(activity.type === 'story' ? 'completed' : 'correct')
     await complete(avatar, activity, true)
+  }
+  async function fail() {
+    if (ended) return
+    await save('incorrect')
+    soundWrong()
+    await missed(avatar, activity)
   }
   const options = activity.options ?? []
   if (activity.type === 'story') {
@@ -603,6 +759,202 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     const rights = pairs.map(([, b]) => b)
     shuffled(rights, order => rights.length > 1 && order.some((b, index) => b === rights[index]))
       .forEach(b => card(b, right, 'right'))
+  } else if (activity.type === 'sort') {
+    // Sort into baskets: one thing at a time, tap the basket where it goes.
+    const pairs = (Array.isArray(activity.correct) ? activity.correct : []).map(pair => pair.split(':'))
+    const byId = new Map(options.map(option => [option.id, option]))
+    const basketIds = [...new Set(pairs.map(([, basket]) => basket))]
+    if (pairs.length < 3 || basketIds.length < 2 || pairs.some(pair => pair.length !== 2 || !byId.has(pair[0]) || !byId.has(pair[1]))) {
+      screen(t.needsReview)
+      button(t.goBack, () => activities(avatar))
+      return
+    }
+    const queue = shuffled(pairs)
+    coach.say(t.sortHelp, 'thinking')
+    const current = document.createElement('div')
+    current.className = 'sort-item'
+    current.setAttribute('aria-live', 'polite')
+    const baskets = document.createElement('div')
+    baskets.className = 'baskets'
+    lesson.append(hint, current, baskets)
+    const contents = new Map<string, HTMLElement>()
+    let index = 0
+    const show = () => {
+      const item = byId.get(queue[index][0])!
+      current.textContent = item.text
+      decorate(current, item)
+      current.classList.remove('pop'); void current.offsetWidth; current.classList.add('pop')
+    }
+    const drop = async (basketId: string) => {
+      if (ended) return
+      const [itemId, rightBasket] = queue[index]
+      const item = byId.get(itemId)!
+      if (basketId !== rightBasket) {
+        soundWrong()
+        const wrong = byOption(baskets, basketId)
+        wrong?.classList.remove('wrong'); void wrong?.offsetWidth; wrong?.classList.add('wrong')
+        coach.say(item.feedback || t.sortWrong(item.text), 'thinking', 'wiggle')
+        if (needsHelp()) { coach.say(t.helpSort, 'happy', 'hop'); glow(byOption(baskets, rightBasket)) }
+        return
+      }
+      soundRight()
+      const chip = document.createElement('span')
+      chip.textContent = item.icon ?? item.text
+      chip.title = item.text
+      contents.get(basketId)!.append(chip)
+      index++
+      if (index === queue.length) { coach.say(t.correctAnswer, 'cheer', 'hop'); await delay(650); await finish() }
+      else { coach.say(t.sortGood, 'happy', 'hop'); show() }
+    }
+    for (const id of shuffled(basketIds)) {
+      const basket = byId.get(id)!
+      const element = button(basket.text, () => drop(id))
+      element.className = 'basket'
+      decorate(element, basket)
+      const inside = document.createElement('span')
+      inside.className = 'basket-items'
+      inside.setAttribute('aria-hidden', 'true')
+      element.append(inside)
+      contents.set(id, inside)
+      baskets.append(element)
+    }
+    show()
+  } else if (activity.type === 'memory') {
+    // Memory: face-down cards; turn two over, they stay up if they belong together.
+    const pairs = (Array.isArray(activity.correct) ? activity.correct : []).map(pair => pair.split(':'))
+    const byId = new Map(options.map(option => [option.id, option]))
+    if (pairs.length < 2 || pairs.some(pair => pair.length !== 2 || !byId.has(pair[0]) || !byId.has(pair[1]))) {
+      screen(t.needsReview)
+      button(t.goBack, () => activities(avatar))
+      return
+    }
+    const partner = new Map<string, string>()
+    for (const [a, b] of pairs) { partner.set(a, b); partner.set(b, a) }
+    coach.say(t.memoryHelp, 'thinking')
+    const board = document.createElement('div')
+    board.className = 'memory'
+    lesson.append(hint, board)
+    let open: HTMLButtonElement[] = []
+    let found = 0
+    let misses = 0
+    let busy = false
+    for (const option of shuffled(options.filter(option => partner.has(option.id)))) {
+      const card = document.createElement('button')
+      card.className = 'memory-card'
+      card.dataset.option = option.id
+      card.setAttribute('aria-label', t.memoryCard)
+      const back = document.createElement('span')
+      back.className = 'memory-back'
+      back.setAttribute('aria-hidden', 'true')
+      back.textContent = '?'
+      const face = document.createElement('span')
+      face.className = 'memory-face'
+      if (option.icon) {
+        const art = document.createElement('span')
+        art.className = 'memory-icon'
+        art.textContent = option.icon
+        face.append(art)
+      }
+      face.append(option.text)
+      card.append(back, face)
+      card.onclick = async () => {
+        if (busy || ended || card.classList.contains('open')) return
+        soundTap()
+        card.classList.add('open')
+        card.setAttribute('aria-label', option.text)
+        open.push(card)
+        if (open.length < 2) return
+        const [first, second] = open
+        open = []
+        if (partner.get(first.dataset.option!) === second.dataset.option) {
+          const color = 'pair-' + (found % 4)
+          first.classList.add('matched', color); second.classList.add('matched', color)
+          first.disabled = second.disabled = true
+          found++
+          soundRight()
+          if (found === pairs.length) {
+            // Memory is about remembering: many misses still solve it, but count as «with help».
+            mistakes = misses > pairs.length ? 1 : 0
+            coach.say(t.correctAnswer, 'cheer', 'hop'); await delay(800); await finish()
+          } else coach.say(t.pairsGood, 'happy', 'hop')
+          return
+        }
+        misses++
+        busy = true
+        soundWrong()
+        coach.say(t.memoryMiss, 'thinking', 'wiggle')
+        await delay(1000)
+        // Memory forgives some misses (it is about remembering), but not endlessly: too many ends it as unsolved.
+        // Documented exception to the three-tries rule: the limit is pairs*2+2 misses, and a solved game with many misses
+        // is saved as attempts=2 («with help»), not as the real number of misses.
+        if (misses >= pairs.length * 2 + 2) { mistakes = MAX_MISTAKES; await fail(); return }
+        for (const turned of [first, second]) { turned.classList.remove('open'); turned.setAttribute('aria-label', t.memoryCard) }
+        busy = false
+        if (misses % 4 === 0) {
+          coach.say(t.memoryHint, 'happy', 'hop')
+          board.classList.add('peek')
+          await delay(1400)
+          board.classList.remove('peek')
+        }
+      }
+      board.append(card)
+    }
+  } else if (activity.type === 'truefalse') {
+    // True or false? One statement at a time; a wrong answer explains why. Three mistakes: not solved.
+    const truths = new Set(Array.isArray(activity.correct) ? activity.correct : [])
+    const statements = shuffled(options)
+    coach.say(t.tfHelp, 'thinking')
+    const counter = document.createElement('p')
+    counter.className = 'tf-counter'
+    const card = document.createElement('div')
+    card.className = 'tf-card'
+    const row = document.createElement('div')
+    row.className = 'tf-buttons'
+    lesson.append(hint, counter, card, row)
+    let index = 0
+    const show = () => {
+      counter.textContent = t.tfCount(index + 1, statements.length)
+      card.textContent = statements[index].text
+      if (statements[index].icon) {
+        const art = document.createElement('span')
+        art.className = 'option-icon'
+        art.setAttribute('aria-hidden', 'true')
+        art.textContent = statements[index].icon!
+        card.prepend(art)
+      }
+      card.classList.remove('pop'); void card.offsetWidth; card.classList.add('pop')
+    }
+    const answer = async (value: boolean) => {
+      if (ended || yes.disabled) return
+      yes.disabled = no.disabled = true
+      const statement = statements[index]
+      const isTrue = truths.has(statement.id)
+      if (value === isTrue) {
+        soundRight()
+        card.classList.add('right')
+        coach.say(isTrue ? t.tfRightTrue : t.tfRightFalse, 'cheer', 'hop')
+        await delay(900)
+      } else {
+        mistakes++
+        soundWrong()
+        card.classList.add('wrong')
+        coach.say((isTrue ? t.tfWasTrue : t.tfWasFalse) + (statement.feedback ? ' ' + statement.feedback : ''), 'thinking', 'wiggle')
+        await delay(2600)
+        // The third mistake ends the activity right away (no more statements).
+        if (mistakes >= MAX_MISTAKES) { await fail(); return }
+      }
+      card.classList.remove('right', 'wrong')
+      index++
+      if (index < statements.length) { yes.disabled = no.disabled = false; show(); return }
+      if (mistakes >= MAX_MISTAKES) await fail()
+      else await finish()
+    }
+    const yes = button(t.tfTrue, () => answer(true))
+    yes.className = 'tf-true'
+    const no = button(t.tfFalse, () => answer(false))
+    no.className = 'tf-false'
+    row.append(yes, no)
+    show()
   } else if (isPlate(activity)) {
     // "Fill the plate": every correct option must be collected; wrong ones bounce back.
     const needed = new Set(activity.correct as string[])
@@ -699,22 +1051,57 @@ async function complete(avatar: Avatar, activity: Activity, fresh = false) {
   }
   const items = pack.modules.flatMap(module => module.activities).filter(playable)
   const done = await completedIds(avatar)
+  const failed = await failedIds(avatar)
   lesson.append(seals(items.filter(item => done.has(item.id)).length, items.length))
-  const next = items.find(item => !done.has(item.id))
+  const next = nextStation(items.filter(item => item !== activity), done, failed)
   if (next) button(t.nextActivity, () => play(avatar, next))
   const all = button(t.allActivities, () => activities(avatar))
   if (next) all.classList.add('secondary')
   button(t.playAgain, () => play(avatar, activity, true)).classList.add('secondary')
 }
 
-/** Paints the landscape behind the screen (DESIGN.md §6). Pack screens add the visible "illustrative" note. */
-function showScene(scene: Scene, language?: string) {
+/** What the right answer was, in words, for the «almost» screen. */
+function solutionOf(activity: Activity): string {
+  const options = activity.options ?? []
+  const text = (id: string) => { const option = options.find(item => item.id === id); return option ? (option.icon ? option.icon + ' ' : '') + option.text : id }
+  const correct = Array.isArray(activity.correct) ? activity.correct : activity.correct ? [activity.correct] : []
+  if (activity.type === 'order') return correct.map(text).join(' → ')
+  if (activity.type === 'match' || activity.type === 'memory') return correct.map(pair => pair.split(':').map(text).join(' + ')).join('   ')
+  if (activity.type === 'sort') {
+    const baskets = [...new Set(correct.map(pair => pair.split(':')[1]))]
+    return baskets.map(basket => text(basket) + ': ' + correct.filter(pair => pair.endsWith(':' + basket)).map(pair => text(pair.split(':')[0])).join(', ')).join('   ')
+  }
+  if (activity.type === 'truefalse') return t.truths + ' ' + correct.map(text).join('; ')
+  return correct.map(text).join(', ')
+}
+
+/** Out of tries: no sticker, show the answer, move on. The station stays «to try again». */
+async function missed(avatar: Avatar, activity: Activity) {
+  screen(t.missedTitle, t.missedHelp)
+  lesson.className = 'celebrate missed'
+  lesson.append(guide(t.missedMochi, 'happy').box)
+  const answer = document.createElement('p')
+  answer.className = 'solution'
+  answer.textContent = solutionOf(activity)
+  lesson.append(answer, readingControl(t.missedMochi + ' ' + answer.textContent, pack.language))
+  const items = pack.modules.flatMap(module => module.activities).filter(playable)
+  const done = await completedIds(avatar)
+  const failed = await failedIds(avatar)
+  lesson.append(seals(items.filter(item => done.has(item.id)).length, items.length))
+  const next = nextStation(items.filter(item => item !== activity), done, failed)
+  if (next) button(t.nextActivity, () => play(avatar, next))
+  button(t.tryItAgain, () => play(avatar, activity, true)).classList.add('secondary')
+  button(t.allActivities, () => activities(avatar)).classList.add('secondary')
+}
+
+/** Paints the landscape behind the screen (DESIGN.md §6). A real scene always carries a short visible "illustrative" note. */
+function showScene(scene: Scene, language = 'es') {
   const aside = document.querySelector<HTMLElement>('aside')!
+  aside.querySelector('.scene-notice')?.remove()
+  if (scene !== neutralScene) aside.prepend(sceneCaption(language))
   aside.style.backgroundColor = scene.cielo
   aside.style.backgroundImage = 'url("' + sceneImage(scene) + '")'
   document.body.dataset.scene = scene.id
-  aside.querySelector('.scene-notice')?.remove()
-  if (language) aside.append(sceneCaption(language))
 }
 
 function teacherHeader(title: string, subtitle: string) {
@@ -752,9 +1139,71 @@ function teacherPanel() {
     metrics.append(card)
     return value
   }
-  const received = metric('Eventos recibidos')
-  const completed = metric('Actividades completadas')
+  const received = metric('Avisos recibidos de las tablets')
+  const completed = metric('Actividades terminadas')
   lesson.append(metrics)
+  const metricsHelp = document.createElement('p')
+  metricsHelp.className = 'step-help'
+  metricsHelp.textContent = 'Cada vez que un explorador termina una actividad (resuelta, leída o sin resolver tras tres intentos), su tablet guarda un aviso sin nombres y lo envía al volver la conexión. Abajo tienes el detalle de cada explorador.'
+  lesson.append(metricsHelp)
+  // Per-explorer results: what each pseudonymous explorer solved at first try, with help, or not yet.
+  const resultsTitle = document.createElement('h2')
+  resultsTitle.textContent = 'Resultados por explorador'
+  const resultsBox = document.createElement('div')
+  resultsBox.className = 'explorer-results'
+  lesson.append(resultsTitle, resultsBox)
+  async function showResults() {
+    try {
+      const explorers = await classResults()
+      resultsBox.replaceChildren()
+      if (!explorers.length) {
+        const empty = document.createElement('p')
+        empty.textContent = 'Todavía no ha llegado ningún resultado. Cuando las tablets envíen su progreso, aparecerá aquí cada explorador.'
+        resultsBox.append(empty)
+        return
+      }
+      for (const explorer of explorers) {
+        const avatar = avatars.find(item => item.id === explorer.avatarId)
+        const card = document.createElement('details')
+        card.className = 'explorer'
+        const summary = document.createElement('summary')
+        if (avatar) {
+          const portrait = new Image()
+          portrait.src = avatar.portrait
+          portrait.alt = ''
+          summary.append(portrait)
+        }
+        const name = document.createElement('strong')
+        name.textContent = texts.es.avatars[explorer.avatarId] ?? explorer.avatarId
+        const chips = document.createElement('span')
+        chips.className = 'result-chips'
+        const chip = (label: string, kind: string) => {
+          const item = document.createElement('span')
+          item.className = 'result-chip ' + kind
+          item.textContent = label
+          chips.append(item)
+        }
+        chip(explorer.firstTry + ' a la primera', 'first')
+        chip(explorer.withHelp + ' con ayuda', 'help')
+        chip(explorer.failed + ' sin resolver', 'failed')
+        summary.append(name, chips)
+        const list = document.createElement('ul')
+        for (const result of explorer.results) {
+          const line = document.createElement('li')
+          const state = result.result === 'incorrect' ? '✗ sin resolver (3 intentos)'
+            : result.result === 'completed' ? '📖 leída'
+              : result.attempts > 1 ? '✓ con ayuda (' + result.attempts + ' intentos)' : '✓ a la primera'
+          line.className = result.result === 'incorrect' ? 'failed' : result.attempts > 1 ? 'help' : 'first'
+          line.textContent = state + ': ' + result.activity + ' (' + result.packTitle + ')'
+          list.append(line)
+        }
+        card.append(summary, list)
+        resultsBox.append(card)
+      }
+    } catch {
+      resultsBox.textContent = 'No se pueden consultar los resultados ahora (sin conexión con el servidor).'
+    }
+  }
   const totals = document.createElement('p')
   const status = document.createElement('p')
   status.setAttribute('role', 'status')
@@ -764,6 +1213,7 @@ function teacherPanel() {
       received.textContent = String(data.eventsReceived)
       completed.textContent = String(data.activitiesCompleted)
       totals.textContent = 'Datos de la última consulta al servidor.'
+      await showResults()
     }
     catch { totals.textContent = 'No se pueden consultar los contadores ahora.' }
   }
@@ -791,7 +1241,7 @@ function teacherPanel() {
   pendingLine.className = 'pending-line'
   async function showPending() {
     const { total, pending } = await pendingCount()
-    pendingLine.textContent = 'En este dispositivo: ' + total + ' actividades completadas, ' + pending + ' pendientes de enviar.'
+    pendingLine.textContent = 'En este dispositivo: ' + total + ' actividades terminadas, ' + pending + ' pendientes de enviar.'
   }
   lesson.append(status, totals, pendingLine)
   void showPending()
@@ -887,31 +1337,39 @@ else if (technicalPreview) {
   showScene(neutralScene)
   choose()
 } else if (!new URLSearchParams(location.search).get('pack')) {
-  document.querySelector('.map-copy small')!.textContent = 'MOCHILA'
-  document.querySelector('.map-copy h2')!.textContent = 'Mis mochilas'
-  document.querySelector('.map-copy p')!.textContent = 'Aprender sin conexión'
+  const paintHome = () => {
+    document.documentElement.lang = t === texts.en ? 'en' : 'es'
+    document.querySelector('.map-copy small')!.textContent = 'MOCHILA'
+    document.querySelector('.map-copy h2')!.textContent = t.myBackpacks
+    document.querySelector('.map-copy p')!.textContent = t.learnOffline
+    document.querySelector('.edition')!.textContent = t.edition
+    document.querySelector('footer')!.textContent = t.footer
+    paintSoundToggle()
+    backpacks().catch(storageError)
+  }
   showScene(neutralScene)
-  backpacks().catch(storageError)
+  languageSwitch(paintHome)
+  paintHome()
 } else {
   const id = new URLSearchParams(location.search).get('pack')!
   // Neutral header and landscape until the package says where it belongs.
-  document.querySelector('.map-copy h2')!.textContent = 'Tu mochila'
-  document.querySelector('.map-copy p')!.textContent = 'Aprender sin conexión'
+  document.querySelector('.map-copy h2')!.textContent = t.yourBackpack
+  document.querySelector('.map-copy p')!.textContent = t.learnOffline
   showScene(neutralScene)
-  screen('Buscando material de clase…')
+  screen(t.searching)
   database.then(db => loadPack(db, id)).then(downloaded => {
     if (!downloaded) {
-      screen('No hay material aprobado para este paquete.')
+      screen(t.noMaterial)
       const home = document.createElement('a')
       home.className = 'button-link'
       home.href = '/'
-      home.textContent = '← Mis mochilas'
+      home.textContent = t.backpacks
       return lesson.append(home)
     }
     document.title = 'MOCHILA — ' + downloaded.title
     pack = downloaded
     document.documentElement.lang = pack.language
-    if (pack.language === 'en') t = texts.en
+    t = pack.language === 'en' ? texts.en : texts.es
     paintSoundToggle()
     document.querySelector('.edition')!.textContent = t.edition
     document.querySelector('.map-copy small')!.textContent = t.expedition
@@ -921,12 +1379,12 @@ else if (technicalPreview) {
     showScene(sceneFor(pack.context), pack.language)
     choose()
   }).catch(error => {
-    screen('Paquete no disponible', error instanceof Error ? error.message : '')
-    button('Volver a intentar', () => location.reload())
+    screen(t.unavailable, error instanceof Error && /Conéctate/.test(error.message) ? t.connectFirst : '')
+    button(t.retry, () => location.reload())
     const home = document.createElement('a')
     home.className = 'button-link secondary-link'
     home.href = '/'
-    home.textContent = '← Mis mochilas'
+    home.textContent = t.backpacks
     lesson.append(home)
   })
 }

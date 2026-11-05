@@ -68,7 +68,21 @@ function semanticDetails(pack: unknown): string[] {
       const where = `/modules/${moduleIndex}/activities/${activityIndex}/correct`;
       if (new Set(ids).size !== ids.length) {
         details.push(`/modules/${moduleIndex}/activities/${activityIndex}/options: hay opciones con el mismo id`);
-      } else if (activity.type === "match") {
+      } else if (activity.type === "sort") {
+        // sort: "itemId:basketId". Baskets are the options that only appear on the right.
+        const pairs = correct.map((pair) => String(pair).split(":"));
+        const items = pairs.map((pair) => pair[0]);
+        const baskets = new Set(pairs.map((pair) => pair[1]));
+        const unused = ids.filter((id) => !items.includes(id as string) && !baskets.has(id as string));
+        if (
+          pairs.some((pair) => pair.length !== 2 || pair.some((id) => !ids.includes(id))) ||
+          new Set(items).size !== items.length ||
+          items.some((id) => baskets.has(id)) ||
+          baskets.size < 2 || baskets.size > 3 || items.length < 3 || unused.length > 0
+        ) {
+          details.push(`${where}: clasificar necesita 2 o 3 cestas y cada elemento una sola vez («idElemento:idCesta»)`);
+        }
+      } else if (activity.type === "match" || activity.type === "memory") {
         // match pairs are "idA:idB" (ids cannot contain ":"): both sides must be existing options.
         const pairs = correct.map((pair) => String(pair).split(":"));
         const pairedIds = pairs.flat();
@@ -192,6 +206,7 @@ app.get("/api/prompt", async (req: Request, res: Response) => {
     foods: query.getAll("foods"),
     topic: query.get("topic") ?? undefined,
     communityType: query.get("communityType") ?? undefined,
+    ageRange: query.get("ageRange") ?? undefined,
     resources: query.getAll("resources"),
   });
   if (!context) {
@@ -466,6 +481,51 @@ app.get("/api/progress/:classCode", async (req: Request, res: Response) => {
     ({ event }) => event.result === "correct" || event.result === "completed",
   ).length;
   res.status(200).json({ classCode, eventsReceived: events.length, activitiesCompleted });
+});
+
+// Per-explorer results for the teacher (pseudonymous avatars only, no personal data). For each
+// explorer, package and activity only the latest event counts: a failed try later solved shows as solved.
+app.get("/api/progress/:classCode/detail", async (req: Request, res: Response) => {
+  const classCode = String(req.params.classCode);
+  if (!validateClassCode(classCode)) {
+    res.status(400).json({ error: "invalid_class_code" });
+    return;
+  }
+  const state = await snapshot();
+  const latest = new Map<string, ProgressEvent>();
+  for (const { classCode: code, event } of state.events.values()) {
+    if (code !== classCode) continue;
+    const key = `${event.avatarId}|${event.packId}|${event.activityId}`;
+    const previous = latest.get(key);
+    if (!previous || previous.ts < event.ts) latest.set(key, event);
+  }
+  const titleOf = (packId: string) => {
+    const pack = state.packs.get(packId);
+    return pack && typeof pack.title === "string" ? pack.title : packId;
+  };
+  const promptOf = (packId: string, activityId: string) => {
+    const pack = state.packs.get(packId) as { modules?: Array<{ activities?: Array<{ id?: string; prompt?: string }> }> } | undefined;
+    const activity = pack?.modules?.flatMap((module) => module.activities ?? []).find((item) => item.id === activityId);
+    const prompt = typeof activity?.prompt === "string" ? activity.prompt : activityId;
+    return prompt.length > 70 ? prompt.slice(0, 70).replace(/\s+\S*$/, "") + "…" : prompt;
+  };
+  const byAvatar = new Map<string, ProgressEvent[]>();
+  for (const event of latest.values()) byAvatar.set(event.avatarId, [...(byAvatar.get(event.avatarId) ?? []), event]);
+  const explorers = [...byAvatar.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([avatarId, events]) => {
+    const solved = events.filter((event) => event.result === "correct");
+    return {
+      avatarId,
+      done: events.filter((event) => event.result === "correct" || event.result === "completed").length,
+      firstTry: solved.filter((event) => (event.attempts ?? 1) === 1).length,
+      withHelp: solved.filter((event) => (event.attempts ?? 1) > 1).length,
+      failed: events.filter((event) => event.result === "incorrect").length,
+      results: events.sort((a, b) => a.ts.localeCompare(b.ts)).map((event) => ({
+        packId: event.packId, packTitle: titleOf(event.packId), activityId: event.activityId,
+        activity: promptOf(event.packId, event.activityId), result: event.result, attempts: event.attempts ?? 1, ts: event.ts,
+      })),
+    };
+  });
+  res.status(200).json({ classCode, explorers });
 });
 
 app.use((_req, res) => {

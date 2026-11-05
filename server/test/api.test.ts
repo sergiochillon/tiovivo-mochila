@@ -160,7 +160,7 @@ after(async () => {
 
 test("validación de esquema y semántica match/order", async (t) => {
   const invalidSchema = draftPack("schema-invalido");
-  invalidSchema.context.ageRange = "5-8" as "6-10";
+  invalidSchema.context.ageRange = "4-7" as "6-10";
   const schemaReply = await jsonRequest("/api/generate", { pack: invalidSchema });
   assert.equal(schemaReply.status, 422);
   assert.equal(schemaReply.body.error, "validation_failed");
@@ -268,6 +268,51 @@ test("la generación con IA deja evidencia y el sello conserva modelo y fecha", 
   const sealed = await jsonRequest(`/api/packs/${packId}`);
   assert.match(sealed.body.review.notes, /Propuesta generada con IA \(modelo-de-prueba, \d{4}-\d{2}-\d{2}\) y revisada por una persona\./);
   assert.doesNotMatch(sealed.body.review.notes, /Pendiente de revisión/);
+});
+
+test("juegos nuevos: clasificar, memoria y verdad o mentira se validan", async () => {
+  const pack = draftPack("juegos-nuevos");
+  pack.context.ageRange = "9-12" as "6-10";
+  const games = [
+    { id: "cestas", type: "sort", prompt: "Clasifica.", options: [
+      { id: "antes", text: "Antes de comer" }, { id: "despues", text: "Después de comer" },
+      { id: "lavar", text: "Lavarse las manos" }, { id: "poner-mesa", text: "Poner la mesa" }, { id: "recoger", text: "Recoger el plato" }],
+      correct: ["lavar:antes", "poner-mesa:antes", "recoger:despues"], feedback: "¡Bien!", safetyTag: "hygiene", durationMin: 2 },
+    { id: "memoria", type: "memory", prompt: "Encuentra las parejas.", options: [
+      { id: "jabon", text: "Jabón" }, { id: "manos", text: "Manos" }, { id: "plato", text: "Plato" }, { id: "comida", text: "Comida" }],
+      correct: ["jabon:manos", "plato:comida"], feedback: "¡Bien!", safetyTag: "none", durationMin: 2 },
+    { id: "verdad", type: "truefalse", prompt: "¿Verdad o mentira?", options: [
+      { id: "v1", text: "El agua limpia ayuda." }, { id: "f1", text: "Las manos sucias no importan.", feedback: "Sí importan." }],
+      correct: ["v1"], feedback: "¡Bien!", safetyTag: "hygiene", durationMin: 2 },
+  ];
+  (pack.modules[0].activities as unknown[]).push(...games);
+  const ok = await jsonRequest("/api/generate", { pack });
+  assert.equal(ok.status, 200, JSON.stringify(ok.body));
+
+  const bad = structuredClone(pack);
+  bad.id = "cestas-malas";
+  (bad.modules[0].activities as Array<{ id: string; correct?: string[] }>).find((a) => a.id === "cestas")!.correct = ["lavar:antes", "lavar:despues", "recoger:despues"];
+  const refused = await jsonRequest("/api/generate", { pack: bad });
+  assert.equal(refused.status, 422);
+  assert.match(JSON.stringify(refused.body.details), /clasificar necesita/);
+});
+
+test("el panel recibe los resultados por explorador (último intento, a la primera / con ayuda / fallada)", async () => {
+  const base = { packId: "paquete-valido", avatarId: "zorro", ts: "2026-11-05T10:00:00.000Z" };
+  const events = [
+    { ...base, eventId: "det-0001-aaaa", activityId: "parejas", result: "correct", attempts: 1 },
+    { ...base, eventId: "det-0002-aaaa", activityId: "orden", result: "incorrect", attempts: 3 },
+    { ...base, eventId: "det-0003-aaaa", activityId: "orden", result: "correct", attempts: 2, ts: "2026-11-05T10:05:00.000Z" },
+    { ...base, eventId: "det-0004-aaaa", avatarId: "rana", activityId: "parejas", result: "incorrect", attempts: 3 },
+  ];
+  assert.equal((await jsonRequest("/api/sync", { classCode: "DET-01", events })).status, 200);
+  const detail = await jsonRequest("/api/progress/DET-01/detail");
+  assert.equal(detail.status, 200);
+  const zorro = detail.body.explorers.find((item: { avatarId: string }) => item.avatarId === "zorro");
+  assert.deepEqual([zorro.done, zorro.firstTry, zorro.withHelp, zorro.failed], [2, 1, 1, 0]);
+  const rana = detail.body.explorers.find((item: { avatarId: string }) => item.avatarId === "rana");
+  assert.deepEqual([rana.done, rana.failed], [0, 1]);
+  assert.equal(zorro.results[0].packTitle, "Paquete de prueba");
 });
 
 test("un borrador pegado no puede falsificar la procedencia de la IA en el sello", async () => {

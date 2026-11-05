@@ -15,6 +15,7 @@ export type ProgressEvent = {
   result: "completed" | "correct" | "incorrect" | "skipped";
   ts: string;
   avatarId: string;
+  attempts?: number;
   type?: "activity_completed";
   classCode?: string;
 };
