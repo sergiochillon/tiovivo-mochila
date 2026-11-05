@@ -102,13 +102,19 @@ export const REVIEW_CHECKLIST = [
   "sin-datos-y-seguro",
 ] as const;
 
+// «Generado con IA (modelo, fecha)»: written ONLY by /api/generate/ai, right after a real Gemini answer
+// (and logged in generations.jsonl). Text that looks like it but comes from a client is neutralised.
+const AI_PROVENANCE = /Generado con IA \(([^)]{1,80})\)/;
+const AI_PROVENANCE_ANY = /Generado con IA \([^)]*\)/gi;
+
 function approvalNotes(reviewer: string, reviewedAt: string, previous: unknown): string {
   const draft = typeof previous === "string" ? previous : "";
   const fromAi = /\b(IA|AI)\b/.test(draft);
-  // «Generado con IA (modelo, fecha)» survives the seal as provenance; the rest of the draft wording does not.
-  const provenance = draft.match(/Generado con IA \(([^)]{1,80})\)/)?.[1];
+  // The provenance survives the seal; the rest of the draft wording does not.
+  const provenance = draft.match(AI_PROVENANCE)?.[1];
   const observations = draft
-    .replace(/(Generado con IA( \([^)]*\))?|Propuesta asistida con IA externa|Generated with AI)\.?/gi, "")
+    .replace(AI_PROVENANCE_ANY, "")
+    .replace(/(Generado con IA|Propuesta asistida con IA externa|Generated with AI)\.?/gi, "")
     .replace(/(Pendiente|Pending)[^.]*\.?/gi, "")
     .replace(/\s+/g, " ")
     .trim();
@@ -148,6 +154,10 @@ app.post("/api/generate", async (req: Request, res: Response) => {
   pack.review = { ...pack.review, status: "draft" };
   delete pack.review.reviewedBy;
   delete pack.review.reviewedAt;
+  // A pasted draft cannot claim a verified AI origin: only /api/generate/ai may write that provenance.
+  if (typeof pack.review.notes === "string") {
+    pack.review.notes = pack.review.notes.replace(AI_PROVENANCE_ANY, "IA externa (origen sin verificar)");
+  }
 
   const details = packValidationDetails(pack);
   if (details.length > 0) {

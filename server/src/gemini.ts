@@ -26,7 +26,9 @@ export class GeminiBusyError extends Error {
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function callModel(model: string, apiKey: string, prompt: string): Promise<Response> {
-  const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`;
+  // GEMINI_BASE_URL only exists so the tests can use a fake Gemini; in production it is always Google's.
+  const base = process.env.GEMINI_BASE_URL?.trim() || "https://generativelanguage.googleapis.com/v1beta";
+  const endpoint = `${base}/models/${encodeURIComponent(model)}:generateContent`;
   return fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json", "x-goog-api-key": apiKey },
