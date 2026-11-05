@@ -1,8 +1,8 @@
 /* MOCHILA · sistema visual «el álbum de la mochila». Decisiones en /DESIGN.md. */
 :root{
   --cielo:#DFF3FF;--cielo-2:#BFE3FA;--tinta:#1C2B4B;--tinta-suave:#4A5878;--papel:#fff;
-  --mochi:#FFC531;--mochi-oscuro:#C98A00;--verde:#17A06B;--verde-oscuro:#0E7A50;
-  --intento:#F28C38;--intento-fondo:#FFF0E2;--baya:#B5367D;--lago:#2F7FD8;
+  --mochi:#FFC531;--mochi-oscuro:#C98A00;--verde:#108556;--verde-oscuro:#0A5E3D;
+  --intento:#F28C38;--intento-fondo:#FFF0E2;--baya:#B5367D;--lago:#2569B8;
   --titulo:"Baloo 2","Avenir Next",system-ui,sans-serif;--texto:"Atkinson Hyperlegible","Avenir Next",system-ui,sans-serif;
   --radio:24px;--pegatina:0 6px 0 rgba(28,43,75,.16);
   font:100%/1.5 var(--texto);color:var(--tinta);background:var(--cielo);font-synthesis:none
@@ -145,7 +145,7 @@ button.pair-card{width:100%;margin:0;min-height:72px;background:var(--papel);col
 button.pair-card.picked{border-color:var(--mochi-oscuro);box-shadow:0 0 0 5px var(--mochi),0 5px 0 var(--mochi-oscuro)}
 button.pair-card.wrong{animation:nudge .4s ease;border-color:var(--intento)}
 button.pair-done{opacity:1!important;color:#fff!important;border-color:#fff!important}
-.pair-0{background:var(--verde)!important;box-shadow:0 5px 0 var(--verde-oscuro)!important}.pair-1{background:var(--baya)!important;box-shadow:0 5px 0 #7d2152!important}.pair-2{background:var(--lago)!important;box-shadow:0 5px 0 #1d5aa0!important}.pair-3{background:var(--mochi)!important;color:var(--tinta)!important}
+.pair-0{background:var(--verde)!important;box-shadow:0 5px 0 var(--verde-oscuro)!important}.pair-1{background:var(--baya)!important;box-shadow:0 5px 0 #7d2152!important}.pair-2{background:var(--lago)!important;box-shadow:0 5px 0 #1a4c8a!important}.pair-3{background:var(--mochi)!important;color:var(--tinta)!important}
 
 /* Arma el plato */
 .plate{display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:8px;width:min(320px,78vw);aspect-ratio:1;margin:6px auto 16px;padding:46px;border-radius:50%;background:radial-gradient(circle,#fff 0 55%,#EEF6FB 56% 64%,#fff 65%);border:5px solid #fff;box-shadow:0 0 0 4px var(--cielo-2),0 10px 0 rgba(28,43,75,.12)}

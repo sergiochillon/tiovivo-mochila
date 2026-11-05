@@ -86,6 +86,7 @@ const texts = {
     activities: 'Actividades', goingWith: (name: string) => 'Vas con ' + name + '. Toca una actividad para empezar.',
     start: 'Empezar', done: 'Completada', minutes: 'min', changeAvatar: 'Cambiar de explorador',
     back: '← Actividades', continue: 'Continuar', needsReview: 'Esta actividad necesita revisión.', goBack: 'Volver',
+    soundOff: 'Silenciar sonidos', soundOn: 'Activar sonidos',
     yourOrder: 'Tu orden', yourPlate: 'Tu plato', pairFound: 'pareja encontrada', firstStep: '¿Cuál es el primer paso?', wrongStep: 'Ese no va ahora. Prueba otro paso.',
     nextStep: '¡Bien! ¿Cuál va después?', tryAgain: 'Puedes volver a elegir.',
     wellDone: (name: string) => '¡Buen trabajo, ' + name + '!', seal: 'Pegatina de la estación',
@@ -110,6 +111,7 @@ const texts = {
     activities: 'Activities', goingWith: (name: string) => 'You are with ' + name + '. Tap an activity to start.',
     start: 'Start', done: 'Done', minutes: 'min', changeAvatar: 'Change explorer',
     back: '← Activities', continue: 'Continue', needsReview: 'This activity needs review.', goBack: 'Back',
+    soundOff: 'Mute sounds', soundOn: 'Turn sounds on',
     yourOrder: 'Your order', yourPlate: 'Your plate', pairFound: 'match found', firstStep: 'What is the first step?', wrongStep: 'Not this one yet. Try another step.',
     nextStep: 'Good! What comes next?', tryAgain: 'You can choose again.',
     wellDone: (name: string) => 'Well done, ' + name + '!', seal: 'Station sticker',
@@ -851,15 +853,17 @@ function teacherPanel() {
   void refresh()
 }
 
-// Sound switch in the header (children's screens only).
+// Sound switch in the header (children's screens only). Its label follows the package language.
+let paintSoundToggle = () => {}
 if (!['/docente', '/autoria'].includes(location.pathname)) {
   const toggle = document.createElement('button')
   toggle.type = 'button'
   toggle.className = 'sound-toggle'
   const paint = () => {
     toggle.textContent = isMuted() ? '🔇' : '🔊'
-    toggle.setAttribute('aria-label', isMuted() ? 'Activar sonidos' : 'Silenciar sonidos')
+    toggle.setAttribute('aria-label', isMuted() ? t.soundOn : t.soundOff)
   }
+  paintSoundToggle = paint
   toggle.onclick = () => { setMuted(!isMuted()); paint(); soundTap() }
   paint()
   document.querySelector('header')!.append(toggle)
@@ -908,6 +912,7 @@ else if (technicalPreview) {
     pack = downloaded
     document.documentElement.lang = pack.language
     if (pack.language === 'en') t = texts.en
+    paintSoundToggle()
     document.querySelector('.edition')!.textContent = t.edition
     document.querySelector('.map-copy small')!.textContent = t.expedition
     document.querySelector('footer')!.textContent = t.footer

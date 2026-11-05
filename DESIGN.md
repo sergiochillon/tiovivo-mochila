@@ -23,11 +23,11 @@ Lo que evitamos a propósito (son los rasgos del diseño genérico generado por 
 | `--papel` | `#FFFFFF` | Tarjetas y pegatinas |
 | `--mochi` | `#FFC531` | Mochi, acentos, progreso |
 | `--mochi-oscuro` | `#C98A00` | Bordes y sombras del amarillo |
-| `--verde` | `#17A06B` | Acción principal y aciertos |
-| `--verde-oscuro` | `#0E7A50` | Sombra de botones verdes |
+| `--verde` | `#108556` | Acción principal y aciertos (blanco encima: 4,65:1, AA en texto normal) |
+| `--verde-oscuro` | `#0A5E3D` | Sombra de botones verdes |
 | `--intento` | `#F28C38` | «Inténtalo otra vez» (nunca rojo de castigo) |
 | `--baya` | `#B5367D` | Pegatinas, logros, pareja 2 |
-| `--lago` | `#2F7FD8` | Pareja 3, enlaces |
+| `--lago` | `#2569B8` | Pareja 3, enlaces (blanco encima: 5,54:1) |
 
 Escenarios (sección 6) añaden su propio par de colores de suelo y cielo.
 
