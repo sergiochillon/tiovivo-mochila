@@ -1,7 +1,7 @@
 # ADR-001 · Frontend: Vite + TypeScript + vite-plugin-pwa
 
 - **Fecha:** 2026-11-04
-- **Estado:** propuesta (pendiente de que Rodrigo confirme React o vanilla)
+- **Estado:** propuesta. Aplicada en la práctica: `app/` usa Vite + TypeScript vanilla + `vite-plugin-pwa` en `main`. Pasa a «aceptada» cuando Rodrigo lo confirme por escrito (pendiente a 5 nov).
 - **Propone:** Sergio, a partir de la propuesta de Rodrigo (JS modular + service worker propio)
 - **Aprueba:** Sergio (integrador) + Rodrigo (dueño de `app/`)
 

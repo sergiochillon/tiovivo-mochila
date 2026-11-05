@@ -117,3 +117,18 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 - **Resultado:** correcto para el alcance probado: la PWA instalada abre desde el icono y vuelve a mostrar su pantalla inicial en modo avión.
 - **Límite:** esta prueba acredita instalación y arranque offline; no prueba completar una actividad nueva ni sincronizar progreso. Esas acciones constan en la prueba Andes anterior.
 - **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026, 18:10.
+
+## 2026-11-04 — Voz local offline en Andes y Uganda
+
+- **Ejecutó:** Rodrigo.
+- **Registro preparado por:** Carlos, a partir del informe de Rodrigo.
+- **Dispositivo:** iPhone 17 con iOS 27.2.
+- **Navegador:** Safari.
+- **Versión probada:** commit `cee26cb` (PR #34).
+- **Paquetes:** `alimentacion-andes-es` y `food-northern-uganda-en`, ambos con revisión pedagógica aprobada; la validación cultural local sigue pendiente.
+- **Conexión:** cargó cada paquete con Wi-Fi; después activó modo avión y apagó Wi-Fi antes de reproducir la historia.
+- **Acciones y resultado observado:** pulsó «Escuchar» en Andes y «Listen» en Uganda. Oyó la narración en español e inglés, respectivamente, sin conexión.
+- **Resultado:** correcto para el alcance probado: la primera historia de cada paquete reproduce voz en el idioma del paquete sin red.
+- **Incidencia/condición para la demo:** con el modo silencio del iPhone activado (campana tachada), el botón cambiaba a «Detener», pero no se oía voz. Rodrigo recomienda dejar el modo silencio desactivado durante la demo.
+- **Límite:** solo se probó la primera historia de cada paquete. La validación cultural local y las pruebas con niños siguen pendientes.
+- **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.

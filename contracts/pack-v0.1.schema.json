@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/sergiochillon/tiovivo-mochila/contracts/pack-v0.1.schema.json",
   "title": "MOCHILA Pack v0.1",
-  "description": "BORRADOR v0.1 (pendiente de aprobación de Rodrigo, Alejandro y Carlos; congelación prevista M1, 14:30 del 4 nov). Paquete de contenido: se genera con conexión, se revisa por una persona y se reproduce sin conexión. Sin datos personales. Regla: los campos se AÑADEN, no se renombran ni se quitan sin Issue + aviso a las áreas afectadas.",
+  "description": "Esquema v0.1 (en uso desde el hito M1). Paquete de contenido: se genera con conexión, se revisa por una persona y se reproduce sin conexión. Sin datos personales. Regla: los campos se AÑADEN, no se renombran ni se quitan sin Issue + aviso a las áreas afectadas.",
   "type": "object",
   "additionalProperties": false,
   "required": ["packVersion", "id", "title", "language", "context", "review", "modules"],
@@ -58,7 +58,7 @@
       "required": ["id", "topic", "title", "activities"],
       "properties": {
         "id": { "$ref": "#/$defs/slug" },
-        "topic": { "enum": ["food", "help", "emotions"] },
+        "topic": { "enum": ["food", "help", "emotions", "hygiene", "coexistence", "safety", "autonomy"] },
         "title": { "type": "string", "minLength": 1, "maxLength": 120 },
         "activities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/Activity" } }
       }

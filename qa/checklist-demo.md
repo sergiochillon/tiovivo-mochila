@@ -9,6 +9,7 @@ Usar esta lista en el ensayo final con la misma versión y dispositivos que se p
 - [ ] Con Wi-Fi activo, abrir `/alumno` y confirmar que aparecen los paquetes aprobados Andes (español) y Uganda (inglés).
 - [ ] Abrir `/docente` y comprobar que `DEMO-01` comienza en 0 eventos y 0 actividades para este ensayo.
 - [ ] En iPhone, abrir MOCHILA en Safari y añadirla a la pantalla de inicio. Abrirla desde el icono y confirmar que no aparece la barra de direcciones.
+- [ ] Desactivar el modo silencio del iPhone y comprobar que se oye la narración; con la campana tachada el botón podía cambiar a «Detener» sin audio.
 
 ## Recorrido offline en iPhone
 
@@ -25,6 +26,7 @@ Usar esta lista en el ensayo final con la misma versión y dispositivos que se p
 - Rodrigo informó que en iPhone 17 con iOS 27.2 y Safari instaló MOCHILA en la pantalla de inicio, la abrió desde el icono y la reabrió en modo avión. El selector de avatares volvió a cargar (commit `0900e78`).
 - En ese mismo commit y dispositivo, informó que completó tres actividades Andes en modo avión y sincronizó 3 eventos/3 actividades desde `/docente`.
 - Sergio informó que en un MacBook Air el ensayo integrado cargó Andes y Uganda, conservó progreso cuando la API estaba parada y sincronizó dos eventos al volver la API (commit `e39c184`). Ese ensayo no fue modo avión real.
+- Rodrigo informó que en iPhone 17/Safari, commit `cee26cb`, oyó la primera historia de Andes en español y de Uganda en inglés en modo avión. Con el modo silencio activado no se oyó la voz.
 - Los paquetes Andes y Uganda tienen revisión pedagógica aprobada; la validación cultural local sigue pendiente. No hay pruebas con niños registradas.
 - El paquete Altiplano es un contexto sintético generado con IA; no presentarlo como validado por una comunidad.
 

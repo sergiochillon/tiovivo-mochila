@@ -1,6 +1,14 @@
 # TECHNICAL_ARCHITECTURE — arquitectura propuesta
 
-Responsable: Sergio (integración). Es una **propuesta** para 2 jornadas con 5 personas. Nada está implementado. Cualquier cambio de arquitectura o de interfaces se propone por Issue/ADR y lo aprueba el responsable de integración **antes** de tocar código ajeno.
+Responsable: Sergio (integración). Fue una **propuesta** para 2 jornadas con 5 personas y hoy es en gran parte realidad (ver «Estado real a 5 nov»). Cualquier cambio de arquitectura o de interfaces se propone por Issue/ADR y lo aprueba el responsable de integración **antes** de tocar código ajeno.
+
+## Estado real a 5 nov (`main` en a044acb)
+
+- **Front (`app/`):** Vite + TypeScript **vanilla** (sin React) + `vite-plugin-pwa`; progreso en IndexedDB; `/alumno`, `/docente` y `/autoria`. Lo del sprint de calidad (PR 37) no está aún en `main`.
+- **Back (`server/`):** Node + Express + AJV; Gemini solo desde el servidor; sin chat para niños ni datos personales.
+- **Contrato:** `contracts/pack-v0.1.schema.json`.
+- **Pendiente (comprobado el 5 nov):** tests y CI; `storage.persist()`; sincronización automática al volver la red; el servidor no exige la lista de revisión ni la identidad del revisor; un 404 borra la copia local; evidencia guardada de la IA real. Sin verificar: tableta física y cuotas reales de Gemini.
+- Los apartados siguientes conservan el texto de planificación original; donde difiera de lo anterior, manda esta sección.
 
 Criterios de elección: velocidad de desarrollo, funcionar en Mac M1, facilidad de integración, un solo lenguaje en lo posible, cero coste. **No** se elige tecnología por moda.
 
