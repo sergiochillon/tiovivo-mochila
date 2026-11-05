@@ -69,3 +69,6 @@ se guardan en `server/.env` (ignorado por Git) y nunca se registran cuerpos de
 petición. Ninguna generación se aprueba automáticamente.
 
 `npm run typecheck` comprueba los tipos TypeScript sin iniciar el servidor.
+`npm test` ejecuta pruebas HTTP con `node:test`; cada ejecución inicia un
+servidor en un puerto libre y almacena sus datos en un directorio temporal que
+se elimina al terminar. No usa `server/data/store.json`.
