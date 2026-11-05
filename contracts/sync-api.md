@@ -37,6 +37,14 @@ Petición: `{ "packId": "food-andes-es-demo", "reviewer": "docente-demo" }`
 El servidor asigna la fecha; no acepta que el cliente selle `approved` por sí
 mismo. `404` si no existe, `409` si no está en estado revisable.
 
+## `GET /api/packs`
+
+Devuelve `{ "packs": [...] }` con todos los paquetes aprobados de la caché,
+ordenados por `id`. La lista contiene los paquetes completos conformes a
+pack-v0.1 para que el cliente pueda mostrar el catálogo y descargar el contenido
+sin conexión. Los borradores nunca se incluyen. Sin paquetes aprobados devuelve
+`200 OK` con `{ "packs": [] }`.
+
 ## `GET /api/packs/:id`
 
 Devuelve únicamente paquetes aprobados, desde la caché/almacenamiento local.

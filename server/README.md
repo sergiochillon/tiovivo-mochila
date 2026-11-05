@@ -54,7 +54,9 @@ servidor con el mismo valor.
 - `GET /api/drafts/:id`: recupera solo borradores para edición; paquetes
   aprobados o IDs inexistentes devuelven `404`.
 - `POST /api/review/approve`: registra revisor y fecha en el servidor.
-- `GET /api/packs/:id`: devuelve solo paquetes aprobados.
+- `GET /api/packs`: devuelve `{ packs: [...] }` con los paquetes aprobados,
+  ordenados por id; los borradores no se incluyen.
+- `GET /api/packs/:id`: devuelve un paquete aprobado concreto.
 - `POST /api/sync`: valida el lote completo, guarda de forma atómica e
   idempotente por `eventId`.
 - `GET /api/progress/:classCode`: devuelve contadores agregados sin avatares.
