@@ -79,7 +79,7 @@ const database = new Promise<IDBDatabase>((resolve, reject) => {
 
 const texts = {
   es: {
-    kinds: { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas' } as Record<string, string>,
+    kinds: { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas', plate: 'Llena el plato' } as Record<string, string>,
     avatars: { zorro: 'Zorro', colibri: 'Colibrí', llama: 'Llama', jirafa: 'Jirafa', tortuga: 'Tortuga', rana: 'Rana' } as Record<string, string>,
     edition: 'Atlas de aula', expedition: 'EXPEDICIÓN 01', footer: 'El progreso se guarda en este dispositivo.',
     who: '¿Qué explorador eliges hoy?', whoHelp: 'Cada explorador guarda sus propias pegatinas. Elige el tuyo.',
@@ -103,7 +103,7 @@ const texts = {
     helpOption: 'Te ayudo: ahora hay una opción menos. Mira bien las que quedan.', helpStep: 'Te ayudo: el paso que sigue brilla.', helpPlate: 'Te ayudo: mira lo que brilla.', helpPair: 'Te ayudo: su pareja brilla.'
   },
   en: {
-    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs' } as Record<string, string>,
+    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs', plate: 'Fill the plate' } as Record<string, string>,
     avatars: { zorro: 'Fox', colibri: 'Hummingbird', llama: 'Llama', jirafa: 'Giraffe', tortuga: 'Turtle', rana: 'Frog' } as Record<string, string>,
     edition: 'Class atlas', expedition: 'EXPEDITION 01', footer: 'Your progress is saved on this device.',
     who: 'Which explorer do you pick today?', whoHelp: 'Each explorer keeps their own stickers. Choose yours.',
@@ -145,6 +145,34 @@ const knownPacks = [
   { id: 'food-altiplano-es', title: 'Alimentos en el Altiplano', place: 'Altiplano, Bolivia (contexto sintético)', language: 'Español', note: 'Propuesta de IA revisada por el equipo' }
 ]
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+/** A new random order each time, so the answer is never in a position the child can memorise.
+ *  `predictable` rejects orders that would give the answer away (retries a few times). */
+function shuffled<T>(list: readonly T[], predictable: (order: T[]) => boolean = () => false): T[] {
+  let order = [...list]
+  for (let attempt = 0; attempt < 12; attempt++) {
+    order = [...list]
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[order[i], order[j]] = [order[j], order[i]]
+    }
+    if (!predictable(order)) break
+  }
+  return order
+}
+/** Option emoji (if any) before the text, hidden from screen readers; the id lets Mochi find the card. */
+function decorate(element: HTMLElement, option: { id: string; icon?: string }) {
+  element.dataset.option = option.id
+  if (option.icon) {
+    const icon = document.createElement('span')
+    icon.className = 'option-icon'
+    icon.setAttribute('aria-hidden', 'true')
+    icon.textContent = option.icon
+    element.prepend(icon)
+  }
+  return element
+}
+const byOption = (container: Element, id: string | undefined) =>
+  [...container.querySelectorAll<HTMLElement>('[data-option]')].find(item => item.dataset.option === id)
 
 // Static, trusted markup only: never pass package text to this helper.
 function icon(paths: string, className: string) {
@@ -317,7 +345,7 @@ async function activities(avatar: Avatar) {
     const text = document.createElement('span')
     text.className = 'activity-text'
     const label = document.createElement('small')
-    label.textContent = t.kinds[item.type] + (item === next ? ' · ' + t.next : '')
+    label.textContent = kindLabel(item)
     const title = document.createElement('span')
     title.className = 'activity-title'
     title.textContent = item.prompt
@@ -369,7 +397,7 @@ async function album(avatar: Avatar) {
     if (done.has(item.id)) art.innerHTML = sticker(stickerKind(item), index)
     else art.textContent = '?'
     const caption = document.createElement('figcaption')
-    caption.textContent = done.has(item.id) ? (t.kinds[item.type] ?? '') + ' ' + (index + 1) : t.emptySlot
+    caption.textContent = done.has(item.id) ? kindLabel(item) + ' ' + (index + 1) : t.emptySlot
     slot.append(art, caption)
     grid.append(slot)
   })
@@ -378,6 +406,8 @@ async function album(avatar: Avatar) {
 
 const stickerKind = (activity: Activity) =>
   Array.isArray(activity.correct) && activity.correct.length > 1 && activity.type !== 'order' && activity.type !== 'match' ? 'plate' : activity.type
+/** What the child sees as the game's name: a choice with several right answers is played as «fill the plate». */
+const kindLabel = (activity: Activity) => t.kinds[stickerKind(activity)] ?? t.kinds[activity.type] ?? ''
 
 async function play(avatar: Avatar, activity: Activity, replay = false) {
   const db = await database
@@ -388,7 +418,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     request.onerror = () => reject(request.error)
   })
   if (saved && !replay) return complete(avatar, activity)
-  screen(activity.prompt, t.kinds[activity.type] ?? '')
+  screen(activity.prompt, kindLabel(activity))
   lesson.className = 'activity-screen kind-' + activity.type
   lesson.append(readingControl(activity.audioText || activity.prompt, pack.language))
   if (!technicalPreview) {
@@ -437,8 +467,8 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     }
     let step = 0
     const ordered = sequence.map(id => options.find(option => option.id === id)!)
-    // Present the steps out of order, including when the package lists them in solution order.
-    const shown = [...ordered.slice(1), ordered[0]]
+    // A new order every time; the first step is never shown first.
+    const shown = shuffled(ordered, order => order[0] === ordered[0])
     const slots = document.createElement('ol')
     slots.className = 'slots'
     slots.setAttribute('aria-label', t.yourOrder)
@@ -462,19 +492,20 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
           soundWrong()
           if (needsHelp()) {
             coach.say(t.helpStep, 'happy', 'hop')
-            glow([...grid.querySelectorAll('button')].find(item => item.textContent === ordered[step].text))
+            glow(byOption(grid, ordered[step].id))
           }
           answer.classList.remove('wrong'); void answer.offsetWidth; answer.classList.add('wrong')
           return
         }
         soundRight()
-        slotText[step].textContent = option.text
+        slotText[step].textContent = (option.icon ? option.icon + ' ' : '') + option.text
         slotText[step].parentElement!.classList.add('filled')
         step++
         answer.disabled = true
         if (step === sequence.length) { await delay(450); await finish() }
         else coach.say(t.nextStep, 'happy', 'hop')
       })
+      decorate(answer, option)
       grid.append(answer)
     }
   } else if (activity.type === 'match') {
@@ -518,7 +549,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
           if (needsHelp()) {
             const partner = pairs.find(([a]) => a === selected!.id)?.[1]
             coach.say(t.helpPair, 'happy', 'hop')
-            glow([...right.querySelectorAll('button')].find(item => item.textContent === byId.get(partner ?? '')?.text))
+            glow(byOption(right, partner))
           }
           return
         }
@@ -532,12 +563,14 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         if (found === pairs.length) { coach.say(t.correctAnswer, 'cheer', 'hop'); await delay(600); await finish() }
         else coach.say(t.pairsGood, 'happy', 'hop')
       }
+      decorate(element, byId.get(id)!)
       column.append(element)
     }
     pairs.forEach(([a]) => card(a, left, 'left'))
-    // Right column never in the same order as the left one.
+    // Right column in a new order each time, with no card level with its partner.
     const rights = pairs.map(([, b]) => b)
-    ;[...rights.slice(1), rights[0]].forEach(b => card(b, right, 'right'))
+    shuffled(rights, order => rights.length > 1 && order.some((b, index) => b === rights[index]))
+      .forEach(b => card(b, right, 'right'))
   } else if (Array.isArray(activity.correct) && activity.correct.length > 1) {
     // "Fill the plate": every correct option must be collected; wrong ones bounce back.
     const needed = new Set(activity.correct)
@@ -548,7 +581,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     const tray = document.createElement('div')
     tray.className = 'tray'
     lesson.append(hint, plate, tray)
-    options.forEach(option => {
+    shuffled(options).forEach(option => {
       const token = button(option.text, async () => {
         if (!needed.has(option.id)) {
           token.classList.remove('wrong'); void token.offsetWidth; token.classList.add('wrong')
@@ -556,8 +589,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
           soundWrong()
           if (needsHelp()) {
             coach.say(t.helpPlate, 'happy', 'hop')
-            const remaining = options.find(item => needed.has(item.id))
-            glow([...tray.querySelectorAll('button')].find(item => item.textContent?.includes(remaining?.text ?? '\u0000')))
+            glow(byOption(tray, options.find(item => needed.has(item.id))?.id))
           }
           return
         }
@@ -570,22 +602,18 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         else coach.say(t.plateGood, 'happy', 'hop')
       })
       token.className = 'food-token'
-      if (option.icon) {
-        const icon = document.createElement('span')
-        icon.setAttribute('aria-hidden', 'true')
-        icon.textContent = option.icon
-        token.prepend(icon)
-      }
+      decorate(token, option)
       tray.append(token)
     })
   } else {
     const choices = document.createElement('div')
     choices.className = 'choices'
     lesson.append(choices, hint)
-    options.forEach((option, index) => {
+    // New order each time, so the right answer is not always «A».
+    const isRight = (id: string) => Array.isArray(activity.correct) ? activity.correct.includes(id) : activity.correct === id
+    shuffled(options).forEach((option, index) => {
       const answer = button(option.text, async () => {
-        const correct = activity.correct
-        if (Array.isArray(correct) ? correct.includes(option.id) : correct === option.id) {
+        if (isRight(option.id)) {
           answer.classList.add('right')
           coach.say(t.correctAnswer, 'cheer', 'hop')
           soundRight()
@@ -597,10 +625,8 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
           coach.say(option.feedback || t.tryAgain, 'thinking', 'wiggle')
           soundWrong()
           if (needsHelp()) {
-            const correct = activity.correct
-            const isRight = (id: string) => Array.isArray(correct) ? correct.includes(id) : correct === id
-            const wrongs = [...choices.querySelectorAll<HTMLButtonElement>('button')].filter((item, index) =>
-              !item.disabled && !isRight(options[index].id))
+            const wrongs = [...choices.querySelectorAll<HTMLButtonElement>('button')].filter(item =>
+              !item.disabled && !isRight(item.dataset.option ?? ''))
             const wrongOne = wrongs.find(item => item !== answer) ?? wrongs[0]
             if (wrongOne) { wrongOne.disabled = true; wrongOne.classList.add('removed'); coach.say(t.helpOption, 'happy', 'hop') }
           }
@@ -612,13 +638,8 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
       letter.setAttribute('aria-hidden', 'true')
       letter.textContent = 'ABCD'[index] ?? ''
       answer.prepend(letter)
+      decorate(answer, option)
       choices.append(answer)
-      if (option.icon) {
-        const icon = document.createElement('span')
-        icon.setAttribute('aria-hidden', 'true')
-        icon.textContent = option.icon
-        answer.prepend(icon)
-      }
     })
   }
   if (!hint.isConnected) lesson.append(hint)

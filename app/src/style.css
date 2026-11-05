@@ -281,3 +281,4 @@ button.removed{opacity:.25;text-decoration:line-through}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
 }
+.option-icon{font-size:1.4em;line-height:1;margin-right:.3em}
