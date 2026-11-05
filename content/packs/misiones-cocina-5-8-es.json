@@ -24,7 +24,7 @@
     "status": "approved",
     "reviewedBy": "Sergio Chillón",
     "reviewedAt": "2026-11-05T14:26:44+01:00",
-    "notes": "Revisión pedagógica aprobada por Sergio Chillón el 2026-11-05 tras jugar todas las actividades. Borrador preparado con ayuda de IA (Claude) y revisado por una persona. Sin actividades con safetyTag sensible. La validación cultural local sigue pendiente. No probado con niños."
+    "notes": "Revisión pedagógica aprobada por Sergio Chillón el 2026-11-05 tras jugar todas las actividades. Borrador preparado con ayuda de IA (Claude) y revisado por una persona. Sin actividades con safetyTag sensible. La validación cultural local sigue pendiente. No probado con niños. Textos sobre agua y jabón modificados el 2026-11-05 tras una observación de Carlos Herrero; pendientes de relectura humana."
   },
   "modules": [
     {
@@ -62,7 +62,7 @@
               "id": "fruta",
               "text": "La fruta se come sin lavar.",
               "icon": "🍎",
-              "feedback": "Mejor lavarla antes con agua limpia."
+              "feedback": "Si hay agua limpia, mejor lavarla antes. Si no hay, pide ayuda a una persona adulta."
             },
             {
               "id": "agua",
@@ -284,8 +284,8 @@
           "id": "ordena-manos",
           "type": "order",
           "icon": "🫧",
-          "prompt": "Ordena los pasos para lavarte bien las manos.",
-          "audioText": "Ordena los pasos para lavarte bien las manos.",
+          "prompt": "Si hay agua y jabón, ordena los pasos para lavarte bien las manos.",
+          "audioText": "Si hay agua y jabón, ordena los pasos para lavarte bien las manos.",
           "feedback": "¡Manos limpias! Así se lavan bien.",
           "safetyTag": "hygiene",
           "durationMin": 2,
@@ -323,7 +323,7 @@
             "enjuagar",
             "secar"
           ],
-          "teacherNotes": "Si no hay jabón o paño en casa, adaptar los pasos con la familia."
+          "teacherNotes": "A VALIDAR: este juego supone que hay agua y jabón. Si no los hay o no son seguros, adaptar los pasos con la familia, sin que parezca una carencia del niño o su familia."
         }
       ]
     }
