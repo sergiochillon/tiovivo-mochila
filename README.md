@@ -79,7 +79,7 @@ VITE_API_BASE_URL=http://127.0.0.1:3001/api npm run build
 npm run preview -- --host 127.0.0.1 --port 4173
 ```
 
-**3. Antes de enseñarla**, con ambas arrancadas: `node scripts/preflight-demo.mjs` comprueba (solo lectura) que la API es la versión actual, que están los tres paquetes y que la app compilada apunta a ella.
+**3. Antes de enseñarla**, con ambas arrancadas: `node scripts/preflight-demo.mjs` comprueba (solo lectura) que la API es la versión actual, que están los seis paquetes aprobados y que la app compilada apunta a ella.
 
 **4. Recorrido de la demo** (http://127.0.0.1:4173):
 
@@ -109,8 +109,8 @@ Las bases (Base 9) exigen una licencia aprobada por OSI para el código y recomi
 | `server/` | Generación con IA, validación, sincronización | Alejandro |
 | `content/` | Paquetes de contenido revisados y reglas pedagógicas | Carlos |
 | `qa/` | Plan de pruebas y registro de pruebas offline | Carlos |
-| `pitch/` | Guion, diapositivas, vídeo, guion de demo | Mario |
-| `research/` | Notas de validación, competencia, fuentes | Mario |
+| `pitch/` | Solo un README: el vídeo y la presentación se entregaron por el formulario de Hack4Edu | Mario |
+| `research/` | Solo un README: la investigación de mercado no se versiona en este repositorio | Mario |
 | `scripts/` | Utilidades (diagnóstico de Macs, validación de todo el contenido) | Sergio |
 
 Lectura recomendada para cualquier integrante nuevo (o IA): `docs/PROJECT_CONTEXT.md` → `docs/TEAM_ROLES.md` → `docs/GIT_WORKFLOW.md` → tu carpeta.

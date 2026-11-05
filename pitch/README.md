@@ -1,4 +1,5 @@
-# pitch/ — guion, diapositivas, vídeo y guion de demo
+# pitch/ — presentación y vídeo
 
-**Dueño: Rodrigo.** Formatos pedidos por las bases: presentación de 5 min, vídeo de 3 min, enlace a GitHub.
-No subir archivos de gran tamaño sin avisar (usa el enlace si pesa mucho).
+Responsable: Mario.
+
+El vídeo y la presentación de MOCHILA se entregaron por el formulario de Hack4Edu 2026 (Bases 3 y 5) y no se versionan aquí por su tamaño. El vídeo muestra la app real grabada en local; el estado de cada funcionalidad está en el [README del proyecto](../README.md).
