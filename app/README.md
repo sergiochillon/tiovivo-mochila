@@ -1,6 +1,8 @@
 # MOCHILA · Frontend y PWA
 
-**Dueño: Rodrigo.** El esqueleto usa Vite, TypeScript y vite-plugin-pwa con una interfaz vanilla. El ejemplo local reproduce el borrador técnico de la PR 5. Solo se puede jugar en /revision para pruebas del equipo. /alumno bloquea el material pendiente de revisión. El progreso se guarda en IndexedDB por avatar, paquete y actividad.
+**Dueño: Rodrigo** (retomado por Sergio el 5 nov). Vite + TypeScript + `vite-plugin-pwa`, interfaz vanilla sin framework. Rutas: `/` y `/alumno` (el niño: «Mis mochilas», explorador, actividades, álbum), `/autoria` (la persona docente prepara, revisa y aprueba) y `/docente` (cuaderno de clase: contadores y envío de progreso). El progreso se guarda en IndexedDB por explorador, paquete y actividad. El diseño está en `/DESIGN.md`; lo que cada pantalla puede y no puede hacer sin red, en la skill `mochila-offline-invariants`.
+
+> Las secciones «Prueba …» de más abajo son el **registro histórico del 4 nov** (versiones anteriores); no describen la versión actual. Las pruebas vigentes están en `qa/`.
 
 ## Ejecutar y probar
 
@@ -37,7 +39,9 @@ Chrome 156.0.8078.81 headless en el mismo Mac, con servidor disponible y perfil 
 
 Rodrigo probó Safari en un iPhone 17 con iOS 27.2 (modelo y versión comunicados por él). Versión de la app: main, commit `24f7cf2`, ruta `/revision`, paquete técnico en borrador. Con wifi y mediante HTTPS, completó la actividad con Zorro. Activó el modo avión, cerró la pestaña y volvió a abrir la misma URL. Apareció el selector y al elegir Zorro recuperó directamente «¡Buen trabajo, Zorro!». Esta prueba cubre la reapertura y recuperación de una actividad completada antes de desconectar.
 
-## Envío manual y panel docente
+## Envío del progreso y panel docente
+
+El progreso pendiente se envía **solo** cuando vuelve la conexión (evento `online`) y una vez al abrir la app con conexión (no en `/docente` ni en `/autoria`); los envíos van en cola, uno tras otro, y el servidor ignora los eventos repetidos. El botón «Enviar progreso» de `/docente` sigue ahí para reenviar a mano. Lo que sigue es el comportamiento del envío manual, que es el mismo mecanismo.
 
 Abrir /docente en el mismo origen y navegador que el reproductor. «Enviar progreso» envía los resultados pendientes de DEMO-01. Cada finalización se guarda en IndexedDB antes de mostrar el resultado. Un evento queda pendiente hasta recibir HTTP 200 y una confirmación que cubra el lote. El progreso completado se conserva también después del envío.
 
@@ -47,10 +51,14 @@ Prueba local en Chrome con el servidor de la PR 9 (f401bba): se completó la act
 
 ## Paquetes para el alumno
 
-Abrir `/alumno?pack=alimentacion-andes-es` o `/alumno?pack=food-northern-uganda-en`. Si se omite el ID se solicita Andes. El reproductor solicita `GET /api/packs/:id`, valida el esquema v0.1, el identificador y la aprobación antes de guardar el paquete en IndexedDB. Para reabrirlo sin conexión hay que visitar la misma URL con conexión una primera vez. Un 404 elimina la copia de ese ID. Para una API en otro origen configurar VITE_API_BASE_URL al compilar.
-
-El selector de actividades admite historias, elección, ordenación y escenarios. Las pistas permiten reintentar. Cada finalización se conserva por paquete, actividad y avatar y entra en el envío manual. El ejemplo técnico de /revision conserva su actividad de elección aislada.
+- `/` abre **«Mis mochilas»**: las mochilas guardadas en el dispositivo (marcadas «✓ Lista sin conexión») y, con conexión, las aprobadas que ofrece el servidor (`GET /api/packs`). Abrir una mochila con conexión la guarda.
+- `/alumno?pack=<id>` abre una mochila concreta. El reproductor pide `GET /api/packs/:id`, valida el esquema v0.1, el identificador y que esté **aprobada** antes de guardarla en IndexedDB.
+- **Offline primero:** la copia guardada en el dispositivo manda sobre cualquier respuesta del servidor que no sea un paquete aprobado válido. Un 404, un error 5xx, un JSON roto, un paquete inválido o la falta de red **no borran ni ocultan** una copia ya descargada; solo la sustituye un paquete aprobado más nuevo. (Consecuencia: un paquete retirado del servidor sigue en los dispositivos que ya lo tenían.)
+- Una mochila que nunca se abrió con conexión y se pide sin red muestra «Conéctate para descargar este paquete por primera vez».
+- Cinco tipos de actividad: historia, elige, ordena, parejas y «¿qué harías?». Un «elige» con varias respuestas correctas y alguna incorrecta se juega como «llena el plato»; si todas son correctas (autoelección) vale cualquiera. El orden de las opciones cambia cada vez. Mochi da pistas y, cada dos fallos, ayuda. Cada finalización se conserva por paquete, actividad y explorador.
+- Los escenarios por contexto (Andes y Altiplano, norte de Uganda, neutro) están en `src/scenes.ts`; un contexto nuevo se añade registrando su entrada. Siempre llevan la nota «paisaje ilustrativo».
+- Para una API en otro origen, configurar `VITE_API_BASE_URL` al compilar.
 
 ## Proxy temporal para la prueba física de sincronización
 
-Compilar sin VITE_API_BASE_URL para que el iPhone utilice /api en el mismo origen HTTPS que la PWA. Con la API de datos de prueba en 127.0.0.1:3001, ejecutar `MOCHILA_IPHONE_PROXY=1 npm run preview -- --host 127.0.0.1 --port 4173 --strictPort`. El túnel apunta exclusivamente a esa vista previa. El proxy reenvía GET /api/packs/:id (la API solo sirve aprobados), POST /api/sync y GET /api/progress/DEMO-01. Cualquier otro método o ruta de API queda bloqueado, incluidos generación y aprobación.
+Compilar sin VITE_API_BASE_URL para que el iPhone utilice /api en el mismo origen HTTPS que la PWA. Con la API de datos de prueba en 127.0.0.1:3001, ejecutar `MOCHILA_IPHONE_PROXY=1 npm run preview -- --host 127.0.0.1 --port 4173 --strictPort`. El túnel apunta exclusivamente a esa vista previa. El proxy reenvía `GET /api/packs` y `GET /api/packs/:id` (la API solo sirve aprobados), `POST /api/sync` y `GET /api/progress/DEMO-01`. Cualquier otro método o ruta de API queda bloqueado, incluidos generación y aprobación.
