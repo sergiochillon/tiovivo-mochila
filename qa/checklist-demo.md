@@ -37,4 +37,4 @@ Usar esta lista en el ensayo final con la misma versión y dispositivos que se p
 
 La prueba de PWA/Andes registrada corresponde a `0900e78`, y el ensayo integrado de servidor a `e39c184`. Completar y registrar de nuevo el recorrido en el commit de demo elegido; no trasladar resultados anteriores a una versión posterior sin repetir la comprobación.
 
-El guion paso a paso para el ensayo final con modo avión real está en [`ensayo-final-v0.9-freeze.md`](ensayo-final-v0.9-freeze.md).
+El guion paso a paso para el ensayo final con modo avión real está en [`ensayo-final-iphone.md`](ensayo-final-iphone.md).
