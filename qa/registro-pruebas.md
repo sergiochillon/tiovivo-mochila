@@ -131,4 +131,14 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 - **Resultado:** correcto para el alcance probado: la primera historia de cada paquete reproduce voz en el idioma del paquete sin red.
 - **Incidencia/condición para la demo:** con el modo silencio del iPhone activado (campana tachada), el botón cambiaba a «Detener», pero no se oía voz. Rodrigo recomienda dejar el modo silencio desactivado durante la demo.
 - **Límite:** solo se probó la primera historia de cada paquete. La validación cultural local y las pruebas con niños siguen pendientes.
+
+## 2026-11-05 — Validación estática de paquetes JSON
+
+- **Ejecutó:** copiloto de Carlos (Codex).
+- **Entorno:** equipo macOS; modelo no especificado; Python 3.15 y `jsonschema` 4.26.0.
+- **Fuente de los paquetes:** árbol de trabajo de `content/reglas`, basado en commit `d5b27b2` más cambios locales sin commit.
+- **Esquema:** copia de `contracts/pack-v0.1.schema.json` de `origin/pr/37`, commit `16df58c`; se usó esa copia porque incluye el ámbito `hygiene` del borrador nuevo. El contrato de la rama base todavía no lo incluye.
+- **Alcance:** `content/packs/food-altiplano-es.json` y los siete JSON de `content/drafts/`; sintaxis JSON y JSON Schema Draft 2020-12. En las siete propuestas nuevas o reescritas se comprobaron además coincidencia de `audioText` con `prompt`, frases infantiles de hasta doce palabras, referencias de `correct`, ids de opciones, orden completo, tres parejas para `match`, notas docentes y emoji en opciones cerradas.
+- **Resultado observado:** los ocho archivos pasan el esquema candidato y las siete propuestas pasan las comprobaciones mecánicas detalladas en `qa/revision-paquetes-contenido.md`. Altiplano preexistente conserva dos opciones sin emoji y dos frases sobre el objetivo de doce palabras; no se cambió.
+- **Límite:** no prueba `/autoria`, comportamiento del reproductor, audio, uso sin conexión, adecuación cultural ni comprensión infantil. Las propuestas nuevas siguen en `draft`.
 - **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
