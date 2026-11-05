@@ -29,7 +29,8 @@ export async function sendProgress(db: IDBDatabase): Promise<string> {
   const response = await fetch(api + '/sync', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ classCode, events })
+    body: JSON.stringify({ classCode, events }),
+    signal: AbortSignal.timeout(10000)
   })
   if (response.status !== 200) throw new Error('Respuesta del servidor: ' + response.status)
   const ack = await response.json()
@@ -48,7 +49,7 @@ export async function sendProgress(db: IDBDatabase): Promise<string> {
 }
 
 export async function classTotals() {
-  const response = await fetch(api + '/progress/' + classCode, { cache: 'no-store' })
+  const response = await fetch(api + '/progress/' + classCode, { cache: 'no-store', signal: AbortSignal.timeout(8000) })
   if (response.status !== 200) throw new Error('No se pudo consultar el panel')
   const data = await response.json()
   if (data?.classCode !== classCode || !count(data.eventsReceived) ||

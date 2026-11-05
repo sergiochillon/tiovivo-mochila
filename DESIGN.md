@@ -62,7 +62,8 @@ Escenarios (sección 6) añaden su propio par de colores de suelo y cielo.
 
 ## 6. Escenarios por contexto
 
-Cada contexto tiene un escenario: ilustración de fondo (SVG propio), color de suelo y de cielo. Hoy: **Andes** (valle, montañas, sol; `valle.svg`) y **sabana del norte de Uganda** (acacias, tierra rojiza, casas redondas; `art.ts`). Un contexto nuevo se añade registrando su escenario; si no hay, se usa uno neutro.
+Cada contexto tiene un escenario: ilustración de fondo (SVG propio), color de suelo y de cielo, registrados en `app/src/scenes.ts`. Hoy: **Andes** (Perú y Bolivia: montañas nevadas, sol, terrazas y río), **sabana del norte de Uganda** (acacias, tierra rojiza) y un **paisaje neutro** para «Mis mochilas», la parte docente y cualquier contexto sin escenario propio. Un contexto nuevo se añade registrando su entrada antes del neutro.
+En las pantallas de un paquete se ve siempre la nota «Paisaje ilustrativo; no representa una comunidad concreta ni está validado por ella» (arriba del escenario en móvil, abajo en tableta).
 Las ilustraciones son **ilustrativas**: no representan una comunidad concreta ni están validadas por ella. Si en el futuro se generan con IA, se preparan antes, se revisan y se guardan como archivos estáticos (nunca se generan en el dispositivo del niño).
 
 ## 7. Movimiento

@@ -58,42 +58,53 @@ export function approved(value: unknown, id: string): value is Pack {
   return valid(value) && value.id === id && value.review.status === 'approved'
 }
 
-async function updateCache(db: IDBDatabase, id: string, pack?: Pack) {
-  await new Promise<void>((resolve, reject) => {
+function savePack(db: IDBDatabase, id: string, pack: Pack) {
+  return new Promise<void>((resolve, reject) => {
     const tx = db.transaction('packs', 'readwrite')
-    const store = tx.objectStore('packs')
-    if (pack) store.put(pack, id)
-    else store.delete(id)
+    tx.objectStore('packs').put(pack, id)
     tx.oncomplete = () => resolve()
     tx.onabort = () => reject(tx.error)
   })
 }
 
+function savedPack(db: IDBDatabase, id: string) {
+  return new Promise<Pack | undefined>((resolve, reject) => {
+    const request = db.transaction('packs').objectStore('packs').get(id)
+    request.onsuccess = () => resolve(approved(request.result, id) ? request.result : undefined)
+    request.onerror = () => reject(request.error)
+  })
+}
+
+/**
+ * Offline first: the copy already on the device wins over any server answer that is not a valid
+ * approved package. A 404, a 5xx, broken JSON, an invalid package or no network never erase or
+ * hide a copy that was approved and downloaded before; only a newer approved package replaces it.
+ * Returns undefined when the server has no approved package and the device has no copy either.
+ */
 export async function loadPack(db: IDBDatabase, id: string): Promise<Pack | undefined> {
   const base = import.meta.env.VITE_API_BASE_URL || '/api'
-  let response: Response
+  let fresh: Pack | undefined
+  let notApproved = false
   try {
-    response = await fetch(base + '/packs/' + encodeURIComponent(id), {
+    const response = await fetch(base + '/packs/' + encodeURIComponent(id), {
       cache: 'no-store', signal: AbortSignal.timeout(6000)
     })
-    if (response.status !== 200 && response.status !== 404) {
-      throw new Error('No se pudo actualizar el paquete.')
+    if (response.status === 404) notApproved = true
+    else if (response.status === 200) {
+      // The server answered: if its package is unreadable or not approved, there is nothing for the child.
+      notApproved = true
+      const data: unknown = await response.json()
+      if (approved(data, id)) fresh = data
     }
   } catch {
-    const cached = await new Promise<unknown>((resolve, reject) => {
-      const request = db.transaction('packs').objectStore('packs').get(id)
-      request.onsuccess = () => resolve(request.result)
-      request.onerror = () => reject(request.error)
-    })
-    if (approved(cached, id)) return cached
-    throw new Error('Conéctate para descargar este paquete por primera vez.')
+    // No network, timeout or unreadable answer: fall back to the saved copy below.
   }
-  if (response.status === 404) {
-    await updateCache(db, id)
-    return undefined
+  if (fresh) {
+    await savePack(db, id, fresh)
+    return fresh
   }
-  const data: unknown = await response.json()
-  if (!approved(data, id)) return undefined
-  await updateCache(db, id, data)
-  return data
+  const saved = await savedPack(db, id)
+  if (saved) return saved
+  if (notApproved) return undefined
+  throw new Error('Conéctate para descargar este paquete por primera vez.')
 }

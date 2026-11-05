@@ -25,8 +25,9 @@ const svg = (sky: string, shapes: string) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none"><path fill="${sky}" d="M0 0h800v600H0z"/>${shapes}</svg>`
 
 const andes: Scene = {
-  id: 'peru-andes', nombre: 'Andes del Perú',
-  coincide: ({ country, region }) => normalize(country) === 'peru' && /andes|andin|altiplano/.test(normalize(region)),
+  id: 'peru-andes', nombre: 'Andes y Altiplano',
+  // The Altiplano spans Peru and Bolivia: both use the Andean landscape.
+  coincide: ({ country, region }) => /^(peru|bolivia)$/.test(normalize(country)) && /andes|andin|altiplano/.test(normalize(region)),
   cielo: '#DFF3FF', suelo: '#BBD9A8', acento: '#2F7FD8',
   ilustracion: svg('#DFF3FF', `
     <circle cx="610" cy="120" r="55" fill="#FFC531" stroke="white" stroke-width="8"/>

@@ -10,7 +10,8 @@ import './style.css'
 import { classTotals, sendProgress, type Progress } from './sync'
 import fox from './zorro.svg'
 import bird from './colibri.svg'
-import { extraAvatars, mochi, savanna, sticker } from './art'
+import { extraAvatars, mochi, sticker } from './art'
+import { neutralScene, sceneCaption, sceneFor, sceneImage, type Scene } from './scenes'
 import { confetti, isMuted, setMuted, soundRight, soundStamp, soundTap, soundWrong } from './fx'
 // Each explorer is a child's identity on a shared device, without personal data: progress is kept per avatar.
 // label is the legacy display name used only to migrate old progress records.
@@ -81,9 +82,9 @@ const texts = {
     kinds: { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas' } as Record<string, string>,
     avatars: { zorro: 'Zorro', colibri: 'Colibrí', llama: 'Llama', jirafa: 'Jirafa', tortuga: 'Tortuga', rana: 'Rana' } as Record<string, string>,
     edition: 'Atlas de aula', expedition: 'EXPEDICIÓN 01', footer: 'El progreso se guarda en este dispositivo.',
-    who: '¿Quién eres hoy?', whoHelp: 'Cada explorador guarda sus propios sellos. Elige el tuyo.',
+    who: '¿Qué explorador eliges hoy?', whoHelp: 'Cada explorador guarda sus propias pegatinas. Elige el tuyo.',
     activities: 'Actividades', goingWith: (name: string) => 'Vas con ' + name + '. Toca una actividad para empezar.',
-    next: 'Siguiente', start: 'Empezar', done: 'Completada', minutes: 'min', changeAvatar: 'Cambiar de avatar',
+    next: 'Siguiente', start: 'Empezar', done: 'Completada', minutes: 'min', changeAvatar: 'Cambiar de explorador',
     back: '← Actividades', continue: 'Continuar', needsReview: 'Esta actividad necesita revisión.', goBack: 'Volver',
     yourOrder: 'Tu orden', firstStep: '¿Cuál es el primer paso?', wrongStep: 'Ese no va ahora. Prueba otro paso.',
     nextStep: '¡Bien! ¿Cuál va después?', tryAgain: 'Puedes volver a elegir.',
@@ -99,15 +100,15 @@ const texts = {
     stamps: (n: number) => n === 1 ? '1 pegatina' : n + ' pegatinas', allDone: '¡Has completado todas las estaciones!',
     album: 'Mi álbum', albumHelp: (name: string) => 'Las pegatinas de ' + name + ' en esta mochila. Cada estación superada pega una nueva.',
     newSticker: '¡Pegatina nueva!', emptySlot: 'Por conseguir', openAlbum: (n: number, total: number) => '📒 Mi álbum (' + n + '/' + total + ')',
-    helpOption: 'Te ayudo: he quitado una opción que no va.', helpStep: 'Te ayudo: el paso que sigue brilla.', helpPlate: 'Te ayudo: mira lo que brilla.', helpPair: 'Te ayudo: su pareja brilla.'
+    helpOption: 'Te ayudo: ahora hay una opción menos. Mira bien las que quedan.', helpStep: 'Te ayudo: el paso que sigue brilla.', helpPlate: 'Te ayudo: mira lo que brilla.', helpPair: 'Te ayudo: su pareja brilla.'
   },
   en: {
     kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs' } as Record<string, string>,
     avatars: { zorro: 'Fox', colibri: 'Hummingbird', llama: 'Llama', jirafa: 'Giraffe', tortuga: 'Turtle', rana: 'Frog' } as Record<string, string>,
     edition: 'Class atlas', expedition: 'EXPEDITION 01', footer: 'Your progress is saved on this device.',
-    who: 'Who are you today?', whoHelp: 'Each explorer keeps their own stamps. Choose yours.',
+    who: 'Which explorer do you pick today?', whoHelp: 'Each explorer keeps their own stickers. Choose yours.',
     activities: 'Activities', goingWith: (name: string) => 'You are with ' + name + '. Tap an activity to start.',
-    next: 'Next', start: 'Start', done: 'Done', minutes: 'min', changeAvatar: 'Change friend',
+    next: 'Next', start: 'Start', done: 'Done', minutes: 'min', changeAvatar: 'Change explorer',
     back: '← Activities', continue: 'Continue', needsReview: 'This activity needs review.', goBack: 'Back',
     yourOrder: 'Your order', firstStep: 'What is the first step?', wrongStep: 'Not this one yet. Try another step.',
     nextStep: 'Good! What comes next?', tryAgain: 'You can choose again.',
@@ -123,7 +124,7 @@ const texts = {
     stamps: (n: number) => n === 1 ? '1 sticker' : n + ' stickers', allDone: 'You completed every station!',
     album: 'My album', albumHelp: (name: string) => name + "'s stickers in this backpack. Every station you finish adds a new one.",
     newSticker: 'New sticker!', emptySlot: 'Still to win', openAlbum: (n: number, total: number) => '📒 My album (' + n + '/' + total + ')',
-    helpOption: 'Let me help: I removed one option that does not fit.', helpStep: 'Let me help: the next step is shining.', helpPlate: 'Let me help: look at what is shining.', helpPair: 'Let me help: its match is shining.'
+    helpOption: 'Let me help: there is one option fewer now. Look closely at the rest.', helpStep: 'Let me help: the next step is shining.', helpPlate: 'Let me help: look at what is shining.', helpPair: 'Let me help: its match is shining.'
   }
 }
 // The interface follows the language of the approved package; Spanish until one is loaded.
@@ -211,7 +212,7 @@ function storageError() {
 }
 
 async function backpacks() {
-  screen('¿Qué mochila abrimos hoy?', 'Cada mochila es una misión. Las que llevan ✓ ya están guardadas y funcionan sin conexión.')
+  screen('¿Qué mochila abrimos hoy?', 'Las mochilas con ✓ ya están guardadas y funcionan sin conexión.')
   lesson.className = 'backpacks'
   const db = await database
   const cached = await new Promise<Map<string, Pack>>((resolve, reject) => {
@@ -653,8 +654,19 @@ async function complete(avatar: Avatar, activity: Activity, fresh = false) {
   button(t.playAgain, () => play(avatar, activity, true)).classList.add('secondary')
 }
 
+/** Paints the landscape behind the screen (DESIGN.md §6). Pack screens add the visible "illustrative" note. */
+function showScene(scene: Scene, language?: string) {
+  const aside = document.querySelector<HTMLElement>('aside')!
+  aside.style.backgroundColor = scene.cielo
+  aside.style.backgroundImage = 'url("' + sceneImage(scene) + '")'
+  document.body.dataset.scene = scene.id
+  aside.querySelector('.scene-notice')?.remove()
+  if (language && scene !== neutralScene) aside.append(sceneCaption(language))
+}
+
 function teacherHeader(title: string, subtitle: string) {
   document.body.classList.add('teacher')
+  showScene(neutralScene)
   document.querySelector('.edition')!.textContent = 'Espacio docente'
   document.querySelector('.map-copy small')!.textContent = 'DOCENTE'
   document.querySelector('.map-copy h2')!.textContent = title
@@ -817,17 +829,20 @@ else if (location.pathname === '/autoria') {
 else if (reviewRoute && !technicalPreview) screen('Página no disponible')
 else if (technicalPreview) {
   pack = demo
+  showScene(neutralScene)
   choose()
 } else if (!new URLSearchParams(location.search).get('pack')) {
   document.querySelector('.map-copy small')!.textContent = 'MOCHILA'
   document.querySelector('.map-copy h2')!.textContent = 'Mis mochilas'
   document.querySelector('.map-copy p')!.textContent = 'Aprender sin conexión'
+  showScene(neutralScene)
   backpacks().catch(storageError)
 } else {
   const id = new URLSearchParams(location.search).get('pack')!
-  // Neutral header until the package says where it belongs (the static HTML shows the Andes).
+  // Neutral header and landscape until the package says where it belongs.
   document.querySelector('.map-copy h2')!.textContent = 'Tu mochila'
   document.querySelector('.map-copy p')!.textContent = 'Aprender sin conexión'
+  showScene(neutralScene)
   screen('Buscando material de clase…')
   database.then(db => loadPack(db, id)).then(downloaded => {
     if (!downloaded) {
@@ -847,10 +862,7 @@ else if (technicalPreview) {
     document.querySelector('footer')!.textContent = t.footer
     document.querySelector('.map-copy h2')!.textContent = pack.title
     document.querySelector('.map-copy p')!.textContent = pack.context.country
-    if (/uganda/i.test(pack.context.country)) {
-      document.body.classList.add('scene-savanna')
-      document.querySelector<HTMLElement>('aside')!.style.backgroundImage = 'url("' + savanna + '")'
-    }
+    showScene(sceneFor(pack.context), pack.language)
     choose()
   }).catch(error => {
     screen('Paquete no disponible', error instanceof Error ? error.message : '')
@@ -863,3 +875,8 @@ else if (technicalPreview) {
   })
 }
 database.catch(storageError)
+// Ask the browser to keep the saved backpacks and progress: without it, Safari may evict them after days unused.
+navigator.storage?.persist?.().catch(() => undefined)
+// When the network comes back, send pending progress quietly. The server ignores repeated eventIds,
+// so this never duplicates a manual send from /docente; a failure leaves the events pending as before.
+if (!technicalPreview) addEventListener('online', () => { database.then(sendProgress).catch(() => undefined) })
