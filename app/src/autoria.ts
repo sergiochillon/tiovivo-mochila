@@ -74,6 +74,8 @@ function step(number: number, title: string, help: string) {
 
 function messages(target: HTMLElement, kind: 'ok' | 'error', lines: string[]) {
   target.className = 'notice ' + kind
+  // Errors interrupt a screen reader; confirmations wait their turn.
+  target.setAttribute('role', kind === 'error' ? 'alert' : 'status')
   target.replaceChildren(...lines.map(line => element('p', '', line)))
   target.hidden = lines.length === 0
 }

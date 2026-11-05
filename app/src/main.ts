@@ -86,7 +86,7 @@ const texts = {
     activities: 'Actividades', goingWith: (name: string) => 'Vas con ' + name + '. Toca una actividad para empezar.',
     start: 'Empezar', done: 'Completada', minutes: 'min', changeAvatar: 'Cambiar de explorador',
     back: '← Actividades', continue: 'Continuar', needsReview: 'Esta actividad necesita revisión.', goBack: 'Volver',
-    yourOrder: 'Tu orden', firstStep: '¿Cuál es el primer paso?', wrongStep: 'Ese no va ahora. Prueba otro paso.',
+    yourOrder: 'Tu orden', yourPlate: 'Tu plato', pairFound: 'pareja encontrada', firstStep: '¿Cuál es el primer paso?', wrongStep: 'Ese no va ahora. Prueba otro paso.',
     nextStep: '¡Bien! ¿Cuál va después?', tryAgain: 'Puedes volver a elegir.',
     wellDone: (name: string) => '¡Buen trabajo, ' + name + '!', seal: 'Pegatina de la estación',
     seals: (done: number, total: number) => 'Tus pegatinas: ' + done + ' de ' + total,
@@ -110,7 +110,7 @@ const texts = {
     activities: 'Activities', goingWith: (name: string) => 'You are with ' + name + '. Tap an activity to start.',
     start: 'Start', done: 'Done', minutes: 'min', changeAvatar: 'Change explorer',
     back: '← Activities', continue: 'Continue', needsReview: 'This activity needs review.', goBack: 'Back',
-    yourOrder: 'Your order', firstStep: 'What is the first step?', wrongStep: 'Not this one yet. Try another step.',
+    yourOrder: 'Your order', yourPlate: 'Your plate', pairFound: 'match found', firstStep: 'What is the first step?', wrongStep: 'Not this one yet. Try another step.',
     nextStep: 'Good! What comes next?', tryAgain: 'You can choose again.',
     wellDone: (name: string) => 'Well done, ' + name + '!', seal: 'Station sticker',
     seals: (done: number, total: number) => 'Your stickers: ' + done + ' of ' + total,
@@ -559,8 +559,10 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         soundTap()
         if (side === 'left') {
           selected?.element.classList.remove('picked')
+          selected?.element.setAttribute('aria-pressed', 'false')
           selected = { id, element }
           element.classList.add('picked')
+          element.setAttribute('aria-pressed', 'true') // a screen reader also hears which card is chosen
           return
         }
         if (!selected) return coach.say(t.pairsHelp, 'thinking', 'wiggle')
@@ -581,6 +583,10 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         selected.element.className = 'pair-card ' + color
         element.className = 'pair-card ' + color
         selected.element.disabled = element.disabled = true
+        // Matched cards say so (and to whom), not only through their colour.
+        selected.element.removeAttribute('aria-pressed')
+        selected.element.setAttribute('aria-label', byId.get(selected.id)!.text + ': ' + t.pairFound + ', ' + byId.get(id)!.text)
+        element.setAttribute('aria-label', byId.get(id)!.text + ': ' + t.pairFound + ', ' + byId.get(selected.id)!.text)
         selected = undefined
         found++
         soundRight()
@@ -601,7 +607,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     coach.say(t.plateHelp, 'thinking')
     const plate = document.createElement('div')
     plate.className = 'plate'
-    plate.setAttribute('aria-label', t.yourOrder)
+    plate.setAttribute('aria-label', t.yourPlate)
     const tray = document.createElement('div')
     tray.className = 'tray'
     lesson.append(hint, plate, tray)
