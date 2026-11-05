@@ -114,3 +114,7 @@ Las bases (Base 9) exigen una licencia aprobada por OSI para el código y recomi
 | `scripts/` | Utilidades (diagnóstico de Macs, validación de todo el contenido) | Sergio |
 
 Lectura recomendada para cualquier integrante nuevo (o IA): `docs/PROJECT_CONTEXT.md` → `docs/TEAM_ROLES.md` → `docs/GIT_WORKFLOW.md` → tu carpeta.
+
+## Uso de IA en el desarrollo
+
+Parte del código, de la documentación y de los borradores de contenido se preparó con ayuda de asistentes de IA. Todo cambio entró en `main` mediante pull request, y los paquetes para niños siguen siendo borradores hasta que una persona los revisa y los aprueba. Algunos commits llevan la línea `Co-Authored-By` de la herramienta usada.
