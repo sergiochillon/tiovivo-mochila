@@ -21,8 +21,10 @@
     "ageRange": "5-8"
   },
   "review": {
-    "status": "draft",
-    "notes": "Borrador preparado con ayuda de IA (Claude) para la demo. Pendiente de revisión pedagógica humana. Validación cultural local pendiente. No probado con niños."
+    "status": "approved",
+    "reviewedBy": "Sergio Chillón",
+    "reviewedAt": "2026-11-05T14:26:44+01:00",
+    "notes": "Revisión pedagógica aprobada por Sergio Chillón el 2026-11-05 tras jugar todas las actividades. Borrador preparado con ayuda de IA (Claude) y revisado por una persona. Sin actividades con safetyTag sensible. La validación cultural local sigue pendiente. No probado con niños."
   },
   "modules": [
     {
