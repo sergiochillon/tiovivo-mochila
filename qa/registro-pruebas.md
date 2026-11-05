@@ -136,9 +136,9 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 
 - **Ejecutó:** copiloto de Carlos (Codex).
 - **Entorno:** equipo macOS; modelo no especificado; Python 3.15 y `jsonschema` 4.26.0.
-- **Fuente de los paquetes:** árbol de trabajo de `content/reglas`, basado en commit `d5b27b2` más cambios locales sin commit.
-- **Esquema:** copia de `contracts/pack-v0.1.schema.json` de `origin/pr/37`, commit `16df58c`; se usó esa copia porque incluye el ámbito `hygiene` del borrador nuevo. El contrato de la rama base todavía no lo incluye.
-- **Alcance:** `content/packs/food-altiplano-es.json` y los siete JSON de `content/drafts/`; sintaxis JSON y JSON Schema Draft 2020-12. En las siete propuestas nuevas o reescritas se comprobaron además coincidencia de `audioText` con `prompt`, frases infantiles de hasta doce palabras, referencias de `correct`, ids de opciones, orden completo, tres parejas para `match`, notas docentes y emoji en opciones cerradas.
-- **Resultado observado:** los ocho archivos pasan el esquema candidato y las siete propuestas pasan las comprobaciones mecánicas detalladas en `qa/revision-paquetes-contenido.md`. Altiplano preexistente conserva dos opciones sin emoji y dos frases sobre el objetivo de doce palabras; no se cambió.
+- **Fuente de los paquetes:** rama `codex/contenido-mochila-carlos-20261105`, commit `ff283e8`, basada en `origin/main` `bfed2d0`.
+- **Esquema:** `contracts/pack-v0.1.schema.json` de `origin/main` `bfed2d0`, JSON Schema Draft 2020-12.
+- **Alcance:** `content/packs/food-altiplano-es.json` y los ocho JSON de `content/drafts/`; sintaxis JSON y esquema. En las siete propuestas nuevas o reescritas se comprobaron además coincidencia de `audioText` con `prompt`, frases infantiles de hasta doce palabras, referencias de `correct`, ids de opciones, orden completo, tres parejas para `match`, notas docentes y emoji en opciones cerradas.
+- **Resultado observado:** los nueve archivos pasan el esquema de `main` y las siete propuestas pasan las comprobaciones mecánicas detalladas en `qa/revision-paquetes-contenido.md`. Altiplano preexistente conserva dos opciones sin emoji y dos frases sobre el objetivo de doce palabras; no se cambió.
 - **Límite:** no prueba `/autoria`, comportamiento del reproductor, audio, uso sin conexión, adecuación cultural ni comprensión infantil. Las propuestas nuevas siguen en `draft`.
 - **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
