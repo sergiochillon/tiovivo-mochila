@@ -1,0 +1,44 @@
+{
+  "packVersion": "0.1",
+  "id": "help-andes-es",
+  "title": "Pedir ayuda — Andes (borrador)",
+  "language": "es",
+  "context": {
+    "country": "Perú",
+    "region": "Andes rurales (contexto ilustrativo)",
+    "communityType": "A VALIDAR",
+    "foods": ["A VALIDAR"],
+    "resources": ["A VALIDAR"],
+    "culturalNotes": ["Borrador genérico; validar lenguaje y adecuación con una persona conocedora del contexto local."],
+    "ageRange": "6-10"
+  },
+  "review": {
+    "status": "draft",
+    "notes": "Borrador pedagógico; requiere revisión humana antes de usarse. Contexto ilustrativo; validación cultural local pendiente. No probado con niños."
+  },
+  "modules": [
+    {
+      "id": "pedir-ayuda",
+      "topic": "help",
+      "title": "Pedir ayuda",
+      "activities": [
+        {
+          "id": "pedir-apoyo-en-clase",
+          "type": "choice",
+          "prompt": "Si no entiendes una actividad en la escuela, ¿qué puedes hacer?",
+          "audioText": "Si no entiendes una actividad en la escuela, ¿qué puedes hacer?",
+          "options": [
+            {"id": "pedir-explicacion", "text": "Pedir a una persona adulta de confianza que me explique otra vez.", "feedback": "Está bien pedir ayuda. La persona adulta puede explicar de otra manera o acompañarte."},
+            {"id": "pedir-primer-paso", "text": "Pedir ayuda para empezar el primer paso.", "feedback": "Está bien pedir ayuda. La persona adulta puede explicar de otra manera o acompañarte."},
+            {"id": "pedir-que-escuche", "text": "Pedir que escuche qué parte no entiendo.", "feedback": "Está bien pedir ayuda. La persona adulta puede explicar de otra manera o acompañarte."}
+          ],
+          "correct": ["pedir-explicacion", "pedir-primer-paso", "pedir-que-escuche"],
+          "feedback": "Pedir ayuda es una opción. Puedes hablar con una persona adulta de confianza.",
+          "safetyTag": "help-adult",
+          "teacherNotes": "Borrador genérico. No pedir al niño que cuente situaciones personales; revisar vocabulario y adecuación local antes de usar.",
+          "durationMin": 2
+        }
+      ]
+    }
+  ]
+}

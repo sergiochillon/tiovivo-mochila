@@ -1,0 +1,44 @@
+{
+  "packVersion": "0.1",
+  "id": "help-northern-uganda-en",
+  "title": "Asking for help — Northern Uganda (draft)",
+  "language": "en",
+  "context": {
+    "country": "Uganda",
+    "region": "Northern Uganda (illustrative context)",
+    "communityType": "TO VALIDATE",
+    "foods": ["TO VALIDATE"],
+    "resources": ["TO VALIDATE"],
+    "culturalNotes": ["Generic draft; validate language and suitability with someone familiar with the local context."],
+    "ageRange": "6-10"
+  },
+  "review": {
+    "status": "draft",
+    "notes": "Pedagogical draft; requires human review before use. Illustrative context; local cultural validation pending. Not tested with children."
+  },
+  "modules": [
+    {
+      "id": "asking-for-help",
+      "topic": "help",
+      "title": "Asking for help",
+      "activities": [
+        {
+          "id": "ask-for-help-at-school",
+          "type": "choice",
+          "prompt": "If you do not understand a school activity, what could you do?",
+          "audioText": "If you do not understand a school activity, what could you do?",
+          "options": [
+            {"id": "ask-for-explanation", "text": "Ask a trusted adult to explain it again.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."},
+            {"id": "ask-for-first-step", "text": "Ask for help to start the first step.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."},
+            {"id": "ask-them-to-listen", "text": "Ask the adult to listen while you say which part is hard to understand.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."}
+          ],
+          "correct": ["ask-for-explanation", "ask-for-first-step", "ask-them-to-listen"],
+          "feedback": "Asking for help is one option. You can talk to a trusted adult.",
+          "safetyTag": "help-adult",
+          "teacherNotes": "Generic draft. Do not ask the child to share personal situations; review wording and local suitability before use.",
+          "durationMin": 2
+        }
+      ]
+    }
+  ]
+}

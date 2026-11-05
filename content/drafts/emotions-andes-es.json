@@ -1,0 +1,44 @@
+{
+  "packVersion": "0.1",
+  "id": "emotions-andes-es",
+  "title": "Reconocer emociones — Andes (borrador)",
+  "language": "es",
+  "context": {
+    "country": "Perú",
+    "region": "Andes rurales (contexto ilustrativo)",
+    "communityType": "A VALIDAR",
+    "foods": ["A VALIDAR"],
+    "resources": ["A VALIDAR"],
+    "culturalNotes": ["Borrador genérico; validar lenguaje y adecuación con una persona conocedora del contexto local."],
+    "ageRange": "6-10"
+  },
+  "review": {
+    "status": "draft",
+    "notes": "Borrador pedagógico; requiere revisión humana antes de usarse. Contexto ilustrativo; validación cultural local pendiente. No probado con niños."
+  },
+  "modules": [
+    {
+      "id": "reconocer-emociones",
+      "topic": "emotions",
+      "title": "Reconocer emociones",
+      "activities": [
+        {
+          "id": "notar-como-me-siento",
+          "type": "choice",
+          "prompt": "A veces las personas sienten calma, alegría, tristeza, preocupación u otra emoción. Si quieres darte cuenta de cómo te sientes, ¿qué puedes hacer?",
+          "audioText": "A veces las personas sienten calma, alegría, tristeza, preocupación u otra emoción. Si quieres darte cuenta de cómo te sientes, ¿qué puedes hacer?",
+          "options": [
+            {"id": "tomar-un-momento", "text": "Tomarme un momento y elegir una palabra para mí.", "feedback": "Puedes notar cómo estás, pedir apoyo o tomar una pausa."},
+            {"id": "hablar-con-adulto", "text": "Hablar con una persona adulta de confianza si quiero apoyo.", "feedback": "Puedes notar cómo estás, pedir apoyo o tomar una pausa."},
+            {"id": "pedir-pausa", "text": "Pedir una pausa si prefiero no responder ahora.", "feedback": "Puedes notar cómo estás, pedir apoyo o tomar una pausa."}
+          ],
+          "correct": ["tomar-un-momento", "hablar-con-adulto", "pedir-pausa"],
+          "feedback": "No hay una sola emoción que debas sentir. Puedes notar cómo estás, pedir apoyo o tomar una pausa.",
+          "safetyTag": "emotion-self-choice",
+          "teacherNotes": "Borrador genérico; no solicitar que el niño comparta su emoción ni inferirla. Revisar vocabulario y adecuación local antes de usar.",
+          "durationMin": 2
+        }
+      ]
+    }
+  ]
+}
