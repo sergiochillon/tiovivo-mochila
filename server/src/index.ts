@@ -91,6 +91,17 @@ function semanticDetails(pack: unknown): string[] {
 
 // Seal note on approval: states what was really done and keeps the draft's specific observations,
 // dropping only the transitional "pending review" sentences that the seal makes obsolete.
+/** The six points a person confirms in /autoria before approving. The server checks them too, so a direct
+ *  API call cannot approve a pack without the review (contracts/sync-api.md). */
+export const REVIEW_CHECKLIST = [
+  "una-idea-por-actividad",
+  "lenguaje-6-10",
+  "feedback-amable",
+  "contexto-local-marcado",
+  "sin-estereotipos",
+  "sin-datos-y-seguro",
+] as const;
+
 function approvalNotes(reviewer: string, reviewedAt: string, previous: unknown): string {
   const draft = typeof previous === "string" ? previous : "";
   const fromAi = /\b(IA|AI)\b/.test(draft);
@@ -100,7 +111,7 @@ function approvalNotes(reviewer: string, reviewedAt: string, previous: unknown):
     .replace(/\s+/g, " ")
     .trim();
   return (
-    `Revisión pedagógica aprobada por ${reviewer} el ${reviewedAt.slice(0, 10)}. ` +
+    `Revisión pedagógica aprobada por ${reviewer} el ${reviewedAt.slice(0, 10)} con la lista de revisión de ${REVIEW_CHECKLIST.length} puntos completa. ` +
     "La validación cultural local sigue pendiente. No probado con niños." +
     (fromAi ? " Propuesta generada con IA y revisada por una persona." : "") +
     (observations ? ` Observaciones del borrador: ${observations}` : "")
@@ -267,6 +278,12 @@ app.post("/api/review/approve", async (req: Request, res: Response) => {
     : "";
   if (!packId || !reviewer || reviewer.length > 100) {
     res.status(422).json({ error: "invalid_review", details: ["packId y reviewer (1–100 caracteres) son obligatorios"] });
+    return;
+  }
+  const confirmed = isRecord(req.body) && Array.isArray(req.body.checklist) ? req.body.checklist : [];
+  const missing = REVIEW_CHECKLIST.filter((point) => !confirmed.includes(point));
+  if (missing.length > 0) {
+    res.status(422).json({ error: "checklist_incomplete", details: missing.map((point) => `Falta confirmar: ${point}`) });
     return;
   }
 

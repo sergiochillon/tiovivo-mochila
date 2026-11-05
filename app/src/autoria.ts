@@ -17,13 +17,14 @@ type Draft = {
 }
 
 const kindLabels: Record<string, string> = { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas' }
-const checklist = [
-  'He leído el paquete completo y cada actividad enseña una sola idea.',
-  'El vocabulario y la longitud son adecuados para 6–10 años.',
-  'Las opciones son claras y el feedback es amable, sin culpabilizar.',
-  'Alimentos, recursos e idioma están revisados o marcados como pendientes de validación local.',
-  'No hay estereotipos ni se atribuyen las mismas prácticas a toda una comunidad.',
-  'No pide datos personales, texto libre, fotos ni voz, y las acciones son seguras.'
+// [id the server checks (contracts/sync-api.md), text the reviewer reads]
+const checklist: [string, string][] = [
+  ['una-idea-por-actividad', 'He leído el paquete completo y cada actividad enseña una sola idea.'],
+  ['lenguaje-6-10', 'El vocabulario y la longitud son adecuados para 6–10 años.'],
+  ['feedback-amable', 'Las opciones son claras y el feedback es amable, sin culpabilizar.'],
+  ['contexto-local-marcado', 'Alimentos, recursos e idioma están revisados o marcados como pendientes de validación local.'],
+  ['sin-estereotipos', 'No hay estereotipos ni se atribuyen las mismas prácticas a toda una comunidad.'],
+  ['sin-datos-y-seguro', 'No pide datos personales, texto libre, fotos ni voz, y las acciones son seguras.']
 ]
 
 function element<K extends keyof HTMLElementTagNameMap>(tag: K, className = '', text = '') {
@@ -369,8 +370,9 @@ export function authoring(lesson: HTMLElement) {
     } catch { messages(saveResult, 'error', ['No hay conexión con el servidor de MOCHILA.']) }
   }, true), saveResult)
 
-  const checks = checklist.map(text => {
+  const checks = checklist.map(([id, text]) => {
     const box = element('input')
+    box.value = id
     box.type = 'checkbox'
     const label = element('label', 'check')
     label.append(box, element('span', '', text))
@@ -386,7 +388,9 @@ export function authoring(lesson: HTMLElement) {
     if (!reviewer.value.trim()) return messages(approveResult, 'error', ['Escribe el nombre de la persona que revisa.'])
     try {
       if (!(await save(approveResult))) return
-      const { status, data } = await send('/review/approve', { packId: draft!.id, reviewer: reviewer.value.trim() })
+      const { status, data } = await send('/review/approve', {
+        packId: draft!.id, reviewer: reviewer.value.trim(), checklist: checks.map(check => check.box.value)
+      })
       if (status !== 200) return messages(approveResult, 'error', serverLines(data))
       messages(approveResult, 'ok', [])
       approveResult.hidden = true
