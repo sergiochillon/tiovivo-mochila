@@ -9,12 +9,13 @@ export function mochi(mood: 'happy' | 'thinking' | 'cheer' = 'happy') {
     : mood === 'cheer'
       ? '<path d="M46 68 Q60 86 74 68 Z" fill="#7a2e1d"/><path d="M52 75 Q60 81 68 75" fill="#e77b6a"/>'
       : '<path d="M48 70 Q60 82 72 70" stroke="#1d2b27" stroke-width="4" fill="none" stroke-linecap="round"/>'
+  // Thinking = curious, never cross: one brow raised and the head tilted (DESIGN.md §5).
   const brows = mood === 'thinking'
-    ? '<path d="M40 46 L52 49 M68 49 L80 46" stroke="#1d2b27" stroke-width="3.5" stroke-linecap="round"/>' : ''
+    ? '<path d="M39 43 Q46 37 53 42 M68 45 Q74 42 80 45" stroke="#1d2b27" stroke-width="3.5" fill="none" stroke-linecap="round"/>' : ''
   const arms = mood === 'cheer'
     ? '<path d="M18 70 Q6 52 12 40" stroke="#d9a441" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M102 70 Q114 52 108 40" stroke="#d9a441" stroke-width="9" fill="none" stroke-linecap="round"/>'
     : '<path d="M18 74 Q8 84 14 96" stroke="#d9a441" stroke-width="9" fill="none" stroke-linecap="round"/><path d="M102 74 Q112 84 106 96" stroke="#d9a441" stroke-width="9" fill="none" stroke-linecap="round"/>'
-  return '<svg viewBox="0 0 120 130" aria-hidden="true">' +
+  return '<svg viewBox="0 0 120 130" aria-hidden="true">' + (mood === 'thinking' ? '<g transform="rotate(-7 60 120)">' : '<g>') +
     '<ellipse cx="60" cy="124" rx="34" ry="5" fill="#000" opacity=".12"/>' + arms +
     '<path d="M42 22 Q42 6 60 6 Q78 6 78 22" stroke="#9a6a1c" stroke-width="7" fill="none"/>' +
     '<rect x="18" y="20" width="84" height="100" rx="30" fill="#f3c76b"/>' +
@@ -24,7 +25,7 @@ export function mochi(mood: 'happy' | 'thinking' | 'cheer' = 'happy') {
     '<g class="mochi-eyes"><circle cx="46" cy="56" r="8" fill="#fff"/><circle cx="74" cy="56" r="8" fill="#fff"/>' +
     '<circle cx="47" cy="57" r="4.5" fill="#1d2b27"/><circle cx="75" cy="57" r="4.5" fill="#1d2b27"/></g>' +
     '<circle cx="35" cy="68" r="5" fill="#f08a6b" opacity=".55"/><circle cx="85" cy="68" r="5" fill="#f08a6b" opacity=".55"/>' +
-    brows + mouth + '</svg>'
+    brows + mouth + '</g></svg>'
 }
 
 const face = (body: string) => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">' + body + '</svg>'
