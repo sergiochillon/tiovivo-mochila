@@ -70,7 +70,7 @@ Cada punto recoge la idea y acción previstas, el apoyo ante error que aún debe
 
 ## Revisión mecánica
 
-Los ocho JSON de `content/packs/` y `content/drafts/` pasaron la validación de JSON Schema Draft 2020-12 contra la copia del esquema de `origin/pr/37` (`16df58c`). En las siete propuestas nuevas o reescritas se comprobó además coincidencia exacta de `audioText`/`prompt`, referencias de `correct`, ids de opciones únicos, tres parejas para `match`, orden con cada opción una vez, `teacherNotes` dentro del máximo y emoji en cada opción. El paquete aprobado Altiplano preexistente no se reescribió; conserva dos opciones sin emoji y dos frases por encima del objetivo de doce palabras. Esto no demuestra el comportamiento en `/autoria` ni en el reproductor.
+Los nueve JSON de `content/packs/` y `content/drafts/` pasaron la validación de JSON Schema Draft 2020-12 contra `contracts/pack-v0.1.schema.json` de `origin/main` (`bfed2d0`). En las siete propuestas nuevas o reescritas se comprobó además coincidencia exacta de `audioText`/`prompt`, referencias de `correct`, ids de opciones únicos, tres parejas para `match`, orden con cada opción una vez, `teacherNotes` dentro del máximo y emoji en cada opción. El paquete aprobado Altiplano preexistente no se reescribió; conserva dos opciones sin emoji y dos frases por encima del objetivo de doce palabras. `juegos-andes-es.json` es el borrador de PR 37 ya integrado en `main`; su revisión separada está en `revision-contenido-pr37.md`. Esto no demuestra el comportamiento en `/autoria` ni en el reproductor.
 
 ## Decisiones que aún no se pueden afirmar
 
