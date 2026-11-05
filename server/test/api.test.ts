@@ -52,6 +52,11 @@ async function jsonRequest(path: string, body?: unknown): Promise<{ status: numb
   return { status: response.status, body: await response.json() };
 }
 
+const fullChecklist = [
+  "una-idea-por-actividad", "lenguaje-6-10", "feedback-amable",
+  "contexto-local-marcado", "sin-estereotipos", "sin-datos-y-seguro",
+];
+
 function draftPack(id: string) {
   return {
     packVersion: "0.1",
@@ -205,12 +210,20 @@ test("listado y detalle solo sirven paquetes aprobados", async () => {
   assert.equal((await jsonRequest("/api/packs/paquete-valido")).status, 404);
   assert.equal((await jsonRequest("/api/packs/solo-borrador")).status, 404);
 
-  const approval = await jsonRequest("/api/review/approve", { packId: "paquete-valido", reviewer: "Docente" });
+  const withoutChecklist = await jsonRequest("/api/review/approve", { packId: "paquete-valido", reviewer: "Docente" });
+  assert.equal(withoutChecklist.status, 422);
+  assert.equal(withoutChecklist.body.error, "checklist_incomplete");
+  const partial = await jsonRequest("/api/review/approve", { packId: "paquete-valido", reviewer: "Docente", checklist: fullChecklist.slice(1) });
+  assert.equal(partial.status, 422);
+  assert.equal((await jsonRequest("/api/packs/paquete-valido")).status, 404);
+
+  const approval = await jsonRequest("/api/review/approve", { packId: "paquete-valido", reviewer: "Docente", checklist: fullChecklist });
   assert.equal(approval.status, 200);
 
   const list = await jsonRequest("/api/packs");
   assert.equal(list.status, 200);
   assert.deepEqual(list.body.packs.map((pack: { id: string }) => pack.id), ["paquete-valido"]);
+  assert.match(list.body.packs[0].review.notes, /lista de revisión de 6 puntos completa/);
   assert.equal((await jsonRequest("/api/packs/paquete-valido")).status, 200);
   assert.equal((await jsonRequest("/api/packs/solo-borrador")).status, 404);
 });
