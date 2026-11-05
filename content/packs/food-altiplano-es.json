@@ -37,8 +37,8 @@
         {
           "id": "historia-almuerzo",
           "type": "story",
-          "prompt": "Lucía y su familia preparan el almuerzo en casa con quinua y papas. Hoy lo acompañan con habas. Otra familia puede acompañarlo con otros alimentos.",
-          "audioText": "Lucía y su familia preparan el almuerzo en casa con quinua y papas. Hoy lo acompañan con habas. Otra familia puede acompañarlo con otros alimentos.",
+          "prompt": "Lucía y su familia preparan quinua y papas en casa. Hoy agregan habas. Otra familia puede elegir otros alimentos.",
+          "audioText": "Lucía y su familia preparan quinua y papas en casa. Hoy agregan habas. Otra familia puede elegir otros alimentos.",
           "feedback": "Cada familia combina los alimentos disponibles de distintas formas según sus gustos.",
           "safetyTag": "none",
           "teacherNotes": "A VALIDAR: revisar el contenido y confirmar vocabulario y contexto local.",
@@ -62,7 +62,7 @@
             }
           ],
           "correct": "lavar-manos",
-          "feedback": "Lavar las manos con agua limpia es un hábito sencillo para cuidar la higiene.",
+          "feedback": "Lavarte las manos ayuda a cuidar la limpieza de los alimentos.",
           "safetyTag": "hygiene",
           "teacherNotes": "A VALIDAR: revisar el contenido y confirmar vocabulario y contexto local.",
           "durationMin": 2

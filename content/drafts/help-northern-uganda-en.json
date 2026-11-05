@@ -30,7 +30,7 @@
           "options": [
             {"id": "ask-for-explanation", "text": "Ask a trusted adult to explain it again.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."},
             {"id": "ask-for-first-step", "text": "Ask for help to start the first step.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."},
-            {"id": "ask-them-to-listen", "text": "Ask the adult to listen while you say which part is hard to understand.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."}
+            {"id": "ask-them-to-listen", "text": "Ask an adult to listen to what is hard to understand.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."}
           ],
           "correct": ["ask-for-explanation", "ask-for-first-step", "ask-them-to-listen"],
           "feedback": "Asking for help is one option. You can talk to a trusted adult.",
