@@ -132,3 +132,14 @@ Un resultado solo se registra si la prueba se ejecutó. Cuando el registro se re
 - **Incidencia/condición para la demo:** con el modo silencio del iPhone activado (campana tachada), el botón cambiaba a «Detener», pero no se oía voz. Rodrigo recomienda dejar el modo silencio desactivado durante la demo.
 - **Límite:** solo se probó la primera historia de cada paquete. La validación cultural local y las pruebas con niños siguen pendientes.
 - **Fuente del registro:** mensaje de Rodrigo del 4 nov 2026.
+
+## 2026-11-05 — Arranque en frío sin servidor en Safari (simulador de iPhone)
+
+- **Ejecutó:** Sergio, con Claude Code (asistente de IA) sobre el Simulator de Xcode. **No es un dispositivo físico.**
+- **Dispositivo:** simulador iPhone 16, iOS 18.5, Safari (WebKit real). No cubre modo avión real, la voz, el modo silencio ni el hardware.
+- **Versión probada:** `main` en `8675115` (compilada contra una API local temporal con los tres paquetes aprobados; datos temporales, borrados después).
+- **Conexión:** con la API y el servidor de la app encendidos (`localhost`), abrió «Mis mochilas», entró en «Elegimos con lo que hay» (Andes) y eligió Zorro; abrió la actividad 1 (historia). Después **paró API y servidor** y **cerró Safari del todo** (`simctl terminate`).
+- **Acciones y resultado observado:** al volver a abrir `http://localhost:…/` sin ningún servidor, la app cargó entera; «Mis mochilas» mostró Andes como «✓ Lista sin conexión» (la mochila de Uganda, nunca abierta, seguía sin ese sello); al abrir Andes sin red aparecieron los seis exploradores. El botón de sonido, la cabecera con la Dynamic Island y la nota «Paisaje ilustrativo…» se ven bien.
+- **Resultado:** correcto para el alcance probado: **el arranque en frío sin servidor funciona en WebKit real** (service worker y paquete guardado en IndexedDB).
+- **Límites:** no se completó la actividad sin red ni se probó el envío del progreso; el service worker de `localhost` no demuestra HTTPS ni la instalación desde el icono de inicio; no sustituye la prueba en el iPhone de demo (hoja `ensayo-final-v0.9-freeze.md`).
+- **Hallazgo:** en 393 pt la fila «Tus pegatinas: 0 de 5» partía los cinco puntos en 4 + 1; corregido en la PR de esta rama (la fila baja entera).
