@@ -27,6 +27,12 @@ lote de progreso. El directorio local está ignorado por Git. No hay paquetes
 aprobados precargados en esta rama; el ejemplo del contrato está en `draft` y
 no se sirve al reproductor.
 
+Cada generación real con Gemini (`POST /api/generate/ai`) añade una línea a
+`data/generations.jsonl`: fecha, modelo que respondió, id del borrador, país,
+región, idioma, tema y número de actividades. Nunca el prompt, la clave ni
+datos de alumnos. Es la evidencia de qué propuestas vienen de verdad de la IA;
+el borrador y su sello también dicen «Generado con IA (modelo, fecha)».
+
 Después de que Carlos apruebe paquetes en `content/packs/`, cárgalos antes de
 arrancar el servidor:
 
