@@ -65,7 +65,7 @@ Texto del reto: solución educativa *offline-first* para escuelas o comunidades 
 
 ## 4. MOCHILA
 
-Plataforma para niños de 6–10 años en contextos vulnerables o con baja conectividad, centrada en **habilidades para la vida**: educación emocional, convivencia y valores, alimentación saludable con alimentos locales y presupuesto limitado, higiene y salud, primeros auxilios y seguridad básica, autonomía cotidiana. **[DECIDIDO]** El foco inicial es **emocional/social y habilidades para la vida**. Lo cognitivo queda como línea abierta a investigación, **no** como objetivo principal.
+Plataforma para niños de 5 a 12 años (tramos 5–8, 6–10 y 9–12) en contextos vulnerables o con baja conectividad, centrada en **habilidades para la vida**: educación emocional, convivencia y valores, alimentación saludable con alimentos locales y presupuesto limitado, higiene y salud, primeros auxilios y seguridad básica, autonomía cotidiana. **[DECIDIDO]** El foco inicial es **emocional/social y habilidades para la vida**. Lo cognitivo queda como línea abierta a investigación, **no** como objetivo principal.
 
 Qué implementamos de verdad en el MVP (**[DECIDIDO]**): ver `PRODUCT_BRIEF.md`. En resumen, 1 módulo completo en 2 contextos; los otros módulos solo si hay tiempo.
 

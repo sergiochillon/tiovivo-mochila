@@ -1,6 +1,6 @@
 ---
 name: mochila-pack-review
-description: Use when writing, generating, editing or reviewing a MOCHILA content pack (content/packs, content/drafts, /autoria output) for children aged 6-10, or before anyone marks a pack as approved.
+description: Use when writing, generating, editing or reviewing a MOCHILA content pack (content/packs, content/drafts, /autoria output) for children aged 5-12 (age bands 5-8, 6-10 and 9-12), or before anyone marks a pack as approved.
 license: MIT
 ---
 

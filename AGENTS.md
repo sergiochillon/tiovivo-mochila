@@ -1,6 +1,6 @@
 # MOCHILA: reglas para cualquier agente de IA
 
-PWA offline-first para niños de 6 a 10 años (habilidades para la vida). La IA solo ayuda a la persona docente a preparar contenido en el servidor; una persona lo revisa y lo aprueba; el niño lo usa sin conexión; el progreso se sincroniza después sin duplicados. No hay chat para niños ni datos personales.
+PWA offline-first para niños de 5 a 12 años, en tres tramos de edad (5–8, 6–10 y 9–12) (habilidades para la vida). La IA solo ayuda a la persona docente a preparar contenido en el servidor; una persona lo revisa y lo aprueba; el niño lo usa sin conexión; el progreso se sincroniza después sin duplicados. No hay chat para niños ni datos personales.
 
 ## Antes de tocar nada
 - Ejecuta `git status`, `git branch --show-current` y `git fetch`. Trabaja en una rama `app/…`, `server/…`, `content/…`, `docs/…` o `pitch/…` creada desde `origin/main` actualizado.
