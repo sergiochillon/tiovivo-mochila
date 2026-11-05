@@ -1,6 +1,6 @@
 # Preparación de conversación real · 5 noviembre 2026
 
-Responsable: Mario. Estado: **no realizada**. Mario confirma hoy que no tiene persona docente/educadora disponible ni notas de una conversación previa. Este documento no cuenta como entrevista. Cero entrevistas realizadas y cuatro correos enviados sin respuesta registrada; [evidencia de envíos](../contactos-ong-peru-2026-11-04.md).
+Responsable: Mario. Estado: **no realizada**. Mario confirma hoy que no tiene persona docente/educadora disponible ni notas de una conversación previa. Este documento no cuenta como entrevista. Cero entrevistas realizadas y cuatro correos enviados sin respuesta registrada; evidencia de envíos.
 
 ## Acceso propuesto
 

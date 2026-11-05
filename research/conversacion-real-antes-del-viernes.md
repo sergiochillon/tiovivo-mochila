@@ -1,6 +1,6 @@
 # Una conversación real antes del viernes
 
-4 nov 2026 · Mario · Plazo pedido por Sergio: **antes del viernes 6**, objetivo operativo: hoy 4 o jueves 5. **Cuatro correos institucionales enviados a petición de Mario; interlocutor individual, respuesta y conversación pendientes.** Ver el [registro de envíos](contactos-ong-peru-2026-11-04.md). Esta petición de contacto real sustituye la limitación anterior de no hacer entrevistas. Los escenarios ficticios no se convierten en evidencia real.
+4 nov 2026 · Mario · Plazo pedido por Sergio: **antes del viernes 6**, objetivo operativo: hoy 4 o jueves 5. **Cuatro correos institucionales enviados a petición de Mario; interlocutor individual, respuesta y conversación pendientes.** Ver el registro de envíos. Esta petición de contacto real sustituye la limitación anterior de no hacer entrevistas. Los escenarios ficticios no se convierten en evidencia real.
 
 ## Acceso propuesto
 

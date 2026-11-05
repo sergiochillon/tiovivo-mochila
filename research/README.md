@@ -7,7 +7,7 @@ Responsable: **Mario**, según [roles del equipo](../docs/TEAM_ROLES.md). Prepar
 - [Transferencia al mercado](transferencia-mercado-2026-11-05.md): resumen de usuario, posible comprador, piloto, costes y sostenibilidad, todo con sus límites.
 - [Competencia](competencia.md): comparación documental de seis alternativas y preguntas para defender el posicionamiento sin atribuir exclusividad.
 - [Mercado y financiación](mercado-y-financiacion-2026-11-04.md): informe con 28 fuentes primarias, canales institucionales y presupuesto ilustrativo. Las organizaciones citadas no son socios ni clientes.
-- [Registro de contacto](contactos-ong-peru-2026-11-04.md): cuatro correos registrados como enviados; no acredita entrega, lectura, respuesta ni interés comercial.
+- Registro de contacto (no se publica en el repositorio, porque contiene direcciones de terceros): cuatro correos registrados como enviados; no acredita entrega, lectura, respuesta ni interés comercial.
 
 ## Estado de evidencia
 

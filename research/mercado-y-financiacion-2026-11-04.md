@@ -4,7 +4,7 @@
 
 Investigación documental: 4 de noviembre de 2026. Responsable de producto: Mario. Alcance: primaria de 6–10 años, habilidades para la vida y baja conectividad; prioridad Perú y Uganda, con vías de acceso desde España.
 
-Este análisis sustituye el simple registro de tareas pendientes. **No acredita interés comercial, entrevistas, compromisos de financiación ni pilotos realizados.** La instrucción posterior de Sergio, trasladada por Mario, pide conseguir al menos una conversación real antes del viernes 6 de noviembre de 2026 y sustituye la limitación anterior de trabajar sin entrevistas. La conversación sigue pendiente. Actualización del 5 nov: hay cuatro correos enviados sin respuesta registrada; ver [registro](contactos-ong-peru-2026-11-04.md). Los pilotos continúan siendo propuestas futuras.
+Este análisis sustituye el simple registro de tareas pendientes. **No acredita interés comercial, entrevistas, compromisos de financiación ni pilotos realizados.** La instrucción posterior de Sergio, trasladada por Mario, pide conseguir al menos una conversación real antes del viernes 6 de noviembre de 2026 y sustituye la limitación anterior de trabajar sin entrevistas. La conversación sigue pendiente. Actualización del 5 nov: hay cuatro correos enviados sin respuesta registrada; ver registro. Los pilotos continúan siendo propuestas futuras.
 
 **Actualización de alcance, 5 nov:** el producto contempla 5–12 años en las franjas 5–8, 6–10 y 9–12 ([ADR-006](../docs/decisions/ADR-006-franjas-de-edad.md)). El análisis original se centró en 6–10; no aporta evidencia específica de las otras franjas.
 

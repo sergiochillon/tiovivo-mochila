@@ -6,7 +6,7 @@ Mario · 5 noviembre 2026 · propuesta de una página · **H1–H4 sin validar**
 
 **Actualización de alcance, 5 nov:** el producto contempla 5–12 años en las franjas 5–8, 6–10 y 9–12 ([ADR-006](../docs/decisions/ADR-006-franjas-de-edad.md)). El análisis original se centró en 6–10; no aporta evidencia específica de las otras franjas.
 
-**Quién usa y quién podría pagar.** El docente prepara y revisa; el niño utiliza el paquete. La hipótesis de comprador es una ONG, red educativa o programa con escuelas y dispositivos existentes. Una fundación podría financiar el piloto a través de ese operador. No hay cliente, partida, precio ni financiación confirmados. Cero entrevistas y cuatro correos sin respuesta registrada ([envíos](contactos-ong-peru-2026-11-04.md)).
+**Quién usa y quién podría pagar.** El docente prepara y revisa; el niño utiliza el paquete. La hipótesis de comprador es una ONG, red educativa o programa con escuelas y dispositivos existentes. Una fundación podría financiar el piloto a través de ese operador. No hay cliente, partida, precio ni financiación confirmados. Cero entrevistas y cuatro correos sin respuesta registrada (envíos).
 
 **Entrada propuesta.** Pedir a un operador que examine una actividad y describa su proceso actual de adaptación. ProFuturo publica colaboración tecnológica y de implementación local; Fe y Alegría Perú describe redes rurales y FYA Digital. Son candidatos por encaje documental, no socios ni compradores de MOCHILA. Fuentes primarias consultadas de nuevo el **5 nov 2026**: [ProFuturo, aliados](https://profuturo.education/nuestros-aliados/) y [Fe y Alegría, qué hacemos](https://feyalegria.org.pe/que-hacemos/). La prioridad de acceso es una inferencia de producto.
 
