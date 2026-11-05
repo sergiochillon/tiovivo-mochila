@@ -15,8 +15,8 @@
   "review": {
     "status": "approved",
     "reviewedBy": "Carlos Herrero",
-    "reviewedAt": "2026-11-04T16:44:06+01:00",
-    "notes": "Revisión pedagógica aprobada por Carlos Herrero el 4 nov 2026. La validación cultural local sigue pendiente: confirmar alimentos, preparación, nombre Ayo y adecuación del inglés con una persona de la comunidad concreta. No probado con niños. Esta aprobación no implica validación por la comunidad. Segunda revisión de las actividades de seguridad «ask-how-to-prepare» y «help-with-cooking» por Sergio Chillón el 2026-11-05: leídas, sin objeciones; no sustituye la validación cultural local."
+    "reviewedAt": "2026-11-05T13:49:54+01:00",
+    "notes": "Revisión pedagógica aprobada por Carlos Herrero el 4 nov 2026. La validación cultural local sigue pendiente: confirmar alimentos, preparación, nombre Ayo y adecuación del inglés con una persona de la comunidad concreta. No probado con niños. Esta aprobación no implica validación por la comunidad. Segunda revisión de las actividades de seguridad «ask-how-to-prepare» y «help-with-cooking» por Sergio Chillón el 2026-11-05: leídas, sin objeciones; no sustituye la validación cultural local. Texto de la actividad `choose-available-food` revisado de nuevo por Carlos Herrero el 2026-11-05."
   },
   "modules": [
     {
@@ -27,8 +27,8 @@
         {
           "id": "story-at-home",
           "type": "story",
-          "prompt": "Ayo helps prepare a meal with their family. Today they use food they have at home. Another family may choose different foods.",
-          "audioText": "Ayo helps prepare a meal with their family. Today they use food they have at home. Another family may choose different foods.",
+          "prompt": "Ayo helps prepare a meal with their family. Today they use millet and beans. Another family may choose different foods.",
+          "audioText": "Ayo helps prepare a meal with their family. Today they use millet and beans. Another family may choose different foods.",
           "feedback": "Families make choices based on what they have and what they usually eat.",
           "safetyTag": "none",
           "durationMin": 1
@@ -36,7 +36,7 @@
         {
           "id": "choose-available-food",
           "type": "choice",
-          "prompt": "Ayo's family has millet and beans. Which answer names both foods in the story?",
+          "prompt": "Which answer names the foods Ayo's family has?",
           "options": [
             { "id": "millet-beans", "text": "Millet and beans" },
             { "id": "cassava-greens", "text": "Cassava and leafy greens" }

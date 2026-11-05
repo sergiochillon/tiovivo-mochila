@@ -15,8 +15,8 @@
   "review": {
     "status": "approved",
     "reviewedBy": "Carlos Herrero",
-    "reviewedAt": "2026-11-04T16:44:06+01:00",
-    "notes": "Revisión pedagógica aprobada por Carlos Herrero el 4 nov 2026. La validación cultural local sigue pendiente: confirmar alimentos, disponibilidad y coste, nombres y vocabulario con una persona de la comunidad concreta. No probado con niños. Esta aprobación no implica validación por la comunidad. Segunda revisión de las actividades de seguridad «preguntar-preparacion» y «ayuda-al-cocinar» por Sergio Chillón el 2026-11-05: leídas, sin objeciones; no sustituye la validación cultural local."
+    "reviewedAt": "2026-11-05T13:49:54+01:00",
+    "notes": "Revisión pedagógica aprobada por Carlos Herrero el 4 nov 2026. La validación cultural local sigue pendiente: confirmar alimentos, disponibilidad y coste, nombres y vocabulario con una persona de la comunidad concreta. No probado con niños. Esta aprobación no implica validación por la comunidad. Segunda revisión de las actividades de seguridad «preguntar-preparacion» y «ayuda-al-cocinar» por Sergio Chillón el 2026-11-05: leídas, sin objeciones; no sustituye la validación cultural local. Texto de la actividad `elige-lo-disponible` revisado de nuevo por Carlos Herrero el 2026-11-05."
   },
   "modules": [
     {
@@ -27,8 +27,8 @@
         {
           "id": "historia-de-ana",
           "type": "story",
-          "prompt": "Ana ayuda a preparar la comida con su familia. Hoy usan alimentos que tienen en casa. En otra casa pueden elegir alimentos distintos.",
-          "audioText": "Ana ayuda a preparar la comida con su familia. Hoy usan alimentos que tienen en casa. En otra casa pueden elegir alimentos distintos.",
+          "prompt": "Ana ayuda a preparar la comida con su familia. Hoy usan papa y habas. En otra casa pueden elegir alimentos distintos.",
+          "audioText": "Ana ayuda a preparar la comida con su familia. Hoy usan papa y habas. En otra casa pueden elegir alimentos distintos.",
           "feedback": "Cada familia organiza sus comidas según lo que tiene y acostumbra.",
           "safetyTag": "none",
           "durationMin": 1
@@ -36,7 +36,7 @@
         {
           "id": "elige-lo-disponible",
           "type": "choice",
-          "prompt": "La familia de Ana tiene papa y habas. ¿Qué opción nombra los dos alimentos de la historia?",
+          "prompt": "¿Qué opción nombra los alimentos que tiene la familia de Ana?",
           "options": [
             { "id": "papa-habas", "text": "Papa y habas" },
             { "id": "quinua-huevo", "text": "Quinua y huevo" }
