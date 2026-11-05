@@ -1,0 +1,319 @@
+{
+  "packVersion": "0.1",
+  "id": "expedicion-mercado-9-12-es",
+  "title": "Expedición al mercado",
+  "language": "es",
+  "context": {
+    "country": "Perú",
+    "region": "Andes rurales (contexto ilustrativo)",
+    "communityType": "A VALIDAR: comunidad rural andina con mercado semanal",
+    "foods": [
+      "papa",
+      "habas",
+      "quinua"
+    ],
+    "resources": [
+      "A VALIDAR: mercado semanal",
+      "A VALIDAR: lista y presupuesto familiar"
+    ],
+    "culturalNotes": [
+      "A VALIDAR: confirmar productos, precios y costumbres del mercado con una persona de la comunidad."
+    ],
+    "ageRange": "9-12"
+  },
+  "review": {
+    "status": "approved",
+    "reviewedBy": "Sergio Chillón",
+    "reviewedAt": "2026-11-05T14:26:44+01:00",
+    "notes": "Revisión pedagógica aprobada por Sergio Chillón el 2026-11-05 tras jugar todas las actividades. Borrador preparado con ayuda de IA (Claude) y revisado por una persona. Sin actividades con safetyTag sensible. La validación cultural local sigue pendiente. No probado con niños. Actividad «quien-decide» sustituida el 2026-11-05 por «ahorra-o-gasta» tras la revisión de Carlos Herrero (las decisiones de «quién decide» dependen de cada familia). La nueva actividad «ahorra-o-gasta» fue leída y aprobada por Sergio Chillón el 2026-11-05."
+  },
+  "modules": [
+    {
+      "id": "mision-compra",
+      "topic": "autonomy",
+      "title": "Misión: la compra",
+      "activities": [
+        {
+          "id": "encargo",
+          "type": "story",
+          "prompt": "Sami tiene 11 años. Hoy su familia le encarga una misión: ir al mercado con su tía y comprar lo necesario para la cena de cuatro personas, sin gastar más de lo que llevan.",
+          "audioText": "Sami tiene 11 años. Hoy su familia le encarga una misión: ir al mercado con su tía y comprar lo necesario para la cena de cuatro personas, sin gastar más de lo que llevan.",
+          "feedback": "Misión aceptada: ahora toca decidir bien.",
+          "safetyTag": "none",
+          "durationMin": 1,
+          "teacherNotes": "A VALIDAR: nombre, mercado y forma de comprar en la comunidad."
+        },
+        {
+          "id": "que-hace-falta",
+          "type": "choice",
+          "prompt": "La cena es una sopa de quinua con papa y habas. En casa ya hay papa. ¿Qué tienen que comprar? Elige todo lo que haga falta.",
+          "audioText": "La cena es una sopa de quinua con papa y habas. En casa ya hay papa. ¿Qué tienen que comprar? Elige todo lo que haga falta.",
+          "feedback": "Bien pensado: solo se compra lo que falta.",
+          "safetyTag": "none",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "quinua",
+              "text": "Quinua",
+              "icon": "🌾"
+            },
+            {
+              "id": "habas",
+              "text": "Habas",
+              "icon": "🫘"
+            },
+            {
+              "id": "papa",
+              "text": "Papa",
+              "icon": "🥔",
+              "feedback": "La papa ya la tienen en casa."
+            },
+            {
+              "id": "golosinas",
+              "text": "Golosinas",
+              "icon": "🍬",
+              "feedback": "No están en la receta ni en la lista."
+            }
+          ],
+          "correct": [
+            "quinua",
+            "habas"
+          ],
+          "teacherNotes": "Exige relacionar receta, despensa y lista; para 9-12."
+        },
+        {
+          "id": "verdad-mercado",
+          "type": "truefalse",
+          "prompt": "¿Verdad o mentira? Piensa antes de responder.",
+          "audioText": "¿Verdad o mentira? Piensa antes de responder.",
+          "feedback": "Ya razonas como alguien que hace la compra.",
+          "safetyTag": "none",
+          "durationMin": 3,
+          "options": [
+            {
+              "id": "comparar",
+              "text": "Comparar precios en varios puestos ayuda a que el dinero alcance.",
+              "icon": "🪙"
+            },
+            {
+              "id": "caro",
+              "text": "Lo más caro siempre es lo mejor.",
+              "icon": "💎",
+              "feedback": "No siempre: algo sencillo puede servir igual de bien."
+            },
+            {
+              "id": "lista",
+              "text": "Llevar una lista evita olvidar cosas y comprar de más.",
+              "icon": "📝"
+            },
+            {
+              "id": "oferta",
+              "text": "Si algo está en oferta, hay que comprarlo aunque no haga falta.",
+              "icon": "🏷️",
+              "feedback": "Una oferta solo ahorra si de verdad lo necesitas."
+            },
+            {
+              "id": "lavar",
+              "text": "Conviene lavar la fruta en casa aunque parezca limpia.",
+              "icon": "🍎"
+            }
+          ],
+          "correct": [
+            "comparar",
+            "lista",
+            "lavar"
+          ]
+        },
+        {
+          "id": "ahorra-o-gasta",
+          "type": "sort",
+          "prompt": "¿Ahorra o gasta de más? Pon cada hábito de compra en su cesta.",
+          "audioText": "¿Ahorra o gasta de más? Pon cada hábito de compra en su cesta.",
+          "options": [
+            {
+              "id": "ahorra",
+              "text": "Ayuda a ahorrar",
+              "icon": "💰"
+            },
+            {
+              "id": "gasta",
+              "text": "Hace gastar de más",
+              "icon": "💸"
+            },
+            {
+              "id": "lista",
+              "text": "Ir al mercado con una lista",
+              "icon": "📝"
+            },
+            {
+              "id": "comparar",
+              "text": "Comparar precios en varios puestos",
+              "icon": "🪙"
+            },
+            {
+              "id": "necesito",
+              "text": "Comprar solo lo que hace falta",
+              "icon": "🛒"
+            },
+            {
+              "id": "impulso",
+              "text": "Comprar todo lo que apetece en el momento",
+              "icon": "🛍️"
+            },
+            {
+              "id": "sin-mirar",
+              "text": "Pagar sin mirar el precio",
+              "icon": "🙈"
+            },
+            {
+              "id": "duplicar",
+              "text": "Comprar lo que ya hay en casa",
+              "icon": "📦"
+            }
+          ],
+          "correct": [
+            "lista:ahorra",
+            "comparar:ahorra",
+            "necesito:ahorra",
+            "impulso:gasta",
+            "sin-mirar:gasta",
+            "duplicar:gasta"
+          ],
+          "feedback": "Con una lista y precios comparados, el dinero rinde más.",
+          "safetyTag": "none",
+          "teacherNotes": "Sustituye a «quién decide», que dependía de cada familia (revisión de Carlos). Aquí cada hábito tiene una respuesta objetiva en cualquier contexto: no hay decisiones familiares. A VALIDAR con la comunidad si algún ejemplo no encaja.",
+          "durationMin": 3
+        },
+        {
+          "id": "memoria-ideas",
+          "type": "memory",
+          "prompt": "Memoria de ideas: une cada acción con lo que consigues.",
+          "audioText": "Memoria de ideas: une cada acción con lo que consigues.",
+          "feedback": "Cada buena idea tiene su porqué.",
+          "safetyTag": "none",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "lista",
+              "text": "Hacer una lista",
+              "icon": "📝"
+            },
+            {
+              "id": "no-olvidar",
+              "text": "No olvidar nada",
+              "icon": "✔️"
+            },
+            {
+              "id": "precios",
+              "text": "Comparar precios",
+              "icon": "🪙"
+            },
+            {
+              "id": "alcanza",
+              "text": "Que el dinero alcance",
+              "icon": "💰"
+            },
+            {
+              "id": "bolsa-tela",
+              "text": "Llevar bolsa de tela",
+              "icon": "👜"
+            },
+            {
+              "id": "menos-plastico",
+              "text": "Usar menos plástico",
+              "icon": "♻️"
+            },
+            {
+              "id": "cercano",
+              "text": "Comprar productos de la zona",
+              "icon": "🌽"
+            },
+            {
+              "id": "menos-viaje",
+              "text": "Que viajen menos kilómetros",
+              "icon": "🛣️"
+            }
+          ],
+          "correct": [
+            "lista:no-olvidar",
+            "precios:alcanza",
+            "bolsa-tela:menos-plastico",
+            "cercano:menos-viaje"
+          ]
+        },
+        {
+          "id": "ordena-mision",
+          "type": "order",
+          "prompt": "Ordena la misión de la compra, de principio a fin.",
+          "audioText": "Ordena la misión de la compra, de principio a fin.",
+          "feedback": "¡Misión cumplida, paso a paso!",
+          "safetyTag": "none",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "mirar",
+              "text": "Mirar qué falta en casa",
+              "icon": "🏠"
+            },
+            {
+              "id": "lista",
+              "text": "Hacer la lista con la familia",
+              "icon": "📝"
+            },
+            {
+              "id": "comparar",
+              "text": "Comparar precios en varios puestos",
+              "icon": "🪙"
+            },
+            {
+              "id": "pagar",
+              "text": "Pagar y revisar el cambio",
+              "icon": "💵"
+            },
+            {
+              "id": "guardar",
+              "text": "Guardar la comida al llegar",
+              "icon": "🧺"
+            }
+          ],
+          "correct": [
+            "mirar",
+            "lista",
+            "comparar",
+            "pagar",
+            "guardar"
+          ]
+        },
+        {
+          "id": "cambio-de-mas",
+          "type": "scenario",
+          "prompt": "En el puesto de frutas, el vendedor se equivoca y te da cambio de más. ¿Qué haces?",
+          "audioText": "En el puesto de frutas, el vendedor se equivoca y te da cambio de más. ¿Qué haces?",
+          "feedback": "Ser honesto también es parte de comprar bien.",
+          "safetyTag": "none",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "devolver",
+              "text": "Le aviso y devuelvo lo que sobra",
+              "icon": "🤝"
+            },
+            {
+              "id": "quedar",
+              "text": "Me lo quedo: no se ha dado cuenta",
+              "icon": "🤫",
+              "feedback": "Ese dinero es del vendedor; devolverlo es lo justo."
+            },
+            {
+              "id": "callar",
+              "text": "Se lo doy a mi tía sin decir nada",
+              "icon": "🙊",
+              "feedback": "Mejor contarlo y devolverlo al vendedor."
+            }
+          ],
+          "correct": "devolver"
+        }
+      ]
+    }
+  ]
+}

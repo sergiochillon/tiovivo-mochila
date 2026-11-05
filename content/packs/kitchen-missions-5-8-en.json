@@ -1,0 +1,323 @@
+{
+  "packVersion": "0.1",
+  "id": "kitchen-missions-5-8-en",
+  "title": "Kitchen missions with Ayo",
+  "language": "en",
+  "context": {
+    "country": "Uganda",
+    "region": "Northern Uganda (illustrative context)",
+    "communityType": "TO VALIDATE: specific rural community",
+    "foods": [
+      "millet",
+      "beans",
+      "cassava"
+    ],
+    "resources": [
+      "TO VALIDATE: clean water at home"
+    ],
+    "culturalNotes": [
+      "A VALIDAR: confirm foods, names and wording with someone from the community."
+    ],
+    "ageRange": "5-8"
+  },
+  "review": {
+    "status": "approved",
+    "reviewedBy": "Sergio Chillón",
+    "reviewedAt": "2026-11-05T14:26:44+01:00",
+    "notes": "Revisión pedagógica aprobada por Sergio Chillón el 2026-11-05 tras jugar todas las actividades. Borrador preparado con ayuda de IA (Claude) y revisado por una persona. Sin actividades con safetyTag sensible. La validación cultural local sigue pendiente. No probado con niños. Textos sobre agua y jabón modificados el 2026-11-05 tras una observación de Carlos Herrero y aprobados por él de palabra ese mismo día (lo registra Alejandro Estévez)."
+  },
+  "modules": [
+    {
+      "id": "kitchen-missions",
+      "topic": "food",
+      "title": "Kitchen missions",
+      "activities": [
+        {
+          "id": "hello-ayo",
+          "type": "story",
+          "prompt": "Hi! I am Ayo. Today I help in the kitchen with my grandma. Will you join my missions?",
+          "audioText": "Hi! I am Ayo. Today I help in the kitchen with my grandma. Will you join my missions?",
+          "feedback": "Let's go to the kitchen with Ayo!",
+          "safetyTag": "none",
+          "durationMin": 1,
+          "teacherNotes": "A VALIDAR: name and family references."
+        },
+        {
+          "id": "true-or-lie",
+          "type": "truefalse",
+          "prompt": "True or false? Listen to each sentence and choose.",
+          "audioText": "True or false? Listen to each sentence and choose.",
+          "feedback": "Great! You know how to take care of food and your body.",
+          "safetyTag": "hygiene",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "hands",
+              "text": "I wash my hands before I eat.",
+              "icon": "🧼"
+            },
+            {
+              "id": "fruit",
+              "text": "We eat fruit without washing it.",
+              "icon": "🍎",
+              "feedback": "If there is clean water, it is better to wash it first. If not, ask an adult for help."
+            },
+            {
+              "id": "water",
+              "text": "Clean water is good to drink.",
+              "icon": "💧"
+            },
+            {
+              "id": "cough",
+              "text": "When I cough, I cough over the food.",
+              "icon": "🤧",
+              "feedback": "Better to cough into your elbow."
+            },
+            {
+              "id": "table",
+              "text": "I can help to set the table.",
+              "icon": "🍽️"
+            }
+          ],
+          "correct": [
+            "hands",
+            "water",
+            "table"
+          ]
+        },
+        {
+          "id": "before-or-after",
+          "type": "sort",
+          "prompt": "Before or after eating? Put each thing in its basket.",
+          "audioText": "Before or after eating? Put each thing in its basket.",
+          "feedback": "Everything in its place!",
+          "safetyTag": "hygiene",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "before",
+              "text": "Before eating",
+              "icon": "⏰"
+            },
+            {
+              "id": "after",
+              "text": "After eating",
+              "icon": "✅"
+            },
+            {
+              "id": "wash-hands",
+              "text": "Wash my hands",
+              "icon": "🙌"
+            },
+            {
+              "id": "set-table",
+              "text": "Set the table",
+              "icon": "🍽️"
+            },
+            {
+              "id": "sit-down",
+              "text": "Sit down to eat",
+              "icon": "🪑"
+            },
+            {
+              "id": "brush-teeth",
+              "text": "Brush my teeth",
+              "icon": "🪥"
+            },
+            {
+              "id": "take-plate",
+              "text": "Take my plate away",
+              "icon": "🥣"
+            }
+          ],
+          "correct": [
+            "wash-hands:before",
+            "set-table:before",
+            "sit-down:before",
+            "brush-teeth:after",
+            "take-plate:after"
+          ]
+        },
+        {
+          "id": "kitchen-memory",
+          "type": "memory",
+          "prompt": "Memory game: find the things that go together.",
+          "audioText": "Memory game: find the things that go together.",
+          "feedback": "What a memory! Every thing with its pair.",
+          "safetyTag": "hygiene",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "soap",
+              "text": "Soap",
+              "icon": "🧼"
+            },
+            {
+              "id": "hands",
+              "text": "Hands",
+              "icon": "🙌"
+            },
+            {
+              "id": "spoon",
+              "text": "Spoon",
+              "icon": "🥄"
+            },
+            {
+              "id": "soup",
+              "text": "Soup",
+              "icon": "🍲"
+            },
+            {
+              "id": "cup",
+              "text": "Cup",
+              "icon": "🥛"
+            },
+            {
+              "id": "water",
+              "text": "Water",
+              "icon": "💧"
+            },
+            {
+              "id": "brush",
+              "text": "Toothbrush",
+              "icon": "🪥"
+            },
+            {
+              "id": "teeth",
+              "text": "Teeth",
+              "icon": "🦷"
+            }
+          ],
+          "correct": [
+            "soap:hands",
+            "spoon:soup",
+            "cup:water",
+            "brush:teeth"
+          ]
+        },
+        {
+          "id": "odd-one-out",
+          "type": "choice",
+          "prompt": "Find the odd one out: what does NOT go on the table to eat?",
+          "audioText": "Find the odd one out: what does NOT go on the table to eat?",
+          "feedback": "You found it! The ball is for playing, not for the table.",
+          "safetyTag": "none",
+          "durationMin": 1,
+          "options": [
+            {
+              "id": "plate",
+              "text": "Plate",
+              "icon": "🍽️",
+              "feedback": "The plate goes on the table."
+            },
+            {
+              "id": "spoon",
+              "text": "Spoon",
+              "icon": "🥄",
+              "feedback": "The spoon goes on the table."
+            },
+            {
+              "id": "ball",
+              "text": "Ball",
+              "icon": "⚽"
+            },
+            {
+              "id": "cup",
+              "text": "Cup",
+              "icon": "🥛",
+              "feedback": "The cup goes on the table."
+            }
+          ],
+          "correct": "ball"
+        },
+        {
+          "id": "ayos-plate",
+          "type": "choice",
+          "prompt": "Ayo cooks millet, beans and cassava. Fill the plate!",
+          "audioText": "Ayo cooks millet, beans and cassava. Fill the plate!",
+          "feedback": "Full plate! Ayo uses what there is at home.",
+          "safetyTag": "none",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "millet",
+              "text": "Millet",
+              "icon": "🌾"
+            },
+            {
+              "id": "beans",
+              "text": "Beans",
+              "icon": "🫘"
+            },
+            {
+              "id": "cassava",
+              "text": "Cassava",
+              "icon": "🥔"
+            },
+            {
+              "id": "shoe",
+              "text": "Shoe",
+              "icon": "👟",
+              "feedback": "We do not eat shoes!"
+            },
+            {
+              "id": "sweet",
+              "text": "Sweet",
+              "icon": "🍬",
+              "feedback": "Sweets are not in Ayo's pot."
+            }
+          ],
+          "correct": [
+            "millet",
+            "beans",
+            "cassava"
+          ]
+        },
+        {
+          "id": "wash-hands-order",
+          "type": "order",
+          "prompt": "If there is water and soap, put the steps in order to wash your hands well.",
+          "audioText": "If there is water and soap, put the steps in order to wash your hands well.",
+          "feedback": "Clean hands! That is how to wash them.",
+          "safetyTag": "hygiene",
+          "teacherNotes": "TO VALIDATE: this game assumes water and soap are available. If they are not, or not safe, adapt the steps with the family, without making it look like a lack of the child or their family.",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "wet",
+              "text": "Wet your hands",
+              "icon": "💧"
+            },
+            {
+              "id": "soap",
+              "text": "Add soap",
+              "icon": "🧼"
+            },
+            {
+              "id": "rub",
+              "text": "Rub well",
+              "icon": "👐"
+            },
+            {
+              "id": "rinse",
+              "text": "Rinse",
+              "icon": "🚿"
+            },
+            {
+              "id": "dry",
+              "text": "Dry",
+              "icon": "🧻"
+            }
+          ],
+          "correct": [
+            "wet",
+            "soap",
+            "rub",
+            "rinse",
+            "dry"
+          ]
+        }
+      ]
+    }
+  ]
+}
