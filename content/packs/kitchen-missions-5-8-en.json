@@ -24,7 +24,7 @@
     "status": "approved",
     "reviewedBy": "Sergio Chillón",
     "reviewedAt": "2026-11-05T14:26:44+01:00",
-    "notes": "Revisión pedagógica aprobada por Sergio Chillón el 2026-11-05 tras jugar todas las actividades. Borrador preparado con ayuda de IA (Claude) y revisado por una persona. Sin actividades con safetyTag sensible. La validación cultural local sigue pendiente. No probado con niños."
+    "notes": "Revisión pedagógica aprobada por Sergio Chillón el 2026-11-05 tras jugar todas las actividades. Borrador preparado con ayuda de IA (Claude) y revisado por una persona. Sin actividades con safetyTag sensible. La validación cultural local sigue pendiente. No probado con niños. Textos sobre agua y jabón modificados el 2026-11-05 tras una observación de Carlos Herrero; pendientes de relectura humana."
   },
   "modules": [
     {
@@ -45,8 +45,8 @@
         {
           "id": "true-or-lie",
           "type": "truefalse",
-          "prompt": "True or lie? Listen to each sentence and choose.",
-          "audioText": "True or lie? Listen to each sentence and choose.",
+          "prompt": "True or false? Listen to each sentence and choose.",
+          "audioText": "True or false? Listen to each sentence and choose.",
           "feedback": "Great! You know how to take care of food and your body.",
           "safetyTag": "hygiene",
           "durationMin": 2,
@@ -60,7 +60,7 @@
               "id": "fruit",
               "text": "We eat fruit without washing it.",
               "icon": "🍎",
-              "feedback": "Better to wash it with clean water first."
+              "feedback": "If there is clean water, it is better to wash it first. If not, ask an adult for help."
             },
             {
               "id": "water",
@@ -276,10 +276,11 @@
         {
           "id": "wash-hands-order",
           "type": "order",
-          "prompt": "Put the steps in order to wash your hands well.",
-          "audioText": "Put the steps in order to wash your hands well.",
+          "prompt": "If there is water and soap, put the steps in order to wash your hands well.",
+          "audioText": "If there is water and soap, put the steps in order to wash your hands well.",
           "feedback": "Clean hands! That is how to wash them.",
           "safetyTag": "hygiene",
+          "teacherNotes": "TO VALIDATE: this game assumes water and soap are available. If they are not, or not safe, adapt the steps with the family, without making it look like a lack of the child or their family.",
           "durationMin": 2,
           "options": [
             {
