@@ -1,6 +1,6 @@
 import { readingControl, stopReading } from './audio'
 import demo from './demo.json'
-import { loadPack, type Pack, type Activity } from './packs'
+import { approvedCatalog, loadPack, type Pack, type Activity } from './packs'
 import { authoring } from './autoria'
 import '@fontsource/baloo-2/latin-700.css'
 import '@fontsource/baloo-2/latin-800.css'
@@ -255,15 +255,18 @@ async function backpacks() {
     }
     cursor.onerror = () => reject(cursor.error)
   })
+  const fromPack = (pack: Pack) => ({
+    id: pack.id, title: pack.title, place: pack.context.region + ', ' + pack.context.country,
+    language: pack.language === 'en' ? 'English' : 'Español', note: 'Material aprobado'
+  })
   const entries = [...knownPacks]
-  for (const [id, saved] of cached) {
-    if (!entries.some(entry => entry.id === id)) {
-      entries.push({ id, title: saved.title, place: saved.context.region + ', ' + saved.context.country, language: saved.language === 'en' ? 'English' : 'Español', note: 'Material aprobado' })
-    }
+  for (const saved of cached.values()) {
+    if (!entries.some(entry => entry.id === saved.id)) entries.push(fromPack(saved))
   }
   const grid = document.createElement('div')
   grid.className = 'backpack-grid'
-  entries.forEach((entry, index) => {
+  // Only packages stored on this device are «ready offline»; the rest need a connection the first time.
+  const addCard = (entry: typeof entries[number], index: number) => {
     const ready = cached.has(entry.id)
     const card = document.createElement('a')
     card.className = 'backpack backpack-' + (index % 3) + (ready ? ' ready' : '')
@@ -281,8 +284,18 @@ async function backpacks() {
     note.textContent = entry.note
     card.append(art, title, place, state, note)
     grid.append(card)
-  })
+  }
+  entries.forEach(addCard)
   lesson.append(grid)
+  // With a connection, also offer the packages approved on the server since (for example, ones prepared
+  // with AI and approved by a teacher). Offline this adds nothing and the screen is already complete.
+  const offered = await approvedCatalog()
+  for (const pack of offered) {
+    if (!entries.some(entry => entry.id === pack.id)) {
+      entries.push(fromPack(pack))
+      addCard(entries[entries.length - 1], entries.length - 1)
+    }
+  }
 }
 
 async function choose() {

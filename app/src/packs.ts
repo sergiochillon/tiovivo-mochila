@@ -75,6 +75,22 @@ function savedPack(db: IDBDatabase, id: string) {
   })
 }
 
+/** Approved packages the server offers now (GET /api/packs). Empty when offline or on any error. */
+export async function approvedCatalog(): Promise<Pack[]> {
+  const base = import.meta.env.VITE_API_BASE_URL || '/api'
+  try {
+    const response = await fetch(base + '/packs', { cache: 'no-store', signal: AbortSignal.timeout(5000) })
+    if (response.status !== 200) return []
+    const data: unknown = await response.json()
+    const list = typeof data === 'object' && data !== null && Array.isArray((data as { packs?: unknown }).packs)
+      ? (data as { packs: unknown[] }).packs : []
+    return list.filter((item): item is Pack =>
+      typeof item === 'object' && item !== null && approved(item, String((item as { id?: unknown }).id)))
+  } catch {
+    return []
+  }
+}
+
 /**
  * Offline first: the copy already on the device wins over any server answer that is not a valid
  * approved package. A 404, a 5xx, broken JSON, an invalid package or no network never erase or
