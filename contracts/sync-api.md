@@ -30,7 +30,9 @@ reemplaza el borrador editable; no se puede sobrescribir un paquete aprobado
 
 Aprueba un borrador existente tras acción explícita de una persona revisora.
 
-Petición: `{ "packId": "food-andes-es-demo", "reviewer": "docente-demo" }`
+Petición: `{ "packId": "food-andes-es-demo", "reviewer": "docente-demo", "checklist": ["una-idea-por-actividad", "lenguaje-6-10", "feedback-amable", "contexto-local-marcado", "sin-estereotipos", "sin-datos-y-seguro"] }`
+
+`checklist` son los seis puntos de la lista de revisión de `/autoria`, confirmados por la persona revisora. Si falta alguno: `422 { "error": "checklist_incomplete", "details": [...] }`. `reviewer` vacío o de más de 100 caracteres: `422 { "error": "invalid_review" }`. Las notas del sello dicen que la lista se completó.
 
 `200 OK`: `{ "packId": "food-andes-es-demo", "status": "approved", "reviewedBy": "docente-demo", "reviewedAt": "2026-11-04T14:00:00.000Z" }`
 
