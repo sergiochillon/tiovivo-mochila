@@ -633,7 +633,8 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     ended = true
     const event: Progress = {
       eventId: crypto.randomUUID(), avatarId: avatar.id, packId: pack.id,
-      activityId: activity.id, result, attempts: Math.min(mistakes + 1, 20), type: 'activity_completed',
+      // Tries used, never more than three: solved at the 1st try → 1; after two mistakes → 3; out of tries → 3.
+      activityId: activity.id, result, attempts: result === 'incorrect' ? MAX_MISTAKES : Math.min(mistakes + 1, MAX_MISTAKES), type: 'activity_completed',
       ts: new Date().toISOString(), classCode: 'DEMO-01'
     }
     await new Promise<void>((resolve, reject) => {
@@ -909,6 +910,8 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         soundWrong()
         coach.say(t.memoryMiss, 'thinking', 'wiggle')
         await delay(1000)
+        // Memory forgives some misses (it is about remembering), but not endlessly: too many ends it as unsolved.
+        if (misses >= pairs.length * 2 + 2) { mistakes = MAX_MISTAKES; await fail(); return }
         for (const turned of [first, second]) { turned.classList.remove('open'); turned.setAttribute('aria-label', t.memoryCard) }
         busy = false
         if (misses % 4 === 0) {
@@ -961,6 +964,8 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         card.classList.add('wrong')
         coach.say((isTrue ? t.tfWasTrue : t.tfWasFalse) + (statement.feedback ? ' ' + statement.feedback : ''), 'thinking', 'wiggle')
         await delay(2600)
+        // The third mistake ends the activity right away (no more statements).
+        if (mistakes >= MAX_MISTAKES) { await fail(); return }
       }
       card.classList.remove('right', 'wrong')
       index++

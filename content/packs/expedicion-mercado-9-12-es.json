@@ -25,7 +25,7 @@
     "status": "approved",
     "reviewedBy": "Sergio Chillón",
     "reviewedAt": "2026-11-05T14:26:44+01:00",
-    "notes": "Revisión pedagógica aprobada por Sergio Chillón el 2026-11-05 tras jugar todas las actividades. Borrador preparado con ayuda de IA (Claude) y revisado por una persona. Sin actividades con safetyTag sensible. La validación cultural local sigue pendiente. No probado con niños."
+    "notes": "Revisión pedagógica aprobada por Sergio Chillón el 2026-11-05 tras jugar todas las actividades. Borrador preparado con ayuda de IA (Claude) y revisado por una persona. Sin actividades con safetyTag sensible. La validación cultural local sigue pendiente. No probado con niños. Actividad «quien-decide» sustituida el 2026-11-05 por «ahorra-o-gasta» tras la revisión de Carlos Herrero (las decisiones de «quién decide» dependen de cada familia). La nueva actividad está pendiente de lectura por una persona."
   },
   "modules": [
     {
@@ -128,70 +128,65 @@
           ]
         },
         {
-          "id": "quien-decide",
+          "id": "ahorra-o-gasta",
           "type": "sort",
           "icon": "⚖️",
-          "prompt": "¿Quién decide? Clasifica cada situación del mercado.",
-          "audioText": "¿Quién decide? Clasifica cada situación del mercado.",
-          "feedback": "Saber qué puedes hacer solo y cuándo preguntar también es autonomía.",
-          "safetyTag": "none",
-          "durationMin": 3,
+          "prompt": "¿Ahorra o gasta de más? Pon cada hábito de compra en su cesta.",
+          "audioText": "¿Ahorra o gasta de más? Pon cada hábito de compra en su cesta.",
           "options": [
             {
-              "id": "yo",
-              "text": "Lo hago yo",
-              "icon": "🙋"
+              "id": "ahorra",
+              "text": "Ayuda a ahorrar",
+              "icon": "💰"
             },
             {
-              "id": "juntos",
-              "text": "Con una persona adulta",
-              "icon": "🤝"
+              "id": "gasta",
+              "text": "Hace gastar de más",
+              "icon": "💸"
             },
             {
-              "id": "permiso",
-              "text": "Pido permiso antes",
-              "icon": "✋"
+              "id": "lista",
+              "text": "Ir al mercado con una lista",
+              "icon": "📝"
             },
             {
-              "id": "bolsa",
-              "text": "Llevar la bolsa de la compra",
-              "icon": "👜"
+              "id": "comparar",
+              "text": "Comparar precios en varios puestos",
+              "icon": "🪙"
             },
             {
-              "id": "fruta",
-              "text": "Elegir la fruta más fresca",
-              "icon": "🍊"
+              "id": "necesito",
+              "text": "Comprar solo lo que hace falta",
+              "icon": "🛒"
             },
             {
-              "id": "pagar",
-              "text": "Pagar y contar el cambio",
-              "icon": "💵"
-            },
-            {
-              "id": "regatear",
-              "text": "Hablar del precio con quien vende",
-              "icon": "🗣️"
-            },
-            {
-              "id": "otro-puesto",
-              "text": "Ir solo a un puesto lejano",
-              "icon": "🚶"
-            },
-            {
-              "id": "capricho",
-              "text": "Gastar el cambio en algo que no está en la lista",
+              "id": "impulso",
+              "text": "Comprar todo lo que apetece en el momento",
               "icon": "🛍️"
+            },
+            {
+              "id": "sin-mirar",
+              "text": "Pagar sin mirar el precio",
+              "icon": "🙈"
+            },
+            {
+              "id": "duplicar",
+              "text": "Comprar lo que ya hay en casa",
+              "icon": "📦"
             }
           ],
           "correct": [
-            "bolsa:yo",
-            "fruta:yo",
-            "pagar:juntos",
-            "regatear:juntos",
-            "otro-puesto:permiso",
-            "capricho:permiso"
+            "lista:ahorra",
+            "comparar:ahorra",
+            "necesito:ahorra",
+            "impulso:gasta",
+            "sin-mirar:gasta",
+            "duplicar:gasta"
           ],
-          "teacherNotes": "No hay una única forma correcta en todas las familias: comentarlo en clase. A VALIDAR con la comunidad."
+          "feedback": "Con una lista y precios comparados, el dinero rinde más.",
+          "safetyTag": "none",
+          "teacherNotes": "Sustituye a «quién decide», que dependía de cada familia (revisión de Carlos). Aquí cada hábito tiene una respuesta objetiva en cualquier contexto: no hay decisiones familiares. A VALIDAR con la comunidad si algún ejemplo no encaja.",
+          "durationMin": 3
         },
         {
           "id": "memoria-ideas",
