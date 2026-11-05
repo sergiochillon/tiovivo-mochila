@@ -90,8 +90,8 @@ button.avatar:active{transform:scale(.97)}
 .avatar-stamps{margin-top:4px;font:700 .9rem/1.2 var(--titulo);color:var(--tinta-suave)}
 
 /* Progreso: huecos de pegatina */
-.seals{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--cielo);border-radius:20px;padding:10px 16px;margin:0 0 18px;max-width:680px}
-.seals strong{font:800 1.1rem/1 var(--titulo)}
+.seals{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;background:var(--cielo);border-radius:20px;padding:10px 16px;margin:0 0 18px;max-width:680px}
+.seals strong{font:800 1.1rem/1.2 var(--titulo)}
 .dots{display:flex;gap:8px;flex-wrap:wrap}
 .dots i{width:24px;height:24px;border-radius:50%;background:#fff;border:3px dashed var(--cielo-2)}
 .dots i.on{background:var(--baya);border:3px solid #fff;box-shadow:0 2px 0 rgba(28,43,75,.2)}

@@ -7,9 +7,12 @@ El contrato HTTP está en `../contracts/sync-api.md`; los paquetes se validan co
 ## Arranque local
 
 ```sh
-npm install
-npm run dev
+npm ci
+npm run seed:approved-packs   # con el servidor parado: carga los paquetes aprobados (ver más abajo)
+npm start
 ```
+
+Para desarrollar con recarga automática: `npm run dev`.
 
 Por defecto escucha en `http://127.0.0.1:3001`. Configuración opcional:
 
@@ -23,9 +26,9 @@ Por defecto escucha en `http://127.0.0.1:3001`. Configuración opcional:
 - `GEMINI_MODEL`: modelo Gemini opcional (por defecto `gemini-3.5-flash`, probado en la API gratuita).
 
 El servidor crea `data/store.json` al guardar el primer borrador, aprobación o
-lote de progreso. El directorio local está ignorado por Git. No hay paquetes
-aprobados precargados en esta rama; el ejemplo del contrato está en `draft` y
-no se sirve al reproductor.
+lote de progreso. El directorio local está ignorado por Git. Un servidor nuevo
+no trae paquetes aprobados: cárgalos con `npm run seed:approved-packs` (ver
+más abajo). El ejemplo del contrato está en `draft` y no se sirve al reproductor.
 
 Cada generación real con Gemini (`POST /api/generate/ai`) añade una línea a
 `data/generations.jsonl`: fecha, modelo que respondió, id del borrador, país,
@@ -33,7 +36,7 @@ región, idioma, tema y número de actividades. Nunca el prompt, la clave ni
 datos de alumnos. Es la evidencia de qué propuestas vienen de verdad de la IA;
 el borrador y su sello también dicen «Generado con IA (modelo, fecha)».
 
-Después de que Carlos apruebe paquetes en `content/packs/`, cárgalos antes de
+Los paquetes revisados y aprobados viven en `content/packs/`; cárgalos antes de
 arrancar el servidor:
 
 ```sh
