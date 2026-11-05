@@ -62,6 +62,13 @@ export function soundWrong() {
   bell(ctx, 262, now + 0.12, 0.32, 0.1)
 }
 
+/** Out of tries: a slow, soft descending phrase (sad but kind), clearly different from the small «hmm» of a mistake. */
+export function soundOut() {
+  const ctx = audio(); if (!ctx) return
+  const now = ctx.currentTime
+  ;[392, 349, 311, 262].forEach((frequency, index) => bell(ctx, frequency, now + index * 0.2, 0.7, 0.12))
+}
+
 export function soundStamp() {
   const ctx = audio(); if (!ctx) return
   const now = ctx.currentTime

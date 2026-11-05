@@ -12,7 +12,7 @@ import fox from './zorro.svg'
 import bird from './colibri.svg'
 import { extraAvatars, mochi, sticker } from './art'
 import { neutralScene, sceneCaption, sceneFor, sceneImage, type Scene } from './scenes'
-import { confetti, isMuted, setMuted, soundRight, soundStamp, soundTap, soundWrong } from './fx'
+import { confetti, isMuted, setMuted, soundOut, soundRight, soundStamp, soundTap, soundWrong } from './fx'
 // Each explorer is a child's identity on a shared device, without personal data: progress is kept per avatar.
 // label is the legacy display name used only to migrate old progress records.
 const avatars: { id: string; portrait: string; color?: string; label?: string }[] = [
@@ -89,7 +89,7 @@ const texts = {
     soundOff: 'Silenciar sonidos', soundOn: 'Activar sonidos',
     yourOrder: 'Tu orden', yourPlate: 'Tu plato', pairFound: 'pareja encontrada', firstStep: '¿Cuál es el primer paso?', wrongStep: 'Ese no va ahora. Prueba otro paso.',
     nextStep: '¡Bien! ¿Cuál va después?', tryAgain: 'Puedes volver a elegir.',
-    wellDone: (name: string) => '¡Buen trabajo, ' + name + '!', seal: 'Pegatina de la estación',
+    wellDone: (name: string, n = 0) => ['¡Buen trabajo, ' + name + '!', '¡Lo has conseguido, ' + name + '!', '¡Así se hace, ' + name + '!', '¡Genial, ' + name + '!', '¡Qué bien lo hace ' + name + '!', '¡Eres un crack, ' + name + '!', '¡Misión cumplida, ' + name + '!', '¡Muy bien pensado, ' + name + '!'][n % 8], seal: 'Pegatina de la estación',
     seals: (done: number, total: number) => 'Tus pegatinas: ' + done + ' de ' + total,
     nextActivity: 'Siguiente actividad', allActivities: 'Ver todas las actividades',
     storageTitle: 'No se puede acceder al progreso',
@@ -132,7 +132,7 @@ const texts = {
     soundOff: 'Mute sounds', soundOn: 'Turn sounds on',
     yourOrder: 'Your order', yourPlate: 'Your plate', pairFound: 'match found', firstStep: 'What is the first step?', wrongStep: 'Not this one yet. Try another step.',
     nextStep: 'Good! What comes next?', tryAgain: 'You can choose again.',
-    wellDone: (name: string) => 'Well done, ' + name + '!', seal: 'Station sticker',
+    wellDone: (name: string, n = 0) => ['Well done, ' + name + '!', 'You did it, ' + name + '!', 'Nice work, ' + name + '!', 'Awesome, ' + name + '!', name + ' is on fire!', 'You are a star, ' + name + '!', 'Mission complete, ' + name + '!', 'Great thinking, ' + name + '!'][n % 8], seal: 'Station sticker',
     seals: (done: number, total: number) => 'Your stickers: ' + done + ' of ' + total,
     nextActivity: 'Next activity', allActivities: 'See all activities',
     storageTitle: 'Progress cannot be saved',
@@ -200,6 +200,8 @@ const knownPacks: Entry[] = [
   { id: 'food-altiplano-es', title: 'Alimentos en el Altiplano', place: 'Altiplano, Bolivia', language: 'es', age: '6-10', note: 'ai' }
 ]
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+// Praise cycles through eight phrasings, starting at a random one so two children do not hear the same order.
+let praiseTurn = Math.floor(Math.random() * 8)
 /** A new random order each time, so the answer is never in a position the child can memorise.
  *  `predictable` rejects orders that would give the answer away (retries a few times). */
 function shuffled<T>(list: readonly T[], predictable: (order: T[]) => boolean = () => false): T[] {
@@ -245,6 +247,22 @@ function icon(paths: string, className: string) {
 }
 
 const playable = (activity: Activity) => activity.type in kinds
+/** The activity's own little drawing (an emoji chosen by its author), in the same slot as the game icon. */
+function emojiTile(emoji: string) {
+  const wrapper = document.createElement('span')
+  wrapper.className = 'tile tile-emoji'
+  wrapper.setAttribute('aria-hidden', 'true')
+  wrapper.textContent = emoji
+  return wrapper
+}
+/** A link back to the start screen; the logo in the header does the same. */
+function homeLink(secondary = true) {
+  const link = document.createElement('a')
+  link.className = 'button-link' + (secondary ? ' secondary-link' : '')
+  link.href = '/'
+  link.textContent = '🏠 ' + t.myBackpacks
+  return link
+}
 
 async function progressOf(avatar: Avatar) {
   const db = await database
@@ -514,7 +532,7 @@ async function activities(avatar: Avatar) {
       end.className = 'time'
       end.textContent = item.durationMin ? item.durationMin + ' ' + t.minutes : ''
     }
-    const tile = icon(kinds[item.type].icon, 'tile')
+    const tile = item.icon ? emojiTile(item.icon) : icon(kinds[item.type].icon, 'tile')
     const number = document.createElement('b')
     number.className = 'station'
     number.textContent = String(items.indexOf(item) + 1)
@@ -526,6 +544,7 @@ async function activities(avatar: Avatar) {
   const albumButton = button(t.openAlbum(items.filter(item => done.has(item.id)).length, items.length), () => album(avatar))
   albumButton.classList.add('album-button')
   button(t.changeAvatar, choose).classList.add('secondary')
+  lesson.append(homeLink())
 }
 
 async function album(avatar: Avatar) {
@@ -577,6 +596,13 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
   if (saved && saved.result !== 'incorrect' && !replay) return complete(avatar, activity)
   screen(activity.prompt, kindLabel(activity))
   lesson.className = 'activity-screen kind-' + activity.type
+  if (activity.icon) {
+    const art = document.createElement('span')
+    art.className = 'activity-emoji'
+    art.setAttribute('aria-hidden', 'true')
+    art.textContent = activity.icon
+    lesson.querySelector('h1')?.prepend(art)
+  }
   lesson.append(readingControl(activity.audioText || activity.prompt, pack.language))
   if (!technicalPreview) {
     const back = document.createElement('button')
@@ -633,7 +659,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
   async function fail() {
     if (ended) return
     await save('incorrect')
-    soundWrong()
+    soundOut()
     await missed(avatar, activity)
   }
   const options = activity.options ?? []
@@ -1031,7 +1057,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
 }
 
 async function complete(avatar: Avatar, activity: Activity, fresh = false) {
-  screen(t.wellDone(avatarName(avatar)), activity.feedback)
+  screen(t.wellDone(avatarName(avatar), praiseTurn++), activity.feedback)
   lesson.append(readingControl(activity.feedback, pack.language))
   lesson.className = 'celebrate'
   const seal = document.createElement('div')
@@ -1058,6 +1084,7 @@ async function complete(avatar: Avatar, activity: Activity, fresh = false) {
   const all = button(t.allActivities, () => activities(avatar))
   if (next) all.classList.add('secondary')
   button(t.playAgain, () => play(avatar, activity, true)).classList.add('secondary')
+  lesson.append(homeLink())
 }
 
 /** What the right answer was, in words, for the «almost» screen. */
@@ -1092,6 +1119,7 @@ async function missed(avatar: Avatar, activity: Activity) {
   if (next) button(t.nextActivity, () => play(avatar, next))
   button(t.tryItAgain, () => play(avatar, activity, true)).classList.add('secondary')
   button(t.allActivities, () => activities(avatar)).classList.add('secondary')
+  lesson.append(homeLink())
 }
 
 /** Paints the landscape behind the screen (DESIGN.md §6). A real scene always carries a short visible "illustrative" note. */
@@ -1103,6 +1131,10 @@ function showScene(scene: Scene, language = 'es') {
   aside.style.backgroundImage = 'url("' + sceneImage(scene) + '")'
   document.body.dataset.scene = scene.id
 }
+
+/** Fixed labels, no free text and nothing stored: «Alumno 1»…«Alumno 6» are the six explorers in order.
+ *  (The repo rules forbid free text and personal data about minors.) */
+const studentLabel = (avatarId: string) => 'Alumno ' + (avatars.findIndex(avatar => avatar.id === avatarId) + 1)
 
 function teacherHeader(title: string, subtitle: string) {
   document.body.classList.add('teacher')
@@ -1124,8 +1156,8 @@ async function pendingCount() {
 }
 
 function teacherPanel() {
-  teacherHeader('Cuaderno de clase', 'Clase DEMO-01')
-  screen('Cuaderno de clase', 'Clase DEMO-01: prepara el material, sigue el progreso y deja las tablets listas.')
+  teacherHeader('Cuaderno de clase', 'Tu clase de demostración')
+  screen('Cuaderno de clase', 'Mira cómo va cada alumno, prepara material nuevo y deja las tablets listas.')
   lesson.className = 'teacher-home'
   const metrics = document.createElement('div')
   metrics.className = 'metrics'
@@ -1144,11 +1176,33 @@ function teacherPanel() {
   lesson.append(metrics)
   const metricsHelp = document.createElement('p')
   metricsHelp.className = 'step-help'
-  metricsHelp.textContent = 'Cada vez que un explorador termina una actividad (resuelta, leída o sin resolver tras tres intentos), su tablet guarda un aviso sin nombres y lo envía al volver la conexión. Abajo tienes el detalle de cada explorador.'
+  metricsHelp.textContent = 'Cada vez que un alumno termina una actividad (la resuelve, la lee o se queda sin intentos), su tablet lo apunta y lo envía cuando hay conexión. Abajo ves el detalle de cada alumno.'
   lesson.append(metricsHelp)
   // Per-explorer results: what each pseudonymous explorer solved at first try, with help, or not yet.
+  // The class: each explorer on the tablets is one student, shown with a fixed label.
+  const rosterTitle = document.createElement('h2')
+  rosterTitle.textContent = 'Tu alumnado'
+  const rosterHelp = document.createElement('p')
+  rosterHelp.className = 'step-help'
+  rosterHelp.textContent = 'Cada niño o niña elige un explorador en la tablet y aquí lo ves como «Alumno 1» a «Alumno 6». No se guarda ningún nombre ni dato personal.'
+  const rosterList = document.createElement('div')
+  rosterList.className = 'roster'
+  for (const avatar of avatars) {
+    const row = document.createElement('div')
+    row.className = 'roster-row'
+    const portrait = new Image()
+    portrait.src = avatar.portrait
+    portrait.alt = ''
+    const label = document.createElement('strong')
+    label.textContent = studentLabel(avatar.id)
+    const who = document.createElement('small')
+    who.textContent = texts.es.avatars[avatar.id]
+    row.append(portrait, label, who)
+    rosterList.append(row)
+  }
+  lesson.append(rosterTitle, rosterHelp, rosterList)
   const resultsTitle = document.createElement('h2')
-  resultsTitle.textContent = 'Resultados por explorador'
+  resultsTitle.textContent = 'Resultados por alumno'
   const resultsBox = document.createElement('div')
   resultsBox.className = 'explorer-results'
   lesson.append(resultsTitle, resultsBox)
@@ -1158,7 +1212,7 @@ function teacherPanel() {
       resultsBox.replaceChildren()
       if (!explorers.length) {
         const empty = document.createElement('p')
-        empty.textContent = 'Todavía no ha llegado ningún resultado. Cuando las tablets envíen su progreso, aparecerá aquí cada explorador.'
+        empty.textContent = 'Todavía no ha llegado ningún resultado. Cuando las tablets envíen su progreso, aparecerá aquí cada alumno.'
         resultsBox.append(empty)
         return
       }
@@ -1174,7 +1228,7 @@ function teacherPanel() {
           summary.append(portrait)
         }
         const name = document.createElement('strong')
-        name.textContent = texts.es.avatars[explorer.avatarId] ?? explorer.avatarId
+        name.textContent = studentLabel(explorer.avatarId)
         const chips = document.createElement('span')
         chips.className = 'result-chips'
         const chip = (label: string, kind: string) => {
