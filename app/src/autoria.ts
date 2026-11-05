@@ -165,7 +165,7 @@ export function authoring(lesson: HTMLElement) {
     card.onclick = () => {
       topic = id
       topicButtons.forEach(other => other.setAttribute('aria-pressed', String(other === card)))
-      foodsField.hidden = id !== 'food'
+      foodsField.hidden = id !== 'food' && id !== 'mixed'
     }
     topicGrid.append(card)
     return card
@@ -204,7 +204,7 @@ export function authoring(lesson: HTMLElement) {
   contextResult.hidden = true
   const split = (value: string) => value.split(',').map(item => item.trim()).filter(Boolean)
   function context() {
-    const list = topic === 'food' ? split(foods.value) : []
+    const list = topic === 'food' || topic === 'mixed' ? split(foods.value) : []
     const missing = [[country.value, 'país'], [region.value, 'región']].filter(([value]) => !value.trim()).map(([, name]) => name)
     if (missing.length) { messages(contextResult, 'error', ['Falta: ' + missing.join(', ') + '.']); return null }
     if (list.length > 12) { messages(contextResult, 'error', ['Indica como máximo 12 alimentos.']); return null }
@@ -233,9 +233,11 @@ export function authoring(lesson: HTMLElement) {
         messages(contextResult, 'error', [body.reason === 'quota'
           ? 'Se ha agotado el uso gratuito de la IA por ahora. Abre un borrador guardado o usa el plan B de abajo.'
           : 'El servicio de IA está saturado en este momento (lo hemos intentado con varios modelos). Prueba en un rato, abre un borrador guardado o usa el plan B.'])
-      } else {
+      } else if (body.error === 'ai_invalid_package') {
         const details = Array.isArray(body.details) ? body.details.map(String).slice(0, 6) : []
         messages(contextResult, 'error', ['La IA devolvió una propuesta que no cumple las reglas. Prueba otra vez o usa el plan B.', ...details])
+      } else {
+        messages(contextResult, 'error', ['La IA no ha podido preparar el material ahora (error ' + status + '). Prueba otra vez, abre un borrador guardado o usa el plan B de abajo.'])
       }
     } catch {
       messages(contextResult, 'error', ['No hay conexión con el servidor de MOCHILA. La preparación de material necesita conexión.'])
