@@ -69,7 +69,7 @@ export const extraAvatars = [
 ]
 
 const stickerColors = ['#FFC531', '#17A06B', '#B5367D', '#2F7FD8', '#F28C38', '#7BC8E8', '#8E6BBF']
-const stickerEmoji: Record<string, string> = { story: '📖', choice: '⭐', order: '🪜', scenario: '💡', match: '🧩', plate: '🥣' }
+const stickerEmoji: Record<string, string> = { story: '📖', choice: '⭐', order: '🪜', scenario: '💡', match: '🧩', plate: '🥣', sort: '🧺', memory: '🃏', truefalse: '✅' }
 const blobs = [
   'M60 6 C88 6 112 26 112 58 C112 90 90 114 60 114 C28 114 8 92 8 60 C8 28 30 6 60 6 Z',
   'M60 4 L73 34 L106 36 L80 57 L90 90 L60 72 L30 90 L40 57 L14 36 L47 34 Z',

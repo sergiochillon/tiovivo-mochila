@@ -16,7 +16,7 @@ type Draft = {
   [key: string]: unknown
 }
 
-const kindLabels: Record<string, string> = { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas' }
+const kindLabels: Record<string, string> = { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas', sort: 'Clasifica en cestas', memory: 'Memoria', truefalse: '¿Verdad o mentira?' }
 // [id the server checks (contracts/sync-api.md), text the reviewer reads]
 const checklist: [string, string][] = [
   ['una-idea-por-actividad', 'He leído el paquete completo y cada actividad enseña una sola idea.'],
@@ -179,6 +179,13 @@ export function authoring(lesson: HTMLElement) {
     option.value = value
     language.append(option)
   }
+  // Age group: the AI adapts difficulty (5-8: one decision at a time, icons; 9-12: real challenge, why-questions).
+  const age = element('select')
+  for (const [value, label] of [['5-8', '5 a 8 años'], ['9-12', '9 a 12 años'], ['6-10', '6 a 10 años (mixto)']]) {
+    const option = element('option', '', label)
+    option.value = value
+    age.append(option)
+  }
   const presetRow = element('div', 'preset-row')
   for (const [label, presetCountry, presetRegion, presetLanguage] of presets) {
     const chip = element('button', 'preset-chip', label)
@@ -188,7 +195,7 @@ export function authoring(lesson: HTMLElement) {
   }
   const grid = element('div', 'field-grid')
   const foodsField = field('Alimentos locales (opcional)', foods, 'Si lo dejas vacío, la IA propone alimentos de la zona y los marca «A VALIDAR» para que los confirmes.')
-  grid.append(field('País', country), field('Región', region), field('Idioma para el niño', language),
+  grid.append(field('País', country), field('Región', region), field('Idioma para el niño', language), field('Edad', age),
     field('Tipo de comunidad (opcional)', community), foodsField,
     field('Recursos disponibles (opcional)', resources, 'Separados por comas: agua, cocina, mercado, escuela…'))
   const contextResult = element('div')
@@ -202,7 +209,7 @@ export function authoring(lesson: HTMLElement) {
     messages(contextResult, 'error', [])
     return {
       country: country.value.trim(), region: region.value.trim(), language: language.value, topic,
-      foods: list, resources: split(resources.value).slice(0, 8), communityType: community.value.trim()
+      foods: list, resources: split(resources.value).slice(0, 8), communityType: community.value.trim(), ageRange: age.value
     }
   }
   const generate = action('✨ Generar propuesta con IA', async () => {
@@ -259,6 +266,7 @@ export function authoring(lesson: HTMLElement) {
     if (!data) { details.open = true; return }
     const query = new URLSearchParams({ country: data.country, region: data.region, language: data.language, topic: data.topic })
     if (data.communityType) query.set('communityType', data.communityType)
+    query.set('ageRange', data.ageRange)
     for (const food of data.foods) query.append('foods', food)
     for (const resource of data.resources) query.append('resources', resource)
     try {
@@ -358,12 +366,18 @@ export function authoring(lesson: HTMLElement) {
         options.forEach(([option, control], position) => {
           let label = 'Opción ' + (position + 1)
           if (activity.type === 'order' && Array.isArray(correct)) label += ' (va en el paso ' + (correct.indexOf(option.id) + 1) + ')'
-          else if (activity.type === 'match' && Array.isArray(correct)) {
+          else if ((activity.type === 'match' || activity.type === 'memory') && Array.isArray(correct)) {
             const pair = correct.find(item => item.split(':').includes(option.id))
             const other = pair?.split(':').find(id => id !== option.id)
             const partner = (activity.options ?? []).find(item => item.id === other)
             if (partner) label += ' (pareja: ' + partner.text + ')'
           }
+          else if (activity.type === 'sort' && Array.isArray(correct)) {
+            const pair = correct.find(item => item.split(':')[0] === option.id)
+            const basket = (activity.options ?? []).find(item => item.id === pair?.split(':')[1])
+            label = basket ? 'Elemento ' + (position + 1) + ' (va en: ' + basket.text + ')' : 'Cesta'
+          }
+          else if (activity.type === 'truefalse' && Array.isArray(correct)) label = 'Afirmación ' + (position + 1) + (correct.includes(option.id) ? ' ✓ verdad' : ' ✗ mentira')
           else if (Array.isArray(correct) ? correct.includes(option.id) : correct === option.id) label += ' ✓ respuesta correcta'
           list.append(field(label, control))
         })

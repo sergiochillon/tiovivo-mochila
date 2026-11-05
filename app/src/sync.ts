@@ -8,7 +8,8 @@ export interface Progress {
   avatarId: string
   packId: string
   activityId: string
-  result: 'correct' | 'completed'
+  result: 'correct' | 'completed' | 'incorrect'
+  attempts?: number
   type: 'activity_completed'
   ts: string
   classCode: string
@@ -56,6 +57,19 @@ async function sendPending(db: IDBDatabase): Promise<string> {
     tx.onabort = () => reject(tx.error)
   })
   return 'Progreso enviado. Eventos confirmados: ' + events.length + '.'
+}
+
+export interface ExplorerResult {
+  avatarId: string; done: number; firstTry: number; withHelp: number; failed: number
+  results: { packId: string; packTitle: string; activityId: string; activity: string; result: string; attempts: number; ts: string }[]
+}
+
+/** Per-explorer results of the class (pseudonymous avatars only), latest try of each activity. */
+export async function classResults(): Promise<ExplorerResult[]> {
+  const response = await fetch(api + '/progress/' + classCode + '/detail', { cache: 'no-store', signal: timeoutSignal(8000) })
+  if (response.status !== 200) throw new Error('No se pudieron consultar los resultados')
+  const data = await response.json()
+  return Array.isArray(data?.explorers) ? data.explorers as ExplorerResult[] : []
 }
 
 export async function classTotals() {

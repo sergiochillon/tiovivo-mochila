@@ -21,6 +21,8 @@ MOCHILA separa dos momentos:
 1. **Preparar (con conexión, el docente u ONG).** El docente describe su contexto (país, idioma, alimentos disponibles, recursos). La IA propone actividades adaptadas. **El docente revisa, edita y aprueba** (sello de revisión humana). Se exporta un **paquete de contexto** (JSON).
 2. **Usar (sin conexión, el niño).** Una app web instalable (PWA) funciona sin red con el paquete aprobado: historias, juegos y escenarios con audio. El progreso se guarda en el dispositivo con **avatares, sin datos personales**, y se **sincroniza** cuando hay red.
 
+Los paisajes y personajes son **ilustrativos**: no representan a una comunidad concreta ni están validados por ella.
+
 **No hay chat abierto para niños.** La IA genera contenido para el docente; el niño solo interactúa con contenido ya revisado.
 
 ## Público objetivo
@@ -49,8 +51,8 @@ MOCHILA separa dos momentos:
 |---|---|---|
 | Imprescindible | Esquema de paquete v0.1 y módulo de alimentación en 2 contextos (Andes/ES, norte de Uganda/EN) | Hecho: revisión pedagógica aprobada; validación cultural local pendiente |
 | Imprescindible | Autoría: contexto → IA (Gemini o asistente externo) → revisión humana → aprobación → descarga JSON | Hecho; un módulo generado con IA (Altiplano, contexto sintético) revisado y aprobado |
-| Imprescindible | Reproductor PWA sin conexión (selector de mochilas, seis exploradores, cinco tipos de juego, álbum de pegatinas, ayuda de Mochi) | Hecho; probado en iPhone en modo avión según `qa/` (versión anterior al sprint final) |
-| Imprescindible | Progreso local con avatares y sincronización al panel docente (automática al volver la red, o manual) | Hecho, idempotente (sin duplicados al reenviar) |
+| Imprescindible | Reproductor PWA sin conexión (selector de mochilas con filtro por edad, menú en español o inglés, seis exploradores, ocho juegos: historia, elige, llena el plato, ordena, parejas, clasifica, memoria y verdad o mentira; tres intentos, álbum de pegatinas, ayuda de Mochi) | Hecho; probado en iPhone en modo avión según `qa/` (versión anterior al sprint final) |
+| Imprescindible | Progreso local con avatares y sincronización al panel docente (automática al volver la red, o manual); el panel muestra por explorador qué resolvió a la primera, con ayuda o sin resolver | Hecho, idempotente (sin duplicados al reenviar) |
 | Importante | Escuchar actividades con voces del dispositivo (ES/EN) | Hecho; según el registro de `qa/`, se oye sin conexión en iPhone (no con el modo silencio); depende de las voces instaladas |
 | Importante | Módulos «pedir ayuda a un adulto» y «emociones» | Borradores en `content/drafts/`, sin aprobar |
 | Prescindible | IA local en el navegador, voz neuronal offline, exportación a Kolibri | No empezado |
