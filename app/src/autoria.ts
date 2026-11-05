@@ -20,6 +20,7 @@ const kindLabels: Record<string, string> = { story: 'Historia', choice: 'Elige',
 // [id the server checks (contracts/sync-api.md), text the reviewer reads]
 const checklist: [string, string][] = [
   ['una-idea-por-actividad', 'He leído el paquete completo y cada actividad enseña una sola idea.'],
+  // The id keeps its original name (contracts/sync-api.md); renderReview() shows the age group of the draft being reviewed (ADR-006).
   ['lenguaje-6-10', 'El vocabulario y la longitud son adecuados para la edad elegida (5–8, 6–10 o 9–12).'],
   ['feedback-amable', 'Las opciones son claras y el feedback es amable, sin culpabilizar.'],
   ['contexto-local-marcado', 'Alimentos, recursos e idioma están revisados o marcados como pendientes de validación local.'],
@@ -340,6 +341,10 @@ export function authoring(lesson: HTMLElement) {
   }
 
   function renderReview() {
+    // Review against the age group of this draft (5–8, 6–10 or 9–12), not a generic one (ADR-006).
+    const range = (draft!.context as { ageRange?: string } | undefined)?.ageRange
+    const ageCheck = checks.find(check => check.box.value === 'lenguaje-6-10')
+    if (ageCheck && range) ageCheck.label.querySelector('span')!.textContent = 'El vocabulario y la longitud son adecuados para ' + range.replace('-', '–') + ' años, la edad de este paquete.'
     editors.length = 0
     reviewList.replaceChildren()
     const sensitive = draft!.modules.flatMap(module => module.activities)
