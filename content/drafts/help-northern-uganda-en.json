@@ -14,7 +14,7 @@
   },
   "review": {
     "status": "draft",
-    "notes": "Pedagogical draft; requires human review before use. Illustrative context; local cultural validation pending. Not tested with children."
+    "notes": "Leído por Carlos Herrero el 2026-11-05. Pendiente segunda revisión humana, prueba en el reproductor y validación cultural local. No probado con niños."
   },
   "modules": [
     {
@@ -25,15 +25,15 @@
         {
           "id": "ask-for-help-at-school",
           "type": "choice",
-          "prompt": "If you do not understand a school activity, what could you do?",
-          "audioText": "If you do not understand a school activity, what could you do?",
+          "prompt": "If you do not understand an activity, what could you do?",
+          "audioText": "If you do not understand an activity, what could you do?",
           "options": [
-            {"id": "ask-for-explanation", "text": "Ask a trusted adult to explain it again.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."},
-            {"id": "ask-for-first-step", "text": "Ask for help to start the first step.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."},
-            {"id": "ask-them-to-listen", "text": "Ask an adult to listen to what is hard to understand.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."}
+            {"id": "ask-for-explanation", "text": "🗣️ Ask a trusted adult to explain it again.", "feedback": "Another explanation may help you understand."},
+            {"id": "ask-for-first-step", "text": "👣 Ask a trusted adult to help you start.", "feedback": "Starting with one step can help."},
+            {"id": "ask-them-to-listen", "text": "👂 Ask a trusted adult to listen.", "feedback": "An adult can listen and help."}
           ],
           "correct": ["ask-for-explanation", "ask-for-first-step", "ask-them-to-listen"],
-          "feedback": "Asking for help is one option. You can talk to a trusted adult.",
+          "feedback": "It is okay to ask for help. Choose what may help.",
           "safetyTag": "help-adult",
           "teacherNotes": "Generic draft. Do not ask the child to share personal situations; review wording and local suitability before use.",
           "durationMin": 2

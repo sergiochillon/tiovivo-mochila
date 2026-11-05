@@ -14,7 +14,7 @@
   },
   "review": {
     "status": "draft",
-    "notes": "Borrador pedagógico; requiere revisión humana antes de usarse. Contexto ilustrativo; validación cultural local pendiente. No probado con niños."
+    "notes": "Leído por Carlos Herrero el 2026-11-05. Pendiente segunda revisión humana, prueba en el reproductor y validación cultural local. No probado con niños."
   },
   "modules": [
     {
@@ -25,15 +25,15 @@
         {
           "id": "notar-como-me-siento",
           "type": "choice",
-          "prompt": "A veces las personas sienten calma, alegría, tristeza, preocupación u otra emoción. Si quieres darte cuenta de cómo te sientes, ¿qué puedes hacer?",
-          "audioText": "A veces las personas sienten calma, alegría, tristeza, preocupación u otra emoción. Si quieres darte cuenta de cómo te sientes, ¿qué puedes hacer?",
+          "prompt": "Si quieres notar cómo te sientes, ¿qué puedes hacer?",
+          "audioText": "Si quieres notar cómo te sientes, ¿qué puedes hacer?",
           "options": [
-            {"id": "tomar-un-momento", "text": "Tomarme un momento y elegir una palabra para mí.", "feedback": "Puedes notar cómo estás, pedir apoyo o tomar una pausa."},
-            {"id": "hablar-con-adulto", "text": "Hablar con una persona adulta de confianza si quiero apoyo.", "feedback": "Puedes notar cómo estás, pedir apoyo o tomar una pausa."},
-            {"id": "pedir-pausa", "text": "Pedir una pausa si prefiero no responder ahora.", "feedback": "Puedes notar cómo estás, pedir apoyo o tomar una pausa."}
+            {"id": "tomar-un-momento", "text": "🌱 Tomarme un momento y elegir una palabra para mí.", "feedback": "Elegir una palabra puede ayudarte a notar cómo estás."},
+            {"id": "hablar-con-adulto", "text": "💬 Hablar con una persona adulta de confianza si quiero apoyo.", "feedback": "Pedir apoyo a una persona adulta también está bien."},
+            {"id": "pedir-pausa", "text": "⏸️ Pedir una pausa si prefiero no responder ahora.", "feedback": "Está bien pedir una pausa. No hace falta responder ahora."}
           ],
           "correct": ["tomar-un-momento", "hablar-con-adulto", "pedir-pausa"],
-          "feedback": "No hay una sola emoción que debas sentir. Puedes notar cómo estás, pedir apoyo o tomar una pausa.",
+          "feedback": "No tienes que sentir algo concreto. Puedes pedir apoyo o una pausa.",
           "safetyTag": "emotion-self-choice",
           "teacherNotes": "Borrador genérico; no solicitar que el niño comparta su emoción ni inferirla. Revisar vocabulario y adecuación local antes de usar.",
           "durationMin": 2

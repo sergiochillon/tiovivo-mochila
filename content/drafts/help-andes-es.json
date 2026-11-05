@@ -14,7 +14,7 @@
   },
   "review": {
     "status": "draft",
-    "notes": "Borrador pedagógico; requiere revisión humana antes de usarse. Contexto ilustrativo; validación cultural local pendiente. No probado con niños."
+    "notes": "Leído por Carlos Herrero el 2026-11-05. Pendiente segunda revisión humana, prueba en el reproductor y validación cultural local. No probado con niños."
   },
   "modules": [
     {
@@ -25,15 +25,15 @@
         {
           "id": "pedir-apoyo-en-clase",
           "type": "choice",
-          "prompt": "Si no entiendes una actividad en la escuela, ¿qué puedes hacer?",
-          "audioText": "Si no entiendes una actividad en la escuela, ¿qué puedes hacer?",
+          "prompt": "Si no entiendes una actividad, ¿qué puedes hacer?",
+          "audioText": "Si no entiendes una actividad, ¿qué puedes hacer?",
           "options": [
-            {"id": "pedir-explicacion", "text": "Pedir a una persona adulta de confianza que me explique otra vez.", "feedback": "Está bien pedir ayuda. La persona adulta puede explicar de otra manera o acompañarte."},
-            {"id": "pedir-primer-paso", "text": "Pedir ayuda para empezar el primer paso.", "feedback": "Está bien pedir ayuda. La persona adulta puede explicar de otra manera o acompañarte."},
-            {"id": "pedir-que-escuche", "text": "Pedir que escuche qué parte no entiendo.", "feedback": "Está bien pedir ayuda. La persona adulta puede explicar de otra manera o acompañarte."}
+            {"id": "pedir-explicacion", "text": "🗣️ Pedir a una persona adulta de confianza que lo explique.", "feedback": "Otra explicación puede ayudarte a entender."},
+            {"id": "pedir-primer-paso", "text": "👣 Pedir a una persona adulta de confianza que me ayude a empezar.", "feedback": "Empezar con un paso también puede ayudarte."},
+            {"id": "pedir-que-escuche", "text": "👂 Pedir a una persona adulta de confianza que me escuche.", "feedback": "Pedir que te escuchen y acompañen está bien."}
           ],
           "correct": ["pedir-explicacion", "pedir-primer-paso", "pedir-que-escuche"],
-          "feedback": "Pedir ayuda es una opción. Puedes hablar con una persona adulta de confianza.",
+          "feedback": "Pedir ayuda está bien. Elige lo que te ayude.",
           "safetyTag": "help-adult",
           "teacherNotes": "Borrador genérico. No pedir al niño que cuente situaciones personales; revisar vocabulario y adecuación local antes de usar.",
           "durationMin": 2

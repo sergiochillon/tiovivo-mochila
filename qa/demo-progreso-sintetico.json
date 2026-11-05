@@ -1,0 +1,23 @@
+{
+  "classCode": "DEMO-01",
+  "events": [
+    {
+      "eventId": "evt-mochila-demo-20261105-001",
+      "packId": "alimentacion-andes-es",
+      "activityId": "historia-de-ana",
+      "type": "activity_completed",
+      "result": "completed",
+      "ts": "2026-11-05T12:00:00.000Z",
+      "avatarId": "zorro"
+    },
+    {
+      "eventId": "evt-mochila-demo-20261105-002",
+      "packId": "alimentacion-andes-es",
+      "activityId": "elige-lo-disponible",
+      "type": "activity_completed",
+      "result": "correct",
+      "ts": "2026-11-05T12:02:00.000Z",
+      "avatarId": "colibri"
+    }
+  ]
+}

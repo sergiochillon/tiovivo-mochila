@@ -20,12 +20,15 @@ function count(value: unknown): value is number {
   return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0
 }
 
-// One send at a time: the online event, the start-up send and the teacher's button can coincide.
-let sending: Promise<string> | undefined
+// Sends run one after another: the online event, the start-up send and the teacher's button can coincide.
+// A later call waits for the one in progress and then sends whatever is still pending (never a stale result);
+// if nothing is left it is a no-op, so the same batch is never posted twice.
+let queue: Promise<unknown> = Promise.resolve()
 
 export function sendProgress(db: IDBDatabase): Promise<string> {
-  sending ??= sendPending(db).finally(() => { sending = undefined })
-  return sending
+  const run = queue.catch(() => undefined).then(() => sendPending(db))
+  queue = run
+  return run
 }
 
 async function sendPending(db: IDBDatabase): Promise<string> {
