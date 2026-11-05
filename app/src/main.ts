@@ -95,7 +95,7 @@ const texts = {
     storageHelp: 'Comprueba que el navegador permite guardar datos y vuelve a intentarlo.', retry: 'Volver a intentar',
     playAgain: 'Volver a jugar', backpacks: '← Mis mochilas', correctAnswer: '¡Muy bien!', listenFirst: 'Escucha o lee la pregunta y elige.',
     plateHelp: 'Toca todo lo que va en el plato. ¡Llénalo!', plateWrong: 'Eso no va aquí. Prueba con otra cosa.', plateGood: '¡Sí! Sigue llenando el plato.',
-    pairsHelp: 'Toca uno de la izquierda y su pareja de la derecha.', pairsWrong: 'Esa no es su pareja. ¡Inténtalo otra vez!', pairsGood: '¡Pareja encontrada!',
+    pairsHelp: 'Toca uno de la izquierda y su pareja de la derecha.', pairsWrong: (a: string, b: string) => '«' + a + '» y «' + b + '» no son pareja. ¡Prueba con otra!', pairsGood: '¡Pareja encontrada!',
     hello: '¡Hola! Soy Mochi. Cada actividad que termines te dará una pegatina para tu álbum.', letsGo: '¡Vamos! Empieza por la estación que brilla.',
     stamps: (n: number) => n === 1 ? '1 pegatina' : n + ' pegatinas', allDone: '¡Has completado todas las estaciones!',
     album: 'Mi álbum', albumHelp: (name: string) => 'Las pegatinas de ' + name + ' en esta mochila. Cada estación superada pega una nueva.',
@@ -119,7 +119,7 @@ const texts = {
     storageHelp: 'Check that the browser allows saving data and try again.', retry: 'Try again',
     playAgain: 'Play again', backpacks: '← My backpacks', correctAnswer: 'Great!', listenFirst: 'Listen or read the question and choose.',
     plateHelp: 'Tap everything that goes on the plate. Fill it up!', plateWrong: 'That one does not go here. Try another.', plateGood: 'Yes! Keep filling the plate.',
-    pairsHelp: 'Tap one on the left, then its match on the right.', pairsWrong: 'Not a match. Try again!', pairsGood: 'Match found!',
+    pairsHelp: 'Tap one on the left, then its match on the right.', pairsWrong: (a: string, b: string) => '"' + a + '" and "' + b + '" are not a pair. Try another one!', pairsGood: 'Match found!',
     hello: 'Hi! I am Mochi. Every activity you finish gives you a sticker for your album.', letsGo: "Let's go! Start with the shining station.",
     stamps: (n: number) => n === 1 ? '1 sticker' : n + ' stickers', allDone: 'You completed every station!',
     album: 'My album', albumHelp: (name: string) => name + "'s stickers in this backpack. Every station you finish adds a new one.",
@@ -568,7 +568,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         if (!match) {
           element.classList.remove('wrong'); void element.offsetWidth; element.classList.add('wrong')
           setTimeout(() => element.classList.remove('wrong'), 700)
-          coach.say(t.pairsWrong, 'thinking', 'wiggle')
+          coach.say(t.pairsWrong(byId.get(selected!.id)!.text, byId.get(id)!.text), 'thinking', 'wiggle')
           soundWrong()
           if (needsHelp()) {
             const partner = pairs.find(([a]) => a === selected!.id)?.[1]
@@ -924,4 +924,10 @@ database.catch(storageError)
 navigator.storage?.persist?.().catch(() => undefined)
 // When the network comes back, send pending progress quietly. The server ignores repeated eventIds,
 // so this never duplicates a manual send from /docente; a failure leaves the events pending as before.
-if (!technicalPreview) addEventListener('online', () => { database.then(sendProgress).catch(() => undefined) })
+if (!technicalPreview) {
+  const sendQuietly = () => { database.then(sendProgress).catch(() => undefined) }
+  addEventListener('online', sendQuietly)
+  // Opened with a connection (e.g. the next day): there is no «online» event, so also try once at start.
+  // Nothing is sent when there is nothing pending, and /docente keeps its own manual button.
+  if (navigator.onLine && location.pathname !== '/docente') setTimeout(sendQuietly, 3000)
+}
