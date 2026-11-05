@@ -41,7 +41,7 @@ Horas: escenario A (jornadas miércoles 4 y jueves 5 nov; ver `PROJECT_CONTEXT.m
 | T-22 | Generación con IA (o flujo asistido) con salida validada + reintento | I | Alejandro | T-12, T-15 | Parcial: autoría asistida y generación con Gemini desde el servidor en `main` (PR 24, 25, 29-31); la IA real no deja evidencia guardada; cuotas reales de Gemini sin verificar | Paquete válido a partir de contexto |
 | T-23 | Aprobación con sello (`review`) | I | Alejandro + Rodrigo | T-22 | Parcial: `/alumno` solo sirve aprobados y la aprobación desde pantalla con revisión de 6 puntos está en `main` (PR 24); el servidor no exige esa lista ni la identidad del revisor (hallazgos de la PR 37 sobre `reviewer`, pendientes) | Solo `approved` llega al reproductor |
 | T-24 | Segundo contexto (Uganda/EN) generado y revisado | I | Carlos con Alejandro | T-22 | Hecho: paquete Uganda/EN aprobado (revisión pedagógica, PR 20); validación cultural pendiente; escrito por Carlos, no generado con IA | 2.º paquete aprobado |
-| T-25 | Primer plan de pruebas offline | I | Carlos | T-20 | Hecho: `qa/registro-pruebas.md` con 6 pruebas, incluida la de iPhone en modo avión | `qa/` con pasos |
+| T-25 | Primer plan de pruebas offline | I | Carlos | T-20 | Hecho: `qa/registro-pruebas.md` con las pruebas ejecutadas, incluida la de iPhone en modo avión | `qa/` con pasos |
 | T-26 | Esqueleto de diapositivas | I | Mario | T-18 | En curso (según Mario) | 6–8 diapositivas vacías con mensajes |
 | T-27 | Primeras 2 conversaciones de validación realizadas | I | Mario | T-17 | Pendiente | Notas en `research/entrevistas/` |
 
@@ -63,7 +63,7 @@ Horas: escenario A (jornadas miércoles 4 y jueves 5 nov; ver `PROJECT_CONTEXT.m
 | T-42 | Módulo «pedir ayuda» (sin temas de abuso) | M | Carlos | T-24 | Parcial: borradores Andes/ES y Uganda/EN en `content/drafts/` (PR 35, `draft`, validan contra el esquema; probado por Sergio); sin aprobar ni probar en el reproductor | Revisado con la lista |
 | T-43 | Módulo «emociones» (sin inferencia) | M | Carlos | T-24 | Parcial: borradores Andes/ES y Uganda/EN en `content/drafts/` (PR 35, `draft`, validan contra el esquema; probado por Sergio); sin aprobar ni probar en el reproductor; pendiente segunda revisión de contenido sensible | Revisado con la lista |
 | T-44 | Audio TTS del navegador en ES/EN | M | Rodrigo | T-20 | Parcial: audio local en la PR 37 (PR 34), sin fusionar; Rodrigo oyó la primera historia de Andes (ES) y de Uganda (EN) en modo avión, iPhone 17, `cee26cb` (según Rodrigo, registrado en `qa/`); con el modo silencio no se oye | Funciona sin red en los dispositivos de demo; si no, texto |
-| T-45 | Instalación como PWA y prueba en 2.º dispositivo | I | Rodrigo + Carlos | T-19 | Pendiente: probado en Safari sin instalar; instalación como PWA sin probar | Registrado en `qa/` |
+| T-45 | Instalación como PWA y prueba en 2.º dispositivo | I | Rodrigo + Carlos | T-19 | Parcial: instalación como PWA y arranque desde el icono sin conexión probados en iPhone 17, 0900e78 (según Rodrigo, registrado por Carlos en `qa/`); pendiente segundo dispositivo y regresión sobre la versión congelada | Registrado en `qa/` |
 | T-46 | **Congelación de funcionalidades** (16:30) | I | Sergio | — | Pendiente | Tag `v0.9-freeze` |
 | T-47 | Correcciones y pulido (solo errores) | I | Todos | T-46 | Pendiente | Lista de errores a cero en los de demo |
 | T-48 | Datos sintéticos de demo y semilla | I | Carlos | T-40 | Pendiente | Sin datos reales |
