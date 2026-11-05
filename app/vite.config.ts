@@ -10,7 +10,7 @@ export default defineConfig({
         bypass(req) {
           const path = req.url ?? ''
           const allowed = (req.method === 'POST' && path === '/api/sync') ||
-            (req.method === 'GET' && (path === '/api/progress/DEMO-01' ||
+            (req.method === 'GET' && (path === '/api/progress/DEMO-01' || path === '/api/packs' ||
               /^\/api\/packs\/[a-z0-9]+(?:-[a-z0-9]+)*$/.test(path)))
           if (!allowed) return false
         }
