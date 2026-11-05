@@ -79,7 +79,9 @@ VITE_API_BASE_URL=http://127.0.0.1:3001/api npm run build
 npm run preview -- --host 127.0.0.1 --port 4173
 ```
 
-**3. Recorrido de la demo** (http://127.0.0.1:4173):
+**3. Antes de enseñarla**, con ambas arrancadas: `node scripts/preflight-demo.mjs` comprueba (solo lectura) que la API es la versión actual, que están los tres paquetes y que la app compilada apunta a ella.
+
+**4. Recorrido de la demo** (http://127.0.0.1:4173):
 
 1. `/autoria`: describir la comunidad → «Generar propuesta con IA» o «Preparar instrucciones» → revisar y corregir → lista de revisión y nombre → «Aprobar y publicar».
 2. `/`: «Mis mochilas» → abrir una mochila con conexión (queda «✓ Lista sin conexión») → elegir avatar → actividades.
