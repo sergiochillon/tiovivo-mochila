@@ -3,7 +3,7 @@ import express, { type ErrorRequestHandler } from "express";
 import type { Request, Response } from "express";
 import { randomUUID } from "node:crypto";
 import { canonicalJson, describeAjvErrors, validateClassCode, validatePack, validateProgressEvent } from "./validation.js";
-import { snapshot, transact, type Pack, type ProgressEvent, type StoredEvent } from "./store.js";
+import { logGeneration, snapshot, transact, type Pack, type ProgressEvent, type StoredEvent } from "./store.js";
 import { generateJsonWithGemini, GeminiBusyError, GeminiNotConfiguredError } from "./gemini.js";
 import { buildGenerationPrompt, contextForPack, parseGenerationContext, topics } from "./prompt.js";
 
@@ -105,15 +105,17 @@ export const REVIEW_CHECKLIST = [
 function approvalNotes(reviewer: string, reviewedAt: string, previous: unknown): string {
   const draft = typeof previous === "string" ? previous : "";
   const fromAi = /\b(IA|AI)\b/.test(draft);
+  // «Generado con IA (modelo, fecha)» survives the seal as provenance; the rest of the draft wording does not.
+  const provenance = draft.match(/Generado con IA \(([^)]{1,80})\)/)?.[1];
   const observations = draft
-    .replace(/(Generado con IA|Propuesta asistida con IA externa|Generated with AI)\.?/gi, "")
+    .replace(/(Generado con IA( \([^)]*\))?|Propuesta asistida con IA externa|Generated with AI)\.?/gi, "")
     .replace(/(Pendiente|Pending)[^.]*\.?/gi, "")
     .replace(/\s+/g, " ")
     .trim();
   return (
     `Revisión pedagógica aprobada por ${reviewer} el ${reviewedAt.slice(0, 10)} con la lista de revisión de ${REVIEW_CHECKLIST.length} puntos completa. ` +
     "La validación cultural local sigue pendiente. No probado con niños." +
-    (fromAi ? " Propuesta generada con IA y revisada por una persona." : "") +
+    (fromAi ? ` Propuesta generada con IA${provenance ? ` (${provenance})` : ""} y revisada por una persona.` : "") +
     (observations ? ` Observaciones del borrador: ${observations}` : "")
   );
 }
@@ -200,8 +202,9 @@ app.post("/api/generate/ai", async (req: Request, res: Response) => {
   }
 
   let generated: unknown;
+  let model = "";
   try {
-    generated = await generateJsonWithGemini(await buildGenerationPrompt(context));
+    ({ data: generated, model } = await generateJsonWithGemini(await buildGenerationPrompt(context)));
   } catch (error) {
     if (error instanceof GeminiNotConfiguredError) {
       res.status(503).json({ error: "ai_not_configured" });
@@ -229,7 +232,7 @@ app.post("/api/generate/ai", async (req: Request, res: Response) => {
   pack.context = contextForPack(context, generatedFoods);
   pack.review = {
     status: "draft",
-    notes: "Generado con IA. Pendiente de revisión pedagógica y validación local.",
+    notes: `Generado con IA (${model}, ${new Date().toISOString().slice(0, 10)}). Pendiente de revisión pedagógica y validación local.`,
   };
   if (Array.isArray(pack.modules)) {
     for (const module of pack.modules) {
@@ -257,7 +260,16 @@ app.post("/api/generate/ai", async (req: Request, res: Response) => {
     state.packs.set(pack.id, pack);
     return { value: undefined, changed: true };
   });
-  res.status(201).json({ pack, source: "gemini" });
+  // Evidence that this draft really came from the model (the pitch must not claim AI generation without it).
+  await logGeneration({
+    at: new Date().toISOString(),
+    model,
+    packId: pack.id,
+    context: { country: context.country, region: context.region, language: context.language, topic: context.topic },
+    // The pack already passed schema validation above, so modules and activities are arrays.
+    activities: (pack.modules as Array<{ activities: unknown[] }>).reduce((total, module) => total + module.activities.length, 0),
+  }).catch((error) => console.warn("No se pudo registrar la generación:", error));
+  res.status(201).json({ pack, source: "gemini", model });
 });
 
 app.get("/api/drafts/:id", async (req: Request, res: Response) => {

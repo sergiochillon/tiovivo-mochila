@@ -1,4 +1,4 @@
-import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { appendFile, mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -31,6 +31,20 @@ const dataDir = process.env.MOCHILA_DATA_DIR
   ? resolve(process.env.MOCHILA_DATA_DIR)
   : resolve(dirname(fileURLToPath(import.meta.url)), "../data");
 const storePath = resolve(dataDir, "store.json");
+
+/** One line per real AI generation (append-only evidence): when, which model, which draft and context.
+ *  Never the prompt, the API key or anything about children. Ignored by Git like store.json. */
+export type GenerationRecord = {
+  at: string;
+  model: string;
+  packId: string;
+  context: { country: string; region: string; language: string; topic: string };
+  activities: number;
+};
+export async function logGeneration(record: GenerationRecord): Promise<void> {
+  await mkdir(dataDir, { recursive: true });
+  await appendFile(resolve(dataDir, "generations.jsonl"), JSON.stringify(record) + "\n", "utf8");
+}
 
 const emptyState = (): StoreState => ({ version: 1, packs: new Map(), events: new Map() });
 const isRecord = (value: unknown): value is Record<string, unknown> =>

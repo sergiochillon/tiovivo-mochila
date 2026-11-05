@@ -3,3 +3,4 @@
 !.env.example
 data/*.json
 data/*.tmp
+data/*.jsonl

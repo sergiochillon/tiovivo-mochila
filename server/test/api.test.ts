@@ -227,3 +227,14 @@ test("listado y detalle solo sirven paquetes aprobados", async () => {
   assert.equal((await jsonRequest("/api/packs/paquete-valido")).status, 200);
   assert.equal((await jsonRequest("/api/packs/solo-borrador")).status, 404);
 });
+
+test("el sello conserva de qué modelo y qué día salió la propuesta de IA", async () => {
+  const pack = draftPack("procedencia-ia");
+  pack.review.notes = "Generado con IA (gemini-prueba, 2026-11-05). Pendiente de revisión pedagógica y validación local.";
+  assert.equal((await jsonRequest("/api/generate", { pack })).status, 200);
+  const approval = await jsonRequest("/api/review/approve", { packId: "procedencia-ia", reviewer: "Docente", checklist: fullChecklist });
+  assert.equal(approval.status, 200);
+  const sealed = await jsonRequest("/api/packs/procedencia-ia");
+  assert.match(sealed.body.review.notes, /Propuesta generada con IA \(gemini-prueba, 2026-11-05\) y revisada por una persona\./);
+  assert.doesNotMatch(sealed.body.review.notes, /Pendiente de revisión/);
+});

@@ -42,7 +42,8 @@ async function callModel(model: string, apiKey: string, prompt: string): Promise
   });
 }
 
-export async function generateJsonWithGemini(prompt: string): Promise<unknown> {
+/** Returns the parsed JSON and the model that actually answered (it may be a fallback model). */
+export async function generateJsonWithGemini(prompt: string): Promise<{ data: unknown; model: string }> {
   const apiKey = process.env.GEMINI_API_KEY?.trim();
   if (!apiKey) throw new GeminiNotConfiguredError();
 
@@ -70,7 +71,7 @@ export async function generateJsonWithGemini(prompt: string): Promise<unknown> {
     const text = result.candidates?.[0]?.content?.parts?.map((part) => part.text ?? "").join("").trim();
     if (!text) throw new Error("Gemini no devolvió contenido JSON.");
     try {
-      return JSON.parse(text) as unknown;
+      return { data: JSON.parse(text) as unknown, model };
     } catch {
       throw new Error("Gemini devolvió JSON no válido.");
     }
