@@ -1,0 +1,322 @@
+{
+  "packVersion": "0.1",
+  "id": "misiones-cocina-5-8-es",
+  "title": "Misiones en la cocina de Ana",
+  "language": "es",
+  "context": {
+    "country": "Perú",
+    "region": "Andes rurales (contexto ilustrativo)",
+    "communityType": "A VALIDAR: comunidad rural andina concreta",
+    "foods": [
+      "papa",
+      "habas",
+      "quinua"
+    ],
+    "resources": [
+      "A VALIDAR: agua limpia en casa"
+    ],
+    "culturalNotes": [
+      "A VALIDAR: confirmar alimentos, nombres y vocabulario con una persona de la comunidad."
+    ],
+    "ageRange": "5-8"
+  },
+  "review": {
+    "status": "draft",
+    "notes": "Borrador preparado con ayuda de IA (Claude) para la demo. Pendiente de revisión pedagógica humana. Validación cultural local pendiente. No probado con niños."
+  },
+  "modules": [
+    {
+      "id": "misiones-cocina",
+      "topic": "food",
+      "title": "Misiones en la cocina",
+      "activities": [
+        {
+          "id": "hola-ana",
+          "type": "story",
+          "prompt": "¡Hola! Soy Ana. Hoy ayudo en la cocina con mi abuelo. ¿Me acompañas en mis misiones?",
+          "audioText": "¡Hola! Soy Ana. Hoy ayudo en la cocina con mi abuelo. ¿Me acompañas en mis misiones?",
+          "feedback": "¡Vamos a la cocina con Ana!",
+          "safetyTag": "none",
+          "durationMin": 1,
+          "teacherNotes": "Presenta el personaje y el lugar. A VALIDAR: nombre y referentes familiares."
+        },
+        {
+          "id": "verdad-o-mentira",
+          "type": "truefalse",
+          "prompt": "¿Verdad o mentira? Escucha cada frase y elige.",
+          "audioText": "¿Verdad o mentira? Escucha cada frase y elige.",
+          "feedback": "¡Muy bien! Ya sabes cuidar la comida y tu cuerpo.",
+          "safetyTag": "hygiene",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "manos",
+              "text": "Me lavo las manos antes de comer.",
+              "icon": "🧼"
+            },
+            {
+              "id": "fruta",
+              "text": "La fruta se come sin lavar.",
+              "icon": "🍎",
+              "feedback": "Mejor lavarla antes con agua limpia."
+            },
+            {
+              "id": "agua",
+              "text": "El agua limpia sirve para beber.",
+              "icon": "💧"
+            },
+            {
+              "id": "tos",
+              "text": "Si toso, lo hago sobre la comida.",
+              "icon": "🤧",
+              "feedback": "Mejor toser en el codo."
+            },
+            {
+              "id": "mesa",
+              "text": "Puedo ayudar a poner la mesa.",
+              "icon": "🍽️"
+            }
+          ],
+          "correct": [
+            "manos",
+            "agua",
+            "mesa"
+          ]
+        },
+        {
+          "id": "antes-o-despues",
+          "type": "sort",
+          "prompt": "¿Antes o después de comer? Pon cada cosa en su cesta.",
+          "audioText": "¿Antes o después de comer? Pon cada cosa en su cesta.",
+          "feedback": "¡Todo en su sitio! Antes y después de comer también se cuida uno.",
+          "safetyTag": "hygiene",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "antes",
+              "text": "Antes de comer",
+              "icon": "⏰"
+            },
+            {
+              "id": "despues",
+              "text": "Después de comer",
+              "icon": "✅"
+            },
+            {
+              "id": "lavar-manos",
+              "text": "Lavarme las manos",
+              "icon": "🙌"
+            },
+            {
+              "id": "poner-mesa",
+              "text": "Poner la mesa",
+              "icon": "🍽️"
+            },
+            {
+              "id": "sentarme",
+              "text": "Sentarme a la mesa",
+              "icon": "🪑"
+            },
+            {
+              "id": "dientes",
+              "text": "Lavarme los dientes",
+              "icon": "🪥"
+            },
+            {
+              "id": "llevar-plato",
+              "text": "Llevar mi plato",
+              "icon": "🥣"
+            }
+          ],
+          "correct": [
+            "lavar-manos:antes",
+            "poner-mesa:antes",
+            "sentarme:antes",
+            "dientes:despues",
+            "llevar-plato:despues"
+          ]
+        },
+        {
+          "id": "memoria-cocina",
+          "type": "memory",
+          "prompt": "Juego de memoria: encuentra las cosas que van juntas.",
+          "audioText": "Juego de memoria: encuentra las cosas que van juntas.",
+          "feedback": "¡Qué memoria! Cada cosa con su pareja.",
+          "safetyTag": "hygiene",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "jabon",
+              "text": "Jabón",
+              "icon": "🧼"
+            },
+            {
+              "id": "manos",
+              "text": "Manos",
+              "icon": "🙌"
+            },
+            {
+              "id": "cuchara",
+              "text": "Cuchara",
+              "icon": "🥄"
+            },
+            {
+              "id": "sopa",
+              "text": "Sopa",
+              "icon": "🍲"
+            },
+            {
+              "id": "vaso",
+              "text": "Vaso",
+              "icon": "🥛"
+            },
+            {
+              "id": "agua",
+              "text": "Agua",
+              "icon": "💧"
+            },
+            {
+              "id": "cepillo",
+              "text": "Cepillo",
+              "icon": "🪥"
+            },
+            {
+              "id": "dientes",
+              "text": "Dientes",
+              "icon": "🦷"
+            }
+          ],
+          "correct": [
+            "jabon:manos",
+            "cuchara:sopa",
+            "vaso:agua",
+            "cepillo:dientes"
+          ]
+        },
+        {
+          "id": "intruso-mesa",
+          "type": "choice",
+          "prompt": "Encuentra el intruso: ¿qué NO va en la mesa para comer?",
+          "audioText": "Encuentra el intruso: ¿qué NO va en la mesa para comer?",
+          "feedback": "¡Lo encontraste! La pelota es para jugar, no para la mesa.",
+          "safetyTag": "none",
+          "durationMin": 1,
+          "options": [
+            {
+              "id": "plato",
+              "text": "Plato",
+              "icon": "🍽️",
+              "feedback": "El plato sí va en la mesa."
+            },
+            {
+              "id": "cuchara",
+              "text": "Cuchara",
+              "icon": "🥄",
+              "feedback": "La cuchara sí va en la mesa."
+            },
+            {
+              "id": "pelota",
+              "text": "Pelota",
+              "icon": "⚽"
+            },
+            {
+              "id": "vaso",
+              "text": "Vaso",
+              "icon": "🥛",
+              "feedback": "El vaso sí va en la mesa."
+            }
+          ],
+          "correct": "pelota"
+        },
+        {
+          "id": "plato-de-ana",
+          "type": "choice",
+          "prompt": "Ana cocina papa, habas y quinua. ¡Llena su plato!",
+          "audioText": "Ana cocina papa, habas y quinua. ¡Llena su plato!",
+          "feedback": "¡Plato lleno! Ana usa lo que tiene en casa.",
+          "safetyTag": "none",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "papa",
+              "text": "Papa",
+              "icon": "🥔"
+            },
+            {
+              "id": "habas",
+              "text": "Habas",
+              "icon": "🫘"
+            },
+            {
+              "id": "quinua",
+              "text": "Quinua",
+              "icon": "🌾"
+            },
+            {
+              "id": "zapato",
+              "text": "Zapato",
+              "icon": "👟",
+              "feedback": "¡Los zapatos no se comen!"
+            },
+            {
+              "id": "caramelo",
+              "text": "Caramelo",
+              "icon": "🍬",
+              "feedback": "Los caramelos no están en la olla de Ana."
+            }
+          ],
+          "correct": [
+            "papa",
+            "habas",
+            "quinua"
+          ],
+          "teacherNotes": "Comprensión de lo que se acaba de leer; no valora alimentos como buenos o malos."
+        },
+        {
+          "id": "ordena-manos",
+          "type": "order",
+          "prompt": "Ordena los pasos para lavarte bien las manos.",
+          "audioText": "Ordena los pasos para lavarte bien las manos.",
+          "feedback": "¡Manos limpias! Así se lavan bien.",
+          "safetyTag": "hygiene",
+          "durationMin": 2,
+          "options": [
+            {
+              "id": "mojar",
+              "text": "Mojar las manos",
+              "icon": "💧"
+            },
+            {
+              "id": "jabon",
+              "text": "Poner jabón",
+              "icon": "🧼"
+            },
+            {
+              "id": "frotar",
+              "text": "Frotar bien",
+              "icon": "👐"
+            },
+            {
+              "id": "enjuagar",
+              "text": "Enjuagar",
+              "icon": "🚿"
+            },
+            {
+              "id": "secar",
+              "text": "Secar",
+              "icon": "🧻"
+            }
+          ],
+          "correct": [
+            "mojar",
+            "jabon",
+            "frotar",
+            "enjuagar",
+            "secar"
+          ],
+          "teacherNotes": "Si no hay jabón o paño en casa, adaptar los pasos con la familia."
+        }
+      ]
+    }
+  ]
+}
