@@ -107,7 +107,8 @@ const topicCards: [string, string, string, string][] = [
   ['emotions', '💛', 'Emociones', 'Nombrar lo que siento y calmarme'],
   ['coexistence', '🤝', 'Convivencia', 'Compartir, turnos y hablar en lugar de pelear'],
   ['safety', '🛡️', 'Seguridad', 'Fuego, cuchillos, caminos y agua'],
-  ['autonomy', '🎒', 'Autonomía', 'Rutinas y pequeñas responsabilidades']
+  ['autonomy', '🎒', 'Autonomía', 'Rutinas y pequeñas responsabilidades'],
+  ['mixed', '🎲', 'Popurrí', 'Un poco de todo: alimentación, higiene, ayuda, emociones…']
 ]
 const presets: [string, string, string, string][] = [
   ['Andes (Perú)', 'Perú', 'Andes rurales', 'es'],
@@ -225,6 +226,8 @@ export function authoring(lesson: HTMLElement) {
         renderReview()
       } else if (body.error === 'ai_not_configured') {
         messages(contextResult, 'error', ['La IA no está configurada en este servidor. Abre un borrador guardado o usa el plan B de abajo.'])
+      } else if (body.error === 'ai_key_rejected') {
+        messages(contextResult, 'error', ['Google ha rechazado la clave de Gemini de este servidor (revisa GEMINI_API_KEY en server/.env). Mientras tanto, usa el plan B de abajo.'])
       } else if (body.error === 'ai_busy') {
         messages(contextResult, 'error', [body.reason === 'quota'
           ? 'Se ha agotado el uso gratuito de la IA por ahora. Abre un borrador guardado o usa el plan B de abajo.'

@@ -17,6 +17,7 @@ export const topics = {
   coexistence: "living together: sharing, taking turns, solving small conflicts with words, respect",
   safety: "basic everyday safety at home and on the way to school (fire, knives, roads, water), never alarming",
   autonomy: "age-appropriate autonomy: daily routines, looking after one's things, small responsibilities at home",
+  mixed: "a MIX of life skills (popurrí): one activity per area, drawn from food, hygiene, asking for help, feelings by self-choice, living together, everyday safety and autonomy, all tied together by one recurring child character",
 } as const;
 export type Topic = keyof typeof topics;
 
@@ -120,7 +121,9 @@ export async function buildGenerationPrompt(context: GenerationContext): Promise
     "- \"memory\" (face-down cards): 3 or 4 pairs that belong together (thing and what it is for); same data as match: 6–8 options, \"correct\" lists \"idA:idB\" with every option once.",
     "- \"truefalse\" (true or lie?): 4–5 short statements as options; \"correct\" lists the ids of the TRUE statements (at least one, at least one false); give false statements a kind \"feedback\" with the right idea.",
     "- A \"choice\" can also be an odd-one-out: \"Which one does not belong?\" with 4 options with icons.",
-    "Give options a single emoji \"icon\" when it helps children who read little. Every correct id must exist among the options.",
+    "EVERY activity needs its own \"icon\": ONE emoji that illustrates it (for example 🧼 for hand washing, 🧺 for sorting, 🃏 for memory). Also give options a single emoji \"icon\" whenever it helps children who read little. Every correct id must exist among the options and every id must be a lowercase slug.",
+    "Variety matters: do not repeat a game type back to back, vary the wording of the questions, and make the module feel like a small adventure with a goal, not a worksheet. Make the older age groups think (why, compare, decide); make the youngest ones touch, match and look.",
+    "Allowed values for \"type\" are exactly: story, choice, order, match, scenario, sort, memory, truefalse. Every non-story activity must include options and correct as described.",
     "Return exactly one JSON object that conforms to pack-v0.1. Do not use Markdown or add text outside the JSON. All ids must be lowercase slugs.",
     "The review object must be {\"status\":\"draft\",\"notes\":\"Pendiente de revisión humana y validación local\"}.",
     "In each activity's optional teacherNotes, explain in one sentence (Spanish) why it is adapted this way and what must be validated locally. Never claim human review, approval or community validation.",

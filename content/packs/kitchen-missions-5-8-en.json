@@ -35,6 +35,7 @@
         {
           "id": "hello-ayo",
           "type": "story",
+          "icon": "👋",
           "prompt": "Hi! I am Ayo. Today I help in the kitchen with my grandma. Will you join my missions?",
           "audioText": "Hi! I am Ayo. Today I help in the kitchen with my grandma. Will you join my missions?",
           "feedback": "Let's go to the kitchen with Ayo!",
@@ -45,6 +46,7 @@
         {
           "id": "true-or-lie",
           "type": "truefalse",
+          "icon": "🧐",
           "prompt": "True or lie? Listen to each sentence and choose.",
           "audioText": "True or lie? Listen to each sentence and choose.",
           "feedback": "Great! You know how to take care of food and your body.",
@@ -88,6 +90,7 @@
         {
           "id": "before-or-after",
           "type": "sort",
+          "icon": "🧺",
           "prompt": "Before or after eating? Put each thing in its basket.",
           "audioText": "Before or after eating? Put each thing in its basket.",
           "feedback": "Everything in its place!",
@@ -141,6 +144,7 @@
         {
           "id": "kitchen-memory",
           "type": "memory",
+          "icon": "🃏",
           "prompt": "Memory game: find the things that go together.",
           "audioText": "Memory game: find the things that go together.",
           "feedback": "What a memory! Every thing with its pair.",
@@ -198,6 +202,7 @@
         {
           "id": "odd-one-out",
           "type": "choice",
+          "icon": "🕵️",
           "prompt": "Find the odd one out: what does NOT go on the table to eat?",
           "audioText": "Find the odd one out: what does NOT go on the table to eat?",
           "feedback": "You found it! The ball is for playing, not for the table.",
@@ -233,6 +238,7 @@
         {
           "id": "ayos-plate",
           "type": "choice",
+          "icon": "🥣",
           "prompt": "Ayo cooks millet, beans and cassava. Fill the plate!",
           "audioText": "Ayo cooks millet, beans and cassava. Fill the plate!",
           "feedback": "Full plate! Ayo uses what there is at home.",
@@ -276,6 +282,7 @@
         {
           "id": "wash-hands-order",
           "type": "order",
+          "icon": "🫧",
           "prompt": "Put the steps in order to wash your hands well.",
           "audioText": "Put the steps in order to wash your hands well.",
           "feedback": "Clean hands! That is how to wash them.",

@@ -4,7 +4,7 @@ import type { Request, Response } from "express";
 import { randomUUID } from "node:crypto";
 import { canonicalJson, describeAjvErrors, validateClassCode, validatePack, validateProgressEvent } from "./validation.js";
 import { logGeneration, snapshot, transact, type Pack, type ProgressEvent, type StoredEvent } from "./store.js";
-import { generateJsonWithGemini, GeminiBusyError, GeminiNotConfiguredError } from "./gemini.js";
+import { generateJsonWithGemini, GeminiBusyError, GeminiKeyError, GeminiNotConfiguredError } from "./gemini.js";
 import { buildGenerationPrompt, contextForPack, parseGenerationContext, topics } from "./prompt.js";
 
 const app = express();
@@ -216,75 +216,92 @@ app.post("/api/generate/ai", async (req: Request, res: Response) => {
     return;
   }
 
-  let generated: unknown;
+  // Up to two attempts: if the first answer breaks the schema or the game rules, the model is shown the
+  // exact problems and asked to fix them (so a small slip does not cost the teacher a minute and an error).
+  let pack: Pack | undefined;
   let model = "";
-  try {
-    ({ data: generated, model } = await generateJsonWithGemini(await buildGenerationPrompt(context)));
-  } catch (error) {
-    if (error instanceof GeminiNotConfiguredError) {
-      res.status(503).json({ error: "ai_not_configured" });
+  let lastDetails: string[] = [];
+  for (let attempt = 1; attempt <= 2 && !pack; attempt++) {
+    let generated: unknown;
+    try {
+      const basePrompt = await buildGenerationPrompt(context);
+      const prompt = lastDetails.length === 0 ? basePrompt
+        : basePrompt + "\n\n--- YOUR PREVIOUS ANSWER WAS REJECTED ---\nFix every problem below and return the complete corrected JSON object only:\n" + lastDetails.slice(0, 12).map((line) => "- " + line).join("\n");
+      ({ data: generated, model } = await generateJsonWithGemini(prompt));
+    } catch (error) {
+      if (error instanceof GeminiNotConfiguredError) {
+        res.status(503).json({ error: "ai_not_configured" });
+        return;
+      }
+      if (error instanceof GeminiKeyError) {
+        res.status(503).json({ error: "ai_key_rejected" });
+        return;
+      }
+      if (error instanceof GeminiBusyError) {
+        res.status(503).json({ error: "ai_busy", reason: error.reason });
+        return;
+      }
+      res.status(502).json({ error: "ai_generation_failed" });
       return;
     }
-    if (error instanceof GeminiBusyError) {
-      res.status(503).json({ error: "ai_busy", reason: error.reason });
-      return;
+    if (!isRecord(generated)) {
+      lastDetails = ["The answer must be one JSON object."];
+      continue;
     }
-    res.status(502).json({ error: "ai_generation_failed" });
-    return;
-  }
-
-  if (!isRecord(generated)) {
-    res.status(502).json({ error: "ai_invalid_package" });
-    return;
-  }
-  const pack = structuredClone(generated) as Pack;
-  pack.id = `demo-generado-${randomUUID()}`;
-  pack.packVersion = "0.1";
-  pack.language = context.language;
-  const generatedFoods = isRecord(pack.context) && Array.isArray(pack.context.foods)
-    ? pack.context.foods.filter((food): food is string => typeof food === "string" && food.trim().length > 0 && food.length <= 100).slice(0, 12)
-    : [];
-  pack.context = contextForPack(context, generatedFoods);
-  pack.review = {
-    status: "draft",
-    notes: `Generado con IA (${model}, ${new Date().toISOString().slice(0, 10)}). Pendiente de revisión pedagógica y validación local.`,
-  };
-  if (Array.isArray(pack.modules)) {
-    for (const module of pack.modules) {
-      if (isRecord(module) && Array.isArray(module.activities)) {
-        for (const activity of module.activities) {
-          if (isRecord(activity)) {
-            // Keep the AI's justification (useful for the teacher) but always flag local validation.
-            const note = typeof activity.teacherNotes === "string" ? activity.teacherNotes.trim().slice(0, 440) : "";
-            activity.teacherNotes = note
-              ? (/A VALIDAR/.test(note) ? note : `A VALIDAR · ${note}`)
-              : "A VALIDAR: revisar el contenido y confirmar vocabulario y contexto local.";
+    const candidate = structuredClone(generated) as Pack;
+    candidate.id = `demo-generado-${randomUUID()}`;
+    candidate.packVersion = "0.1";
+    candidate.language = context.language;
+    const generatedFoods = isRecord(candidate.context) && Array.isArray(candidate.context.foods)
+      ? candidate.context.foods.filter((food): food is string => typeof food === "string" && food.trim().length > 0 && food.length <= 100).slice(0, 12)
+      : [];
+    candidate.context = contextForPack(context, generatedFoods);
+    candidate.review = {
+      status: "draft",
+      notes: `Generado con IA (${model}, ${new Date().toISOString().slice(0, 10)}). Pendiente de revisión pedagógica y validación local.`,
+    };
+    if (Array.isArray(candidate.modules)) {
+      for (const module of candidate.modules) {
+        if (isRecord(module) && Array.isArray(module.activities)) {
+          for (const activity of module.activities) {
+            if (isRecord(activity)) {
+              // Keep the AI's justification (useful for the teacher) but always flag local validation.
+              const note = typeof activity.teacherNotes === "string" ? activity.teacherNotes.trim().slice(0, 440) : "";
+              activity.teacherNotes = note
+                ? (/A VALIDAR/.test(note) ? note : `A VALIDAR · ${note}`)
+                : "A VALIDAR: revisar el contenido y confirmar vocabulario y contexto local.";
+            }
           }
         }
       }
     }
+    const details = packValidationDetails(candidate);
+    if (details.length > 0) {
+      lastDetails = details;
+      continue;
+    }
+    pack = candidate;
   }
-
-  const details = packValidationDetails(pack);
-  if (details.length > 0) {
-    res.status(502).json({ error: "ai_invalid_package", details });
+  if (!pack) {
+    res.status(502).json({ error: "ai_invalid_package", details: lastDetails });
     return;
   }
+  const finalPack: Pack = pack;
 
   await transact((state) => {
-    state.packs.set(pack.id, pack);
+    state.packs.set(finalPack.id, finalPack);
     return { value: undefined, changed: true };
   });
   // Evidence that this draft really came from the model (the pitch must not claim AI generation without it).
   await logGeneration({
     at: new Date().toISOString(),
     model,
-    packId: pack.id,
+    packId: finalPack.id,
     context: { country: context.country, region: context.region, language: context.language, topic: context.topic },
     // The pack already passed schema validation above, so modules and activities are arrays.
-    activities: (pack.modules as Array<{ activities: unknown[] }>).reduce((total, module) => total + module.activities.length, 0),
+    activities: (finalPack.modules as Array<{ activities: unknown[] }>).reduce((total, module) => total + module.activities.length, 0),
   }).catch((error) => console.warn("No se pudo registrar la generación:", error));
-  res.status(201).json({ pack, source: "gemini", model });
+  res.status(201).json({ pack: finalPack, source: "gemini", model });
 });
 
 app.get("/api/drafts/:id", async (req: Request, res: Response) => {

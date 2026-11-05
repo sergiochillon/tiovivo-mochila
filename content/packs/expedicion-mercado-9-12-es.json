@@ -36,6 +36,7 @@
         {
           "id": "encargo",
           "type": "story",
+          "icon": "🗺️",
           "prompt": "Sami tiene 11 años. Hoy su familia le encarga una misión: ir al mercado con su tía y comprar lo necesario para la cena de cuatro personas, sin gastar más de lo que llevan.",
           "audioText": "Sami tiene 11 años. Hoy su familia le encarga una misión: ir al mercado con su tía y comprar lo necesario para la cena de cuatro personas, sin gastar más de lo que llevan.",
           "feedback": "Misión aceptada: ahora toca decidir bien.",
@@ -46,6 +47,7 @@
         {
           "id": "que-hace-falta",
           "type": "choice",
+          "icon": "🛒",
           "prompt": "La cena es una sopa de quinua con papa y habas. En casa ya hay papa. ¿Qué tienen que comprar? Elige todo lo que haga falta.",
           "audioText": "La cena es una sopa de quinua con papa y habas. En casa ya hay papa. ¿Qué tienen que comprar? Elige todo lo que haga falta.",
           "feedback": "Bien pensado: solo se compra lo que falta.",
@@ -84,6 +86,7 @@
         {
           "id": "verdad-mercado",
           "type": "truefalse",
+          "icon": "🪙",
           "prompt": "¿Verdad o mentira? Piensa antes de responder.",
           "audioText": "¿Verdad o mentira? Piensa antes de responder.",
           "feedback": "Ya razonas como alguien que hace la compra.",
@@ -127,6 +130,7 @@
         {
           "id": "quien-decide",
           "type": "sort",
+          "icon": "⚖️",
           "prompt": "¿Quién decide? Clasifica cada situación del mercado.",
           "audioText": "¿Quién decide? Clasifica cada situación del mercado.",
           "feedback": "Saber qué puedes hacer solo y cuándo preguntar también es autonomía.",
@@ -192,6 +196,7 @@
         {
           "id": "memoria-ideas",
           "type": "memory",
+          "icon": "💡",
           "prompt": "Memoria de ideas: une cada acción con lo que consigues.",
           "audioText": "Memoria de ideas: une cada acción con lo que consigues.",
           "feedback": "Cada buena idea tiene su porqué.",
@@ -249,6 +254,7 @@
         {
           "id": "ordena-mision",
           "type": "order",
+          "icon": "📋",
           "prompt": "Ordena la misión de la compra, de principio a fin.",
           "audioText": "Ordena la misión de la compra, de principio a fin.",
           "feedback": "¡Misión cumplida, paso a paso!",
@@ -292,6 +298,7 @@
         {
           "id": "cambio-de-mas",
           "type": "scenario",
+          "icon": "🤝",
           "prompt": "En el puesto de frutas, el vendedor se equivoca y te da cambio de más. ¿Qué haces?",
           "audioText": "En el puesto de frutas, el vendedor se equivoca y te da cambio de más. ¿Qué haces?",
           "feedback": "Ser honesto también es parte de comprar bien.",

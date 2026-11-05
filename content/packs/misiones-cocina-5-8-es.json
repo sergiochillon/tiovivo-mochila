@@ -35,6 +35,7 @@
         {
           "id": "hola-ana",
           "type": "story",
+          "icon": "👋",
           "prompt": "¡Hola! Soy Ana. Hoy ayudo en la cocina con mi abuelo. ¿Me acompañas en mis misiones?",
           "audioText": "¡Hola! Soy Ana. Hoy ayudo en la cocina con mi abuelo. ¿Me acompañas en mis misiones?",
           "feedback": "¡Vamos a la cocina con Ana!",
@@ -45,6 +46,7 @@
         {
           "id": "verdad-o-mentira",
           "type": "truefalse",
+          "icon": "🧐",
           "prompt": "¿Verdad o mentira? Escucha cada frase y elige.",
           "audioText": "¿Verdad o mentira? Escucha cada frase y elige.",
           "feedback": "¡Muy bien! Ya sabes cuidar la comida y tu cuerpo.",
@@ -88,6 +90,7 @@
         {
           "id": "antes-o-despues",
           "type": "sort",
+          "icon": "🧺",
           "prompt": "¿Antes o después de comer? Pon cada cosa en su cesta.",
           "audioText": "¿Antes o después de comer? Pon cada cosa en su cesta.",
           "feedback": "¡Todo en su sitio! Antes y después de comer también se cuida uno.",
@@ -141,6 +144,7 @@
         {
           "id": "memoria-cocina",
           "type": "memory",
+          "icon": "🃏",
           "prompt": "Juego de memoria: encuentra las cosas que van juntas.",
           "audioText": "Juego de memoria: encuentra las cosas que van juntas.",
           "feedback": "¡Qué memoria! Cada cosa con su pareja.",
@@ -198,6 +202,7 @@
         {
           "id": "intruso-mesa",
           "type": "choice",
+          "icon": "🕵️",
           "prompt": "Encuentra el intruso: ¿qué NO va en la mesa para comer?",
           "audioText": "Encuentra el intruso: ¿qué NO va en la mesa para comer?",
           "feedback": "¡Lo encontraste! La pelota es para jugar, no para la mesa.",
@@ -233,6 +238,7 @@
         {
           "id": "plato-de-ana",
           "type": "choice",
+          "icon": "🥣",
           "prompt": "Ana cocina papa, habas y quinua. ¡Llena su plato!",
           "audioText": "Ana cocina papa, habas y quinua. ¡Llena su plato!",
           "feedback": "¡Plato lleno! Ana usa lo que tiene en casa.",
@@ -277,6 +283,7 @@
         {
           "id": "ordena-manos",
           "type": "order",
+          "icon": "🫧",
           "prompt": "Ordena los pasos para lavarte bien las manos.",
           "audioText": "Ordena los pasos para lavarte bien las manos.",
           "feedback": "¡Manos limpias! Así se lavan bien.",

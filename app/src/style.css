@@ -344,3 +344,44 @@ details.explorer li{margin:4px 0}
 details.explorer li.failed{color:#8a3b00}
 button.memory-card.matched .memory-face{color:#fff}
 button.memory-card.matched.pair-3 .memory-face{color:var(--tinta)}
+
+/* Dibujito de cada actividad */
+.tile-emoji{display:grid;place-items:center;font-size:1.9rem;line-height:1;background:#FFF1C9}
+.activity-emoji{display:inline-block;margin-right:.35em;font-size:1.2em;vertical-align:-.05em;animation:pop .5s cubic-bezier(.34,1.56,.64,1) both}
+a.brand{text-decoration:none;color:inherit}
+/* Movimiento: entradas suaves de pantalla, tarjetas escalonadas y botones con rebote */
+@keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+#lesson>*{animation:enter .38s cubic-bezier(.22,.9,.3,1) backwards}
+#lesson>*:nth-child(2){animation-delay:.04s}#lesson>*:nth-child(3){animation-delay:.08s}#lesson>*:nth-child(4){animation-delay:.12s}#lesson>*:nth-child(5){animation-delay:.16s}
+.activities>button,.backpack-grid>a,.avatar-grid>button,.album-grid>figure,.explorer-results>details,.baskets>button,.memory>button{animation:cardIn .45s cubic-bezier(.22,.9,.3,1) backwards}
+.activities>:nth-child(2),.backpack-grid>:nth-child(2),.avatar-grid>:nth-child(2),.album-grid>:nth-child(2),.explorer-results>:nth-child(2),.memory>:nth-child(2){animation-delay:.05s}
+.activities>:nth-child(3),.backpack-grid>:nth-child(3),.avatar-grid>:nth-child(3),.album-grid>:nth-child(3),.explorer-results>:nth-child(3),.memory>:nth-child(3){animation-delay:.1s}
+.activities>:nth-child(4),.backpack-grid>:nth-child(4),.avatar-grid>:nth-child(4),.album-grid>:nth-child(4),.explorer-results>:nth-child(4),.memory>:nth-child(4){animation-delay:.15s}
+.activities>:nth-child(5),.backpack-grid>:nth-child(5),.avatar-grid>:nth-child(5),.album-grid>:nth-child(5),.memory>:nth-child(5){animation-delay:.2s}
+.activities>:nth-child(n+6),.backpack-grid>:nth-child(n+6),.avatar-grid>:nth-child(n+6),.album-grid>:nth-child(n+6),.memory>:nth-child(n+6){animation-delay:.25s}
+button,a.button-link,a.backpack,button.activity,.age-chip,.lang-switch button{transition:transform .18s cubic-bezier(.34,1.56,.64,1),box-shadow .18s ease,background-color .2s ease,border-color .2s ease,opacity .2s ease}
+@media (hover:hover) and (pointer:fine){
+  button:hover:not(:disabled),a.button-link:hover,a.backpack:hover,button.activity:hover{transform:translateY(-3px)}
+  button.answer:hover:not(:disabled),button.avatar:hover,button.food-token:hover:not(:disabled),button.pair-card:hover:not(:disabled),button.basket:hover,button.memory-card:hover:not(:disabled){transform:translateY(-3px) rotate(-.6deg)}
+}
+button:active:not(:disabled),a.backpack:active,button.activity:active{transform:translateY(3px) scale(.98)}
+button.answer.right,button.pair-done,.tf-card.right{animation:cheer .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes cheer{0%{transform:scale(1)}40%{transform:scale(1.08) rotate(-1.5deg)}100%{transform:scale(1)}}
+.seal{animation:drop .8s cubic-bezier(.34,1.56,.64,1) both}
+.seals .dots i.on{animation:pop .4s cubic-bezier(.34,1.56,.64,1) both}
+.memory-card{transition:transform .35s cubic-bezier(.34,1.56,.64,1),background-color .25s ease}
+button.memory-card.open{animation:flip .4s ease both}
+@keyframes flip{0%{transform:rotateY(90deg)}100%{transform:rotateY(0)}}
+details.explorer[open] ul{animation:enter .3s ease both}
+.metrics strong{display:inline-block;animation:pop .5s cubic-bezier(.34,1.56,.64,1) both}
+.missed .solution{animation:cardIn .5s ease both}
+
+/* Alumnado */
+.roster{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;margin:6px 0 18px}
+.roster-row{display:flex;align-items:center;gap:10px;background:var(--papel);border:3px solid var(--cielo-2);border-radius:18px;padding:8px 12px}
+.roster-row img{width:44px;height:44px;flex:none}
+.roster-row input{flex:1;min-width:0;font:700 1rem/1.2 var(--titulo);padding:8px 10px;border:2px solid var(--cielo-2);border-radius:12px;color:var(--tinta);background:#fff}
+.roster-row input:focus{outline:none;border-color:var(--lago)}
+.roster-row small{color:var(--tinta-suave);font-size:.8rem}
+@media (max-width:480px){.roster-row small{display:none}}

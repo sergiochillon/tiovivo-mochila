@@ -8,6 +8,7 @@ export interface Activity {
   type: string
   prompt: string
   audioText?: string
+  icon?: string
   feedback: string
   options?: { id: string; text: string; icon?: string; feedback?: string }[]
   correct?: string | string[]
