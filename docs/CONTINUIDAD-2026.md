@@ -4,6 +4,8 @@
 **Repositorio:** <https://github.com/sergiochillon/tiovivo-mochila>  
 **Rama principal comprobada:** `main` en `9d1afbd` (PR 28). Verificar el commit y las PR abiertas al retomar.
 
+**Actualización (5 de noviembre de 2026):** `main` está en `bfed2d0`; la PR 37 está fusionada e incorpora el trabajo de las PR 33 y 34. La PR 35 también está fusionada. El resto de estados de este documento corresponde al corte del 4 de noviembre.
+
 Este documento conserva el estado operativo para que el equipo pueda retomar MOCHILA después del hackatón. Los estados de GitHub y los resultados de prueba cambian; comprobarlos antes de continuar.
 
 ## Qué es MOCHILA
@@ -18,7 +20,7 @@ La generación asistida puede usar Gemini durante la autoría, pero no es requis
 - Interfaz de autoría conectada con edición, revisión humana y aprobación.
 - Tres paquetes con `review.status: approved`: `alimentacion-andes-es`, `food-northern-uganda-en` y `food-altiplano-es`.
 - PR 32 fusionada: código bajo MIT; documentación, contenido e ilustraciones propias especificadas bajo CC BY-NC-SA 4.0. Revisar `LICENSE`, `LICENSE-CONTENT.md` y ADR-005.
-- Al corte, PR 33 (exportación de paquetes), PR 34 (voces locales ES/EN) y PR 35 (módulos y QA) estaban abiertas. Consultar GitHub para saber si se fusionaron y qué quedó en el release.
+- A fecha del corte (4 nov), las PR 33 (exportación de paquetes), 34 (voces locales ES/EN) y 35 (módulos y QA) estaban abiertas. La actualización del 5 nov indica cuáles se fusionaron; consultar GitHub para el estado vigente y el contenido final del release.
 
 ## Arranque local desde una copia limpia
 
