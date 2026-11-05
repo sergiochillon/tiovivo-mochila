@@ -75,6 +75,8 @@ function step(number: number, title: string, help: string) {
 
 function messages(target: HTMLElement, kind: 'ok' | 'error', lines: string[]) {
   target.className = 'notice ' + kind
+  // Errors interrupt a screen reader; confirmations wait their turn.
+  target.setAttribute('role', kind === 'error' ? 'alert' : 'status')
   target.replaceChildren(...lines.map(line => element('p', '', line)))
   target.hidden = lines.length === 0
 }
@@ -93,7 +95,7 @@ async function send(path: string, body: unknown) {
 
 function serverLines(data: Record<string, unknown>) {
   const details = Array.isArray(data.details) ? data.details.map(String) : []
-  if (data.error === 'pack_already_approved') return ['Ya existe un paquete aprobado con este identificador. Cambia el "id" para crear uno nuevo.']
+  if (data.error === 'pack_already_approved') return ['Ya existe un paquete aprobado con este identificador. Cambia el «id» para crear uno nuevo.']
   if (data.error === 'pack_not_draft') return ['Este paquete ya estaba aprobado.']
   return details.length ? details.slice(0, 8) : ['El servidor no aceptó el borrador (' + String(data.error ?? 'error') + ').']
 }
@@ -108,10 +110,10 @@ const topicCards: [string, string, string, string][] = [
   ['autonomy', '🎒', 'Autonomía', 'Rutinas y pequeñas responsabilidades']
 ]
 const presets: [string, string, string, string][] = [
-  ['Perú · Andes', 'Perú', 'Andes rurales', 'es'],
-  ['Uganda · Norte', 'Uganda', 'Norte de Uganda', 'en'],
-  ['Bolivia · Altiplano', 'Bolivia', 'Altiplano', 'es'],
-  ['Guatemala · Altiplano', 'Guatemala', 'Altiplano occidental', 'es']
+  ['Andes (Perú)', 'Perú', 'Andes rurales', 'es'],
+  ['Norte de Uganda', 'Uganda', 'Norte de Uganda', 'en'],
+  ['Altiplano (Bolivia)', 'Bolivia', 'Altiplano', 'es'],
+  ['Altiplano (Guatemala)', 'Guatemala', 'Altiplano occidental', 'es']
 ]
 
 export function authoring(lesson: HTMLElement) {
@@ -234,7 +236,7 @@ export function authoring(lesson: HTMLElement) {
   // Plan B (collapsed): no API key or provider saturated → any AI chat the teacher already uses.
   const two = element('section', 'author-step plan-b')
   const details = element('details')
-  details.append(element('summary', '', 'Plan B · ¿No hay IA disponible? Usa el asistente que ya tengas'))
+  details.append(element('summary', '', 'Plan B: ¿no hay IA disponible? Usa el asistente que ya tengas'))
   two.append(details)
   const prompt = area('', 10)
   prompt.readOnly = true
@@ -252,7 +254,7 @@ export function authoring(lesson: HTMLElement) {
     }
   }, true)
   promptBox.append(field('Instrucciones para la IA', prompt), copy, copied)
-  const prepare = action('1 · Preparar instrucciones', async () => {
+  const prepare = action('1. Preparar instrucciones', async () => {
     const data = context()
     if (!data) { details.open = true; return }
     const query = new URLSearchParams({ country: data.country, region: data.region, language: data.language, topic: data.topic })
@@ -274,7 +276,7 @@ export function authoring(lesson: HTMLElement) {
   const pasteResult = element('div')
   pasteResult.hidden = true
   details.append(element('p', 'step-help', 'Sirve cuando el servidor no tiene clave de IA o el servicio está saturado: cualquier asistente de chat puede generar la propuesta y MOCHILA la comprueba igual.'),
-    prepare, promptBox, field('2 · Respuesta de la IA', pasted), action('3 · Comprobar borrador', async () => {
+    prepare, promptBox, field('2. Respuesta de la IA', pasted), action('3. Comprobar borrador', async () => {
     let value: unknown
     try { value = JSON.parse(cleanPaste(pasted.value)) } catch {
       return messages(pasteResult, 'error', ['No es un JSON válido. Copia solo el objeto JSON que devuelve la IA.'])
@@ -331,7 +333,10 @@ export function authoring(lesson: HTMLElement) {
     draft!.modules.forEach(module => module.activities.forEach((activity, index) => {
       const card = element('article', 'review-card')
       const top = element('div', 'review-top')
-      top.append(element('small', '', (index + 1) + ' · ' + (kindLabels[activity.type] ?? activity.type)), element('span', 'chip', activity.safetyTag))
+      // Same name the child will see: several right answers plus a wrong one is played as «Llena el plato».
+      const plate = Array.isArray(activity.correct) && activity.correct.length > 1 && (activity.type === 'choice' || activity.type === 'scenario') &&
+        (activity.options ?? []).some(option => !(activity.correct as string[]).includes(option.id))
+      top.append(element('small', '', (index + 1) + '. ' + (plate ? 'Llena el plato' : kindLabels[activity.type] ?? activity.type)), element('span', 'chip', activity.safetyTag))
       const promptEditor = area(activity.prompt, 3)
       const feedbackEditor = area(activity.feedback, 2)
       card.append(top, field('Enunciado', promptEditor))
@@ -341,14 +346,14 @@ export function authoring(lesson: HTMLElement) {
         const correct = activity.correct
         options.forEach(([option, control], position) => {
           let label = 'Opción ' + (position + 1)
-          if (activity.type === 'order' && Array.isArray(correct)) label += ' · va en el paso ' + (correct.indexOf(option.id) + 1)
+          if (activity.type === 'order' && Array.isArray(correct)) label += ' (va en el paso ' + (correct.indexOf(option.id) + 1) + ')'
           else if (activity.type === 'match' && Array.isArray(correct)) {
             const pair = correct.find(item => item.split(':').includes(option.id))
             const other = pair?.split(':').find(id => id !== option.id)
             const partner = (activity.options ?? []).find(item => item.id === other)
-            if (partner) label += ' · pareja: ' + partner.text
+            if (partner) label += ' (pareja: ' + partner.text + ')'
           }
-          else if (Array.isArray(correct) ? correct.includes(option.id) : correct === option.id) label += ' · ✓ respuesta correcta'
+          else if (Array.isArray(correct) ? correct.includes(option.id) : correct === option.id) label += ' ✓ respuesta correcta'
           list.append(field(label, control))
         })
         card.append(list)
@@ -415,7 +420,7 @@ export function authoring(lesson: HTMLElement) {
           messages(approveResult, 'error', ['No se pudo descargar el paquete aprobado. Comprueba la conexión y vuelve a intentarlo.'])
         }
       }, true)
-      approved.replaceChildren(element('strong', '', 'Aprobado por ' + String(data.reviewedBy) + ' · ' + when),
+      approved.replaceChildren(element('strong', '', 'Aprobado por ' + String(data.reviewedBy) + ' (' + when + ')'),
         element('p', '', 'El paquete ya está disponible para el alumnado. Abre la app con conexión una vez en cada dispositivo para guardarlo y usarlo sin red.'), open, download)
       approved.hidden = false
     } catch { messages(approveResult, 'error', ['No hay conexión con el servidor de MOCHILA.']) }

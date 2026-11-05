@@ -79,14 +79,14 @@ const database = new Promise<IDBDatabase>((resolve, reject) => {
 
 const texts = {
   es: {
-    kinds: { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas' } as Record<string, string>,
+    kinds: { story: 'Historia', choice: 'Elige', order: 'Ordena', scenario: '¿Qué harías?', match: 'Parejas', plate: 'Llena el plato' } as Record<string, string>,
     avatars: { zorro: 'Zorro', colibri: 'Colibrí', llama: 'Llama', jirafa: 'Jirafa', tortuga: 'Tortuga', rana: 'Rana' } as Record<string, string>,
     edition: 'Atlas de aula', expedition: 'EXPEDICIÓN 01', footer: 'El progreso se guarda en este dispositivo.',
     who: '¿Qué explorador eliges hoy?', whoHelp: 'Cada explorador guarda sus propias pegatinas. Elige el tuyo.',
     activities: 'Actividades', goingWith: (name: string) => 'Vas con ' + name + '. Toca una actividad para empezar.',
-    next: 'Siguiente', start: 'Empezar', done: 'Completada', minutes: 'min', changeAvatar: 'Cambiar de explorador',
+    start: 'Empezar', done: 'Completada', minutes: 'min', changeAvatar: 'Cambiar de explorador',
     back: '← Actividades', continue: 'Continuar', needsReview: 'Esta actividad necesita revisión.', goBack: 'Volver',
-    yourOrder: 'Tu orden', firstStep: '¿Cuál es el primer paso?', wrongStep: 'Ese no va ahora. Prueba otro paso.',
+    yourOrder: 'Tu orden', yourPlate: 'Tu plato', pairFound: 'pareja encontrada', firstStep: '¿Cuál es el primer paso?', wrongStep: 'Ese no va ahora. Prueba otro paso.',
     nextStep: '¡Bien! ¿Cuál va después?', tryAgain: 'Puedes volver a elegir.',
     wellDone: (name: string) => '¡Buen trabajo, ' + name + '!', seal: 'Pegatina de la estación',
     seals: (done: number, total: number) => 'Tus pegatinas: ' + done + ' de ' + total,
@@ -95,7 +95,7 @@ const texts = {
     storageHelp: 'Comprueba que el navegador permite guardar datos y vuelve a intentarlo.', retry: 'Volver a intentar',
     playAgain: 'Volver a jugar', backpacks: '← Mis mochilas', correctAnswer: '¡Muy bien!', listenFirst: 'Escucha o lee la pregunta y elige.',
     plateHelp: 'Toca todo lo que va en el plato. ¡Llénalo!', plateWrong: 'Eso no va aquí. Prueba con otra cosa.', plateGood: '¡Sí! Sigue llenando el plato.',
-    pairsHelp: 'Toca uno de la izquierda y su pareja de la derecha.', pairsWrong: 'Esa no es su pareja. ¡Inténtalo otra vez!', pairsGood: '¡Pareja encontrada!',
+    pairsHelp: 'Toca uno de la izquierda y su pareja de la derecha.', pairsWrong: (a: string, b: string) => '«' + a + '» y «' + b + '» no son pareja. ¡Prueba con otra!', pairsGood: '¡Pareja encontrada!',
     hello: '¡Hola! Soy Mochi. Cada actividad que termines te dará una pegatina para tu álbum.', letsGo: '¡Vamos! Empieza por la estación que brilla.',
     stamps: (n: number) => n === 1 ? '1 pegatina' : n + ' pegatinas', allDone: '¡Has completado todas las estaciones!',
     album: 'Mi álbum', albumHelp: (name: string) => 'Las pegatinas de ' + name + ' en esta mochila. Cada estación superada pega una nueva.',
@@ -103,14 +103,14 @@ const texts = {
     helpOption: 'Te ayudo: ahora hay una opción menos. Mira bien las que quedan.', helpStep: 'Te ayudo: el paso que sigue brilla.', helpPlate: 'Te ayudo: mira lo que brilla.', helpPair: 'Te ayudo: su pareja brilla.'
   },
   en: {
-    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs' } as Record<string, string>,
+    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs', plate: 'Fill the plate' } as Record<string, string>,
     avatars: { zorro: 'Fox', colibri: 'Hummingbird', llama: 'Llama', jirafa: 'Giraffe', tortuga: 'Turtle', rana: 'Frog' } as Record<string, string>,
     edition: 'Class atlas', expedition: 'EXPEDITION 01', footer: 'Your progress is saved on this device.',
     who: 'Which explorer do you pick today?', whoHelp: 'Each explorer keeps their own stickers. Choose yours.',
     activities: 'Activities', goingWith: (name: string) => 'You are with ' + name + '. Tap an activity to start.',
-    next: 'Next', start: 'Start', done: 'Done', minutes: 'min', changeAvatar: 'Change explorer',
+    start: 'Start', done: 'Done', minutes: 'min', changeAvatar: 'Change explorer',
     back: '← Activities', continue: 'Continue', needsReview: 'This activity needs review.', goBack: 'Back',
-    yourOrder: 'Your order', firstStep: 'What is the first step?', wrongStep: 'Not this one yet. Try another step.',
+    yourOrder: 'Your order', yourPlate: 'Your plate', pairFound: 'match found', firstStep: 'What is the first step?', wrongStep: 'Not this one yet. Try another step.',
     nextStep: 'Good! What comes next?', tryAgain: 'You can choose again.',
     wellDone: (name: string) => 'Well done, ' + name + '!', seal: 'Station sticker',
     seals: (done: number, total: number) => 'Your stickers: ' + done + ' of ' + total,
@@ -119,7 +119,7 @@ const texts = {
     storageHelp: 'Check that the browser allows saving data and try again.', retry: 'Try again',
     playAgain: 'Play again', backpacks: '← My backpacks', correctAnswer: 'Great!', listenFirst: 'Listen or read the question and choose.',
     plateHelp: 'Tap everything that goes on the plate. Fill it up!', plateWrong: 'That one does not go here. Try another.', plateGood: 'Yes! Keep filling the plate.',
-    pairsHelp: 'Tap one on the left, then its match on the right.', pairsWrong: 'Not a match. Try again!', pairsGood: 'Match found!',
+    pairsHelp: 'Tap one on the left, then its match on the right.', pairsWrong: (a: string, b: string) => '"' + a + '" and "' + b + '" are not a pair. Try another one!', pairsGood: 'Match found!',
     hello: 'Hi! I am Mochi. Every activity you finish gives you a sticker for your album.', letsGo: "Let's go! Start with the shining station.",
     stamps: (n: number) => n === 1 ? '1 sticker' : n + ' stickers', allDone: 'You completed every station!',
     album: 'My album', albumHelp: (name: string) => name + "'s stickers in this backpack. Every station you finish adds a new one.",
@@ -145,6 +145,39 @@ const knownPacks = [
   { id: 'food-altiplano-es', title: 'Alimentos en el Altiplano', place: 'Altiplano, Bolivia (contexto sintético)', language: 'Español', note: 'Propuesta de IA revisada por el equipo' }
 ]
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+/** A new random order each time, so the answer is never in a position the child can memorise.
+ *  `predictable` rejects orders that would give the answer away (retries a few times). */
+function shuffled<T>(list: readonly T[], predictable: (order: T[]) => boolean = () => false): T[] {
+  let order = [...list]
+  for (let attempt = 0; attempt < 12; attempt++) {
+    order = [...list]
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[order[i], order[j]] = [order[j], order[i]]
+    }
+    if (!predictable(order)) return order
+  }
+  // Very unlucky draws: take the first rotation that is not predictable.
+  for (let shift = 1; shift < list.length; shift++) {
+    const rotated = [...list.slice(shift), ...list.slice(0, shift)]
+    if (!predictable(rotated)) return rotated
+  }
+  return order
+}
+/** Option emoji (if any) before the text, hidden from screen readers; the id lets Mochi find the card. */
+function decorate(element: HTMLElement, option: { id: string; icon?: string }) {
+  element.dataset.option = option.id
+  if (option.icon) {
+    const icon = document.createElement('span')
+    icon.className = 'option-icon'
+    icon.setAttribute('aria-hidden', 'true')
+    icon.textContent = option.icon
+    element.prepend(icon)
+  }
+  return element
+}
+const byOption = (container: Element, id: string | undefined) =>
+  [...container.querySelectorAll<HTMLElement>('[data-option]')].find(item => item.dataset.option === id)
 
 // Static, trusted markup only: never pass package text to this helper.
 function icon(paths: string, className: string) {
@@ -330,7 +363,7 @@ async function activities(avatar: Avatar) {
     const text = document.createElement('span')
     text.className = 'activity-text'
     const label = document.createElement('small')
-    label.textContent = t.kinds[item.type] + (item === next ? ' · ' + t.next : '')
+    label.textContent = kindLabel(item)
     const title = document.createElement('span')
     title.className = 'activity-title'
     title.textContent = item.prompt
@@ -382,15 +415,23 @@ async function album(avatar: Avatar) {
     if (done.has(item.id)) art.innerHTML = sticker(stickerKind(item), index)
     else art.textContent = '?'
     const caption = document.createElement('figcaption')
-    caption.textContent = done.has(item.id) ? (t.kinds[item.type] ?? '') + ' ' + (index + 1) : t.emptySlot
+    caption.textContent = done.has(item.id) ? kindLabel(item) + ' ' + (index + 1) : t.emptySlot
     slot.append(art, caption)
     grid.append(slot)
   })
   lesson.append(grid)
 }
 
-const stickerKind = (activity: Activity) =>
-  Array.isArray(activity.correct) && activity.correct.length > 1 && activity.type !== 'order' && activity.type !== 'match' ? 'plate' : activity.type
+/** «Fill the plate»: several right answers AND at least one wrong one. When every option is right
+ *  (self-choice, e.g. emotions), any tap is a good answer and it plays as a normal choice. */
+const isPlate = (activity: Activity) => {
+  const correct = activity.correct
+  return Array.isArray(correct) && correct.length > 1 && activity.type !== 'order' && activity.type !== 'match' &&
+    (activity.options ?? []).some(option => !correct.includes(option.id))
+}
+const stickerKind = (activity: Activity) => isPlate(activity) ? 'plate' : activity.type
+/** What the child sees as the game's name: a choice with several right answers is played as «fill the plate». */
+const kindLabel = (activity: Activity) => t.kinds[stickerKind(activity)] ?? t.kinds[activity.type] ?? ''
 
 async function play(avatar: Avatar, activity: Activity, replay = false) {
   const db = await database
@@ -401,7 +442,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     request.onerror = () => reject(request.error)
   })
   if (saved && !replay) return complete(avatar, activity)
-  screen(activity.prompt, t.kinds[activity.type] ?? '')
+  screen(activity.prompt, kindLabel(activity))
   lesson.className = 'activity-screen kind-' + activity.type
   lesson.append(readingControl(activity.audioText || activity.prompt, pack.language))
   if (!technicalPreview) {
@@ -450,8 +491,8 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     }
     let step = 0
     const ordered = sequence.map(id => options.find(option => option.id === id)!)
-    // Present the steps out of order, including when the package lists them in solution order.
-    const shown = [...ordered.slice(1), ordered[0]]
+    // A new order every time; the first step is never shown first.
+    const shown = shuffled(ordered, order => order[0] === ordered[0])
     const slots = document.createElement('ol')
     slots.className = 'slots'
     slots.setAttribute('aria-label', t.yourOrder)
@@ -475,19 +516,20 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
           soundWrong()
           if (needsHelp()) {
             coach.say(t.helpStep, 'happy', 'hop')
-            glow([...grid.querySelectorAll('button')].find(item => item.textContent === ordered[step].text))
+            glow(byOption(grid, ordered[step].id))
           }
           answer.classList.remove('wrong'); void answer.offsetWidth; answer.classList.add('wrong')
           return
         }
         soundRight()
-        slotText[step].textContent = option.text
+        slotText[step].textContent = (option.icon ? option.icon + ' ' : '') + option.text
         slotText[step].parentElement!.classList.add('filled')
         step++
         answer.disabled = true
         if (step === sequence.length) { await delay(450); await finish() }
         else coach.say(t.nextStep, 'happy', 'hop')
       })
+      decorate(answer, option)
       grid.append(answer)
     }
   } else if (activity.type === 'match') {
@@ -517,8 +559,10 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         soundTap()
         if (side === 'left') {
           selected?.element.classList.remove('picked')
+          selected?.element.setAttribute('aria-pressed', 'false')
           selected = { id, element }
           element.classList.add('picked')
+          element.setAttribute('aria-pressed', 'true') // a screen reader also hears which card is chosen
           return
         }
         if (!selected) return coach.say(t.pairsHelp, 'thinking', 'wiggle')
@@ -526,12 +570,12 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         if (!match) {
           element.classList.remove('wrong'); void element.offsetWidth; element.classList.add('wrong')
           setTimeout(() => element.classList.remove('wrong'), 700)
-          coach.say(t.pairsWrong, 'thinking', 'wiggle')
+          coach.say(t.pairsWrong(byId.get(selected!.id)!.text, byId.get(id)!.text), 'thinking', 'wiggle')
           soundWrong()
           if (needsHelp()) {
             const partner = pairs.find(([a]) => a === selected!.id)?.[1]
             coach.say(t.helpPair, 'happy', 'hop')
-            glow([...right.querySelectorAll('button')].find(item => item.textContent === byId.get(partner ?? '')?.text))
+            glow(byOption(right, partner))
           }
           return
         }
@@ -539,29 +583,35 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         selected.element.className = 'pair-card ' + color
         element.className = 'pair-card ' + color
         selected.element.disabled = element.disabled = true
+        // Matched cards say so (and to whom), not only through their colour.
+        selected.element.removeAttribute('aria-pressed')
+        selected.element.setAttribute('aria-label', byId.get(selected.id)!.text + ': ' + t.pairFound + ', ' + byId.get(id)!.text)
+        element.setAttribute('aria-label', byId.get(id)!.text + ': ' + t.pairFound + ', ' + byId.get(selected.id)!.text)
         selected = undefined
         found++
         soundRight()
         if (found === pairs.length) { coach.say(t.correctAnswer, 'cheer', 'hop'); await delay(600); await finish() }
         else coach.say(t.pairsGood, 'happy', 'hop')
       }
+      decorate(element, byId.get(id)!)
       column.append(element)
     }
     pairs.forEach(([a]) => card(a, left, 'left'))
-    // Right column never in the same order as the left one.
+    // Right column in a new order each time, with no card level with its partner.
     const rights = pairs.map(([, b]) => b)
-    ;[...rights.slice(1), rights[0]].forEach(b => card(b, right, 'right'))
-  } else if (Array.isArray(activity.correct) && activity.correct.length > 1) {
+    shuffled(rights, order => rights.length > 1 && order.some((b, index) => b === rights[index]))
+      .forEach(b => card(b, right, 'right'))
+  } else if (isPlate(activity)) {
     // "Fill the plate": every correct option must be collected; wrong ones bounce back.
-    const needed = new Set(activity.correct)
+    const needed = new Set(activity.correct as string[])
     coach.say(t.plateHelp, 'thinking')
     const plate = document.createElement('div')
     plate.className = 'plate'
-    plate.setAttribute('aria-label', t.yourOrder)
+    plate.setAttribute('aria-label', t.yourPlate)
     const tray = document.createElement('div')
     tray.className = 'tray'
     lesson.append(hint, plate, tray)
-    options.forEach(option => {
+    shuffled(options).forEach(option => {
       const token = button(option.text, async () => {
         if (!needed.has(option.id)) {
           token.classList.remove('wrong'); void token.offsetWidth; token.classList.add('wrong')
@@ -569,8 +619,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
           soundWrong()
           if (needsHelp()) {
             coach.say(t.helpPlate, 'happy', 'hop')
-            const remaining = options.find(item => needed.has(item.id))
-            glow([...tray.querySelectorAll('button')].find(item => item.textContent?.includes(remaining?.text ?? '\u0000')))
+            glow(byOption(tray, options.find(item => needed.has(item.id))?.id))
           }
           return
         }
@@ -583,22 +632,18 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         else coach.say(t.plateGood, 'happy', 'hop')
       })
       token.className = 'food-token'
-      if (option.icon) {
-        const icon = document.createElement('span')
-        icon.setAttribute('aria-hidden', 'true')
-        icon.textContent = option.icon
-        token.prepend(icon)
-      }
+      decorate(token, option)
       tray.append(token)
     })
   } else {
     const choices = document.createElement('div')
     choices.className = 'choices'
     lesson.append(choices, hint)
-    options.forEach((option, index) => {
+    // New order each time, so the right answer is not always «A».
+    const isRight = (id: string) => Array.isArray(activity.correct) ? activity.correct.includes(id) : activity.correct === id
+    shuffled(options).forEach((option, index) => {
       const answer = button(option.text, async () => {
-        const correct = activity.correct
-        if (Array.isArray(correct) ? correct.includes(option.id) : correct === option.id) {
+        if (isRight(option.id)) {
           answer.classList.add('right')
           coach.say(t.correctAnswer, 'cheer', 'hop')
           soundRight()
@@ -610,10 +655,8 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
           coach.say(option.feedback || t.tryAgain, 'thinking', 'wiggle')
           soundWrong()
           if (needsHelp()) {
-            const correct = activity.correct
-            const isRight = (id: string) => Array.isArray(correct) ? correct.includes(id) : correct === id
-            const wrongs = [...choices.querySelectorAll<HTMLButtonElement>('button')].filter((item, index) =>
-              !item.disabled && !isRight(options[index].id))
+            const wrongs = [...choices.querySelectorAll<HTMLButtonElement>('button')].filter(item =>
+              !item.disabled && !isRight(item.dataset.option ?? ''))
             const wrongOne = wrongs.find(item => item !== answer) ?? wrongs[0]
             if (wrongOne) { wrongOne.disabled = true; wrongOne.classList.add('removed'); coach.say(t.helpOption, 'happy', 'hop') }
           }
@@ -625,13 +668,8 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
       letter.setAttribute('aria-hidden', 'true')
       letter.textContent = 'ABCD'[index] ?? ''
       answer.prepend(letter)
+      decorate(answer, option)
       choices.append(answer)
-      if (option.icon) {
-        const icon = document.createElement('span')
-        icon.setAttribute('aria-hidden', 'true')
-        icon.textContent = option.icon
-        answer.prepend(icon)
-      }
     })
   }
   if (!hint.isConnected) lesson.append(hint)
@@ -698,7 +736,7 @@ async function pendingCount() {
 
 function teacherPanel() {
   teacherHeader('Cuaderno de clase', 'Clase DEMO-01')
-  screen('Cuaderno de clase', 'Clase DEMO-01 · prepara el material, sigue el progreso y deja las tablets listas.')
+  screen('Cuaderno de clase', 'Clase DEMO-01: prepara el material, sigue el progreso y deja las tablets listas.')
   lesson.className = 'teacher-home'
   const metrics = document.createElement('div')
   metrics.className = 'metrics'
@@ -831,7 +869,7 @@ const reviewRoute = location.pathname === '/revision'
 const technicalPreview = reviewRoute && import.meta.env.MODE === 'revision'
 if (technicalPreview) {
   document.querySelector('.edition')!.textContent = 'Revisión técnica'
-  document.querySelector('footer')!.textContent = 'Ejemplo técnico en borrador · Solo para pruebas del equipo.'
+  document.querySelector('footer')!.textContent = 'Ejemplo técnico en borrador. Solo para pruebas del equipo.'
 }
 if (location.pathname === '/docente') teacherPanel()
 else if (location.pathname === '/autoria') {
@@ -866,7 +904,7 @@ else if (technicalPreview) {
       home.textContent = '← Mis mochilas'
       return lesson.append(home)
     }
-    document.title = 'MOCHILA · ' + downloaded.title
+    document.title = 'MOCHILA — ' + downloaded.title
     pack = downloaded
     document.documentElement.lang = pack.language
     if (pack.language === 'en') t = texts.en
@@ -892,4 +930,10 @@ database.catch(storageError)
 navigator.storage?.persist?.().catch(() => undefined)
 // When the network comes back, send pending progress quietly. The server ignores repeated eventIds,
 // so this never duplicates a manual send from /docente; a failure leaves the events pending as before.
-if (!technicalPreview) addEventListener('online', () => { database.then(sendProgress).catch(() => undefined) })
+if (!technicalPreview) {
+  const sendQuietly = () => { database.then(sendProgress).catch(() => undefined) }
+  addEventListener('online', sendQuietly)
+  // Opened with a connection (e.g. the next day): there is no «online» event, so also try once at start.
+  // Nothing is sent when there is nothing pending, and /docente keeps its own manual button.
+  if (navigator.onLine && location.pathname !== '/docente') setTimeout(sendQuietly, 3000)
+}

@@ -14,7 +14,7 @@
   },
   "review": {
     "status": "draft",
-    "notes": "Borrador asistido con IA (Claude) para estrenar las dinámicas de plato y parejas. Pendiente de revisión pedagógica y de validación cultural local. No probado con niños."
+    "notes": "Borrador asistido con IA (Claude). Revisión pedagógica interna pendiente; validación cultural local pendiente. decide-fuego requiere segunda revisión humana de Mario o Sergio. No probado con niños."
   },
   "modules": [
     {
@@ -25,29 +25,29 @@
         {
           "id": "historia-cocina",
           "type": "story",
-          "prompt": "Hoy Ana ayuda en la cocina. En la mesa hay papa, habas, quinua y un huevo. Su abuelo le dice: «Vamos a preparar el almuerzo juntos».",
-          "audioText": "Hoy Ana ayuda en la cocina. En la mesa hay papa, habas, quinua y un huevo. Su abuelo le dice: «Vamos a preparar el almuerzo juntos».",
-          "feedback": "¡Ana está lista para cocinar con su abuelo!",
+          "prompt": "Hoy Ana ayuda a preparar la comida. Su familia tiene papa, habas, quinua y huevo. Cada familia puede elegir con lo que tiene en casa.",
+          "audioText": "Hoy Ana ayuda a preparar la comida. Su familia tiene papa, habas, quinua y huevo. Cada familia puede elegir con lo que tiene en casa.",
+          "feedback": "Cada familia puede elegir entre los alimentos que tiene.",
           "safetyTag": "none",
-          "teacherNotes": "A VALIDAR: cambiar los alimentos por los que haya de verdad en la comunidad.",
+          "teacherNotes": "A VALIDAR: confirmar alimentos, nombre Ana, referentes familiares y vocabulario con una persona de la comunidad concreta.",
           "durationMin": 1
         },
         {
           "id": "arma-plato",
           "type": "choice",
-          "prompt": "¿Qué hay en la mesa de Ana? Pon en el plato todo lo que viste en la historia.",
-          "audioText": "¿Qué hay en la mesa de Ana? Pon en el plato todo lo que viste en la historia.",
+          "prompt": "Ana prepara una comida con lo que hay en casa. ¿Qué alimentos puede usar?",
+          "audioText": "Ana prepara una comida con lo que hay en casa. ¿Qué alimentos puede usar?",
           "options": [
             { "id": "papa", "text": "Papa", "icon": "🥔" },
             { "id": "habas", "text": "Habas", "icon": "🫘" },
             { "id": "quinua", "text": "Quinua", "icon": "🌾" },
             { "id": "huevo", "text": "Huevo", "icon": "🥚" },
-            { "id": "pescado", "text": "Pescado", "icon": "🐟", "feedback": "El pescado no estaba hoy en la mesa de Ana. Recuerda la historia." }
+            { "id": "pescado", "text": "Pescado", "icon": "🐟", "feedback": "El pescado no está en casa hoy. Elige los alimentos que sí hay." }
           ],
           "correct": ["papa", "habas", "quinua", "huevo"],
-          "feedback": "¡Plato completo! Ana usa lo que tiene en casa.",
+          "feedback": "Puedes preparar una comida con los alimentos disponibles.",
           "safetyTag": "none",
-          "teacherNotes": "Actividad de memoria y vocabulario: no valora alimentos como buenos o malos.",
+          "teacherNotes": "A VALIDAR: confirmar nombres y disponibilidad de los alimentos. No es una recomendación de porciones o dieta.",
           "durationMin": 2
         },
         {
@@ -56,17 +56,17 @@
           "prompt": "Une cada cosa que hace Ana con lo que necesita.",
           "audioText": "Une cada cosa que hace Ana con lo que necesita.",
           "options": [
-            { "id": "lavar-manos", "text": "Lavarse las manos" },
-            { "id": "cocinar", "text": "Cocinar en el fuego" },
-            { "id": "servir", "text": "Servir la comida" },
-            { "id": "agua-jabon", "text": "Agua y jabón" },
-            { "id": "persona-adulta", "text": "Una persona adulta" },
-            { "id": "plato-limpio", "text": "Un plato limpio" }
+            { "id": "lavar-manos", "text": "Lavarse las manos", "icon": "🧼" },
+            { "id": "cocinar", "text": "Cocinar en el fuego", "icon": "🔥" },
+            { "id": "servir", "text": "Servir la comida", "icon": "🍽️" },
+            { "id": "agua-jabon", "text": "Agua y jabón", "icon": "💧" },
+            { "id": "persona-adulta", "text": "Una persona adulta", "icon": "🧑‍🍳" },
+            { "id": "plato-limpio", "text": "Un plato limpio", "icon": "🥣" }
           ],
           "correct": ["lavar-manos:agua-jabon", "cocinar:persona-adulta", "servir:plato-limpio"],
-          "feedback": "¡Muy bien! Con ayuda y cuidado, cocinar es más seguro.",
+          "feedback": "Las manos se lavan con agua y jabón. Pide ayuda adulta para cocinar. Sirve la comida en un plato limpio.",
           "safetyTag": "food-safety",
-          "teacherNotes": "A VALIDAR: si en la comunidad no hay jabón a mano, adaptar la pareja.",
+          "teacherNotes": "A VALIDAR: confirmar disponibilidad de agua, jabón, fuego y vajilla con una persona local.",
           "durationMin": 2
         },
         {
@@ -79,8 +79,9 @@
             { "id": "mover-olla", "text": "Mueve la olla ella sola", "icon": "🍲", "feedback": "La olla quema. Mejor espera o llama a una persona adulta." }
           ],
           "correct": "esperar-adulto",
-          "feedback": "¡Bien pensado! Con el fuego, siempre con una persona adulta.",
+          "feedback": "Con el fuego, pide ayuda a una persona adulta.",
           "safetyTag": "help-adult",
+          "teacherNotes": "A VALIDAR: revisar vocabulario y referentes adultos con una persona local. Segunda revisión de seguridad pendiente.",
           "durationMin": 2
         }
       ]
