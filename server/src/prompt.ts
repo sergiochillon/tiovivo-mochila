@@ -63,12 +63,18 @@ export function parseGenerationContext(value: unknown): GenerationContext | unde
 /** Context written into the pack. Anything the teacher did not confirm stays marked A VALIDAR. */
 export function contextForPack(context: GenerationContext, generatedFoods: string[] = []) {
   const foods = context.foods.length ? context.foods : generatedFoods.length ? generatedFoods : ["A VALIDAR"];
+  const communityType = context.communityType
+    ? `A VALIDAR: confirmar tipo de comunidad (${context.communityType})`
+    : "A VALIDAR";
+  const resources = context.resources.length
+    ? context.resources.map((resource) => `A VALIDAR: confirmar recurso (${resource})`)
+    : ["A VALIDAR"];
   return {
     country: context.country,
     region: context.region,
-    communityType: context.communityType ?? "A VALIDAR",
+    communityType,
     foods,
-    resources: context.resources.length ? context.resources : ["A VALIDAR"],
+    resources,
     culturalNotes: [
       "A VALIDAR: confirmar alimentos, disponibilidad, recursos y vocabulario con revisores locales.",
       ...(context.foods.length ? [] : ["A VALIDAR: los alimentos los propuso la IA; la persona docente debe confirmarlos."]),
