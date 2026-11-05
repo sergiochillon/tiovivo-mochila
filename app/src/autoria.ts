@@ -303,6 +303,10 @@ export function authoring(lesson: HTMLElement) {
   four.hidden = true
   const editors: { activity: DraftActivity; prompt: HTMLTextAreaElement; feedback: HTMLTextAreaElement; options: [Option, HTMLInputElement][] }[] = []
   const reviewList = element('div', 'review-list')
+  // Activities with a sensitive safetyTag need a second person (content rules, mochila-pack-review).
+  // The server cannot check it, so the screen says it out loud before anyone approves.
+  const sensitiveNote = element('div', 'notice error')
+  sensitiveNote.hidden = true
   const saveResult = element('div')
   saveResult.hidden = true
 
@@ -330,6 +334,13 @@ export function authoring(lesson: HTMLElement) {
   function renderReview() {
     editors.length = 0
     reviewList.replaceChildren()
+    const sensitive = draft!.modules.flatMap(module => module.activities)
+      .filter(activity => ['food-safety', 'help-adult', 'emotion-self-choice', 'privacy'].includes(activity.safetyTag))
+    sensitiveNote.hidden = sensitive.length === 0
+    sensitiveNote.replaceChildren(
+      element('strong', '', 'Necesita una segunda persona revisora'),
+      element('p', '', 'Estas actividades tocan seguridad, emociones o privacidad: ' + sensitive.map(activity => '«' + (activity.prompt.length > 60 ? activity.prompt.slice(0, 60).replace(/\s+\S*$/, '') + '…' : activity.prompt) + '»').join(', ') +
+        '. Antes de aprobar, otra persona del equipo debe leerlas; anota su nombre junto al tuyo en «Revisado por».'))
     draft!.modules.forEach(module => module.activities.forEach((activity, index) => {
       const card = element('article', 'review-card')
       const top = element('div', 'review-top')
@@ -420,14 +431,14 @@ export function authoring(lesson: HTMLElement) {
           messages(approveResult, 'error', ['No se pudo descargar el paquete aprobado. Comprueba la conexión y vuelve a intentarlo.'])
         }
       }, true)
-      approved.replaceChildren(element('strong', '', 'Aprobado por ' + String(data.reviewedBy) + ' (' + when + ')'),
+      approved.replaceChildren(element('strong', '', 'Aprobado por ' + String(data.reviewedBy) + ' el ' + when),
         element('p', '', 'El paquete ya está disponible para el alumnado. Abre la app con conexión una vez en cada dispositivo para guardarlo y usarlo sin red.'), open, download)
       approved.hidden = false
     } catch { messages(approveResult, 'error', ['No hay conexión con el servidor de MOCHILA.']) }
   })
   const checkList = element('div', 'checklist')
   checkList.append(...checks.map(check => check.label))
-  four.append(checkList, field('Revisado por', reviewer), approve, approveResult, approved)
+  four.append(sensitiveNote, checkList, field('Revisado por', reviewer), approve, approveResult, approved)
 
   const back = element('a', 'button-link secondary-link', '← Cuaderno de clase')
   back.href = '/docente'
