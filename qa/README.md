@@ -6,3 +6,5 @@ Un resultado solo se anota si se ha ejecutado.
 La lista para preparar y presentar la demo está en [`checklist-demo.md`](checklist-demo.md).
 
 La hoja de ejecución del ensayo final v0.9 (iPhone y reconexión automática) está en [`ensayo-final-v0.9-freeze.md`](ensayo-final-v0.9-freeze.md). Sus casos empiezan como `Pendiente`; no contiene resultados nuevos.
+
+El lote ficticio para preparar contadores del panel docente está en [`demo-progreso-sintetico.md`](demo-progreso-sintetico.md). No representa una prueba con niños.
