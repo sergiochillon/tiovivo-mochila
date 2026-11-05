@@ -661,7 +661,7 @@ function showScene(scene: Scene, language?: string) {
   aside.style.backgroundImage = 'url("' + sceneImage(scene) + '")'
   document.body.dataset.scene = scene.id
   aside.querySelector('.scene-notice')?.remove()
-  if (language && scene !== neutralScene) aside.append(sceneCaption(language))
+  if (language) aside.append(sceneCaption(language))
 }
 
 function teacherHeader(title: string, subtitle: string) {
