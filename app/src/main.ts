@@ -477,7 +477,7 @@ async function choose() {
     portrait.src = avatar.portrait
     portrait.alt = ''
     card.prepend(portrait)
-    const count = records.filter(record => record.avatarId === avatar.id && pack && record.packId === pack.id).length
+    const count = records.filter(record => record.avatarId === avatar.id && pack && record.packId === pack.id && record.result !== 'incorrect').length
     const stamps = document.createElement('small')
     stamps.className = 'avatar-stamps'
     stamps.textContent = '★ ' + t.stamps(count)
