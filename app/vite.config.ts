@@ -26,8 +26,8 @@ export default defineConfig({
     manifest: {
       name: 'MOCHILA · Aprender sin conexión',
       short_name: 'MOCHILA',
-      theme_color: '#174c43',
-      background_color: '#faf6eb',
+      theme_color: '#DFF3FF',
+      background_color: '#DFF3FF',
       icons: [
         { src: '/mochila-192.png', sizes: '192x192', type: 'image/png' },
         { src: '/mochila-512.png', sizes: '512x512', type: 'image/png' }

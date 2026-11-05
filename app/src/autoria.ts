@@ -1,8 +1,10 @@
 import { approved as isApprovedPack, draftErrors } from './packs'
 
 // Authoring runs on the teacher's computer, with a connection to the MOCHILA server.
-// MOCHILA never sends anything to an AI provider: the teacher copies the instructions
-// into the assistant they already use and pastes the answer back (assisted generation, ADR-002).
+// Two ways to get a draft: the server asks Gemini (/generate/ai; the API key never reaches the
+// browser), or the teacher copies the instructions into their own assistant and pastes the answer
+// (assisted generation, ADR-002). Either way it is a draft until a person reviews and approves it.
+// Nothing from authoring reaches a child's device until it is approved; children never talk to an AI.
 const api = import.meta.env.VITE_API_BASE_URL || '/api'
 
 type Option = { id: string; text: string }

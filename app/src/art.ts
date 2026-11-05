@@ -67,20 +67,6 @@ export const extraAvatars = [
   }
 ]
 
-/** Savanna scene for northern Uganda (the Andes use Rodrigo's valle.svg). */
-export const savanna = svgUrl('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice">' +
-  '<rect width="800" height="300" fill="#fbd99a"/>' +
-  '<circle cx="640" cy="90" r="46" fill="#f39c4a"/><circle cx="640" cy="90" r="64" fill="#f39c4a" opacity=".25"/>' +
-  '<path d="M0 190 Q200 160 400 185 T800 175 L800 300 L0 300 Z" fill="#d9a35b"/>' +
-  '<path d="M0 225 Q220 200 420 222 T800 214 L800 300 L0 300 Z" fill="#c4813f"/>' +
-  '<path d="M0 262 Q260 244 520 262 T800 256 L800 300 L0 300 Z" fill="#a8652e"/>' +
-  '<path d="M140 228 v-58" stroke="#5b3a1e" stroke-width="7"/><ellipse cx="140" cy="166" rx="66" ry="16" fill="#5f7d3a"/><ellipse cx="128" cy="156" rx="40" ry="11" fill="#6f8f45"/>' +
-  '<path d="M560 214 v-40" stroke="#5b3a1e" stroke-width="5"/><ellipse cx="560" cy="172" rx="44" ry="11" fill="#5f7d3a"/>' +
-  '<path d="M300 236 h44 v-22 l-22-18 l-22 18 Z" fill="#b9733a"/><path d="M294 216 l28-26 l28 26 Z" fill="#8a5a2b"/>' +
-  '<path d="M356 240 h34 v-18 l-17-14 l-17 14 Z" fill="#b9733a"/><path d="M351 224 l22-20 l22 20 Z" fill="#8a5a2b"/>' +
-  '<path d="M80 60 q10-8 20 0 q10-8 20 0" stroke="#7a4f19" stroke-width="3" fill="none"/><path d="M700 40 q8-6 16 0 q8-6 16 0" stroke="#7a4f19" stroke-width="3" fill="none"/>' +
-  '</svg>')
-
 const stickerColors = ['#FFC531', '#17A06B', '#B5367D', '#2F7FD8', '#F28C38', '#7BC8E8', '#8E6BBF']
 const stickerEmoji: Record<string, string> = { story: '📖', choice: '⭐', order: '🪜', scenario: '💡', match: '🧩', plate: '🥣' }
 const blobs = [
