@@ -11,7 +11,7 @@ import { classResults, classTotals, sendProgress, type Progress } from './sync'
 import fox from './zorro.svg'
 import bird from './colibri.svg'
 import { extraAvatars, mochi, sticker } from './art'
-import { neutralScene, sceneFor, sceneImage, type Scene } from './scenes'
+import { neutralScene, sceneCaption, sceneFor, sceneImage, type Scene } from './scenes'
 import { confetti, isMuted, setMuted, soundRight, soundStamp, soundTap, soundWrong } from './fx'
 // Each explorer is a child's identity on a shared device, without personal data: progress is kept per avatar.
 // label is the legacy display name used only to migrate old progress records.
@@ -122,7 +122,7 @@ const texts = {
     languageLabel: 'Idioma'
   },
   en: {
-    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs', plate: 'Fill the plate', sort: 'Sort it', memory: 'Memory', truefalse: 'True or lie?' } as Record<string, string>,
+    kinds: { story: 'Story', choice: 'Choose', order: 'Put in order', scenario: 'What would you do?', match: 'Pairs', plate: 'Fill the plate', sort: 'Sort it', memory: 'Memory', truefalse: 'True or false?' } as Record<string, string>,
     avatars: { zorro: 'Fox', colibri: 'Hummingbird', llama: 'Llama', jirafa: 'Giraffe', tortuga: 'Turtle', rana: 'Frog' } as Record<string, string>,
     edition: 'Class atlas', expedition: 'EXPEDITION 01', footer: 'Your progress is saved on this device.',
     who: 'Which explorer do you pick today?', whoHelp: 'Each explorer keeps their own stickers. Choose yours.',
@@ -149,9 +149,9 @@ const texts = {
     sortGood: 'Good! Now the next one.', helpSort: 'Let me help: its basket is shining.',
     memoryHelp: 'Turn over two cards. Are they a pair?', memoryMiss: 'Not a pair. Remember where they were!',
     memoryHint: 'Let me help: look at them all for a moment…', memoryCard: 'Face-down card',
-    tfHelp: 'Is it true or a lie? Tap your answer.', tfTrue: '✓ True', tfFalse: '✗ Lie',
-    tfCount: (n: number, total: number) => n + ' of ' + total, tfRightTrue: 'Yes, it is true!', tfRightFalse: 'Well spotted, it is a lie!',
-    tfWasTrue: 'It was true.', tfWasFalse: 'It was a lie.', truths: 'These were true:',
+    tfHelp: 'Is it true or false? Tap your answer.', tfTrue: '✓ True', tfFalse: '✗ False',
+    tfCount: (n: number, total: number) => n + ' of ' + total, tfRightTrue: 'Yes, it is true!', tfRightFalse: 'Well spotted, it is false!',
+    tfWasTrue: 'It was true.', tfWasFalse: 'It was false.', truths: 'These were true:',
     missedTitle: 'Almost!', missedHelp: 'It did not work out this time. That is okay: this is how we learn.', missedMochi: 'The answer was:',
     tryItAgain: 'Try it again', tryAgainShort: 'Try again',
     homeTitle: 'Which backpack shall we open today?', homeHelp: 'Backpacks with ✓ are saved and work without internet.',
@@ -885,6 +885,8 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
         coach.say(t.memoryMiss, 'thinking', 'wiggle')
         await delay(1000)
         // Memory forgives some misses (it is about remembering), but not endlessly: too many ends it as unsolved.
+        // Documented exception to the three-tries rule: the limit is pairs*2+2 misses, and a solved game with many misses
+        // is saved as attempts=2 («with help»), not as the real number of misses.
         if (misses >= pairs.length * 2 + 2) { mistakes = MAX_MISTAKES; await fail(); return }
         for (const turned of [first, second]) { turned.classList.remove('open'); turned.setAttribute('aria-label', t.memoryCard) }
         busy = false
@@ -898,7 +900,7 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
       board.append(card)
     }
   } else if (activity.type === 'truefalse') {
-    // True or lie? One statement at a time; a wrong answer explains why. Three mistakes: not solved.
+    // True or false? One statement at a time; a wrong answer explains why. Three mistakes: not solved.
     const truths = new Set(Array.isArray(activity.correct) ? activity.correct : [])
     const statements = shuffled(options)
     coach.say(t.tfHelp, 'thinking')
@@ -1092,9 +1094,11 @@ async function missed(avatar: Avatar, activity: Activity) {
   button(t.allActivities, () => activities(avatar)).classList.add('secondary')
 }
 
-/** Paints the landscape behind the screen (DESIGN.md §6). */
-function showScene(scene: Scene) {
+/** Paints the landscape behind the screen (DESIGN.md §6). A real scene always carries a short visible "illustrative" note. */
+function showScene(scene: Scene, language = 'es') {
   const aside = document.querySelector<HTMLElement>('aside')!
+  aside.querySelector('.scene-notice')?.remove()
+  if (scene !== neutralScene) aside.prepend(sceneCaption(language))
   aside.style.backgroundColor = scene.cielo
   aside.style.backgroundImage = 'url("' + sceneImage(scene) + '")'
   document.body.dataset.scene = scene.id
@@ -1372,7 +1376,7 @@ else if (technicalPreview) {
     document.querySelector('footer')!.textContent = t.footer
     document.querySelector('.map-copy h2')!.textContent = pack.title
     document.querySelector('.map-copy p')!.textContent = pack.context.country
-    showScene(sceneFor(pack.context))
+    showScene(sceneFor(pack.context), pack.language)
     choose()
   }).catch(error => {
     screen(t.unavailable, error instanceof Error && /Conéctate/.test(error.message) ? t.connectFirst : '')

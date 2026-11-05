@@ -76,3 +76,13 @@ export function sceneFor(context: SceneContext): Scene {
 export function sceneImage(scene: Scene): string {
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(scene.ilustracion)
 }
+
+/** Short visible note shown on every real scene: the landscape is not validated by a community. */
+export const sceneNotice = { es: 'Paisaje ilustrativo', en: 'Illustrative landscape' } as const
+
+export function sceneCaption(language: string): HTMLElement {
+  const caption = document.createElement('small')
+  caption.className = 'scene-notice'
+  caption.textContent = sceneNotice[language === 'en' ? 'en' : 'es']
+  return caption
+}

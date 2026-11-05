@@ -118,7 +118,7 @@ export async function buildGenerationPrompt(context: GenerationContext): Promise
     "- \"scenario\": a small everyday situation with 2–3 options and one correct id; the safe choice involves a trusted adult when relevant.",
     "- \"sort\" (sort into baskets): 2 or 3 basket options (e.g. \"Before eating\" / \"After eating\") plus 4–6 item options; \"correct\" is an array of \"itemId:basketId\" with every item once; baskets never appear on the left.",
     "- \"memory\" (face-down cards): 3 or 4 pairs that belong together (thing and what it is for); same data as match: 6–8 options, \"correct\" lists \"idA:idB\" with every option once.",
-    "- \"truefalse\" (true or lie?): 4–5 short statements as options; \"correct\" lists the ids of the TRUE statements (at least one, at least one false); give false statements a kind \"feedback\" with the right idea.",
+    "- \"truefalse\" (true or false?): 4–5 short statements as options; \"correct\" lists the ids of the TRUE statements (at least one, at least one false); give false statements a kind \"feedback\" with the right idea.",
     "- A \"choice\" can also be an odd-one-out: \"Which one does not belong?\" with 4 options with icons.",
     "Give options a single emoji \"icon\" when it helps children who read little. Every correct id must exist among the options.",
     "Return exactly one JSON object that conforms to pack-v0.1. Do not use Markdown or add text outside the JSON. All ids must be lowercase slugs.",
