@@ -308,6 +308,14 @@ app.post("/api/review/approve", async (req: Request, res: Response) => {
   res.status(result.status).json(result.body);
 });
 
+app.get("/api/packs", async (_req: Request, res: Response) => {
+  const state = await snapshot();
+  const packs = [...state.packs.values()]
+    .filter((pack) => pack.review.status === "approved")
+    .sort((a, b) => a.id.localeCompare(b.id));
+  res.status(200).json({ packs });
+});
+
 app.get("/api/packs/:id", async (req: Request, res: Response) => {
   const state = await snapshot();
   const pack = state.packs.get(String(req.params.id));
