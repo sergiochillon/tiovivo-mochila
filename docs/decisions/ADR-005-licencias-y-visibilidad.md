@@ -26,8 +26,10 @@ No es asesoramiento jurídico: es la opción más simple que cumple lo que piden
 ## Pasos al aprobarla (Sergio, en una PR)
 - Añadir `LICENSE` (MIT, titulares: los cinco miembros de TIOVIVO.exe) y `LICENSE-CONTENT.md` (CC BY-NC-SA en la versión decidida, con el enlace oficial al texto legal y la lista de carpetas que cubre).
 - Añadir la sección «Licencia» al `README.md`: qué cubre cada licencia, qué queda fuera (terceros) y la nota sobre usos comerciales.
-- Revisar las licencias de las dependencias (Vite, vite-plugin-pwa, ajv, ajv-formats, Express, tsx, TypeScript, dotenv): **pendiente de comprobar**; hasta donde sabemos son permisivas y compatibles con MIT.
-- Revisión de secretos y datos personales en todo el historial antes de publicar (incluido que `server/.env` nunca se haya subido).
+- Revisar las licencias de las dependencias: **hecho por Sergio el 5 nov** a partir de los `package-lock.json` (387 paquetes en `app/`, 133 en `server/`). Todas son permisivas y compatibles con MIT (MIT, ISC, Apache-2.0, BSD-2/3-Clause, BlueOak-1.0.0, MIT OR CC0). Dos casos con otra licencia:
+  - Fuentes **Baloo 2** y **Atkinson Hyperlegible** (`@fontsource`, **OFL-1.1**): se incluyen en la app compilada; la OFL lo permite siempre que no se vendan las fuentes por separado ni se cambie su nombre. No las cubre nuestra licencia.
+  - `caniuse-lite` (**CC-BY-4.0**): solo se usa al compilar (dependencia de desarrollo); no se distribuye con la app.
+- Revisión de secretos y datos personales en todo el historial antes de publicar (incluido que `server/.env` nunca se haya subido): **hecha por Sergio el 5 nov** en todas las ramas y todo el historial; sin claves (`AIza…`, tokens, claves privadas) ni `.env` o `store.json` versionados. Repetirla justo antes de cambiar la visibilidad.
 - Cambiar la visibilidad en GitHub (Settings → General → Danger Zone). Lo hace Sergio, como propietario, con el visto bueno del equipo.
 
 ## Alternativas consideradas
