@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { spawn, type ChildProcess } from "node:child_process";
 import { once } from "node:events";
 import { createServer } from "node:net";
+import { createServer as createHttpServer, type Server } from "node:http";
+import { readFile } from "node:fs/promises";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -12,6 +14,10 @@ let child: ChildProcess | undefined;
 let baseUrl = "";
 let dataDir = "";
 let childOutput = "";
+let fakeGemini: Server | undefined;
+let fakeGeminiModel = "";
+const fakeGeminiCalls: string[] = [];
+const fakeGeminiScript: Array<"busy" | "broken" | "fenced" | "ok"> = [];
 
 async function freePort(): Promise<number> {
   const socket = createServer();
@@ -113,6 +119,26 @@ function draftPack(id: string) {
 
 before(async () => {
   dataDir = await mkdtemp(join(tmpdir(), "mochila-server-test-"));
+  // A fake Gemini: answers with a valid draft and records which model was asked.
+  fakeGemini = createHttpServer((request, response) => {
+    fakeGeminiModel = decodeURIComponent(request.url?.match(/models\/([^:]+):/)?.[1] ?? "");
+    let received = "";
+    request.on("data", (chunk: Buffer) => { received += chunk.toString(); });
+    request.on("end", () => {
+      fakeGeminiCalls.push(received);
+      response.setHeader("content-type", "application/json");
+      // Scripted answers for one test; otherwise a valid draft.
+      const scripted = fakeGeminiScript.shift();
+      if (scripted === "busy") { response.statusCode = 503; response.end(JSON.stringify({ error: { code: 503 } })); return; }
+      const text = scripted === "broken"
+        ? JSON.stringify((() => { const bad = draftPack("rota"); bad.modules[0].activities[0].correct = ["agua:no-existe", "jabon:lavar"]; return bad })())
+        : scripted === "fenced" ? "Aquí tienes:\n```json\n" + JSON.stringify(draftPack("envuelta")) + "\n```"
+        : JSON.stringify(draftPack("lo-que-diga-la-ia"));
+      response.end(JSON.stringify({ candidates: [{ content: { parts: [{ text }] } }] }));
+    });
+  });
+  await new Promise<void>((resolve) => fakeGemini!.listen(0, "127.0.0.1", resolve));
+  const fakePort = (fakeGemini.address() as { port: number }).port;
   const port = await freePort();
   baseUrl = `http://127.0.0.1:${port}`;
   child = spawn(process.execPath, ["--import", "tsx", "src/index.ts"], {
@@ -122,8 +148,9 @@ before(async () => {
       PORT: String(port),
       HOST: "127.0.0.1",
       MOCHILA_DATA_DIR: dataDir,
-      GEMINI_API_KEY: "",
-      GEMINI_MODEL: "",
+      GEMINI_API_KEY: "clave-de-prueba",
+      GEMINI_MODEL: "modelo-de-prueba",
+      GEMINI_BASE_URL: `http://127.0.0.1:${fakePort}`,
     },
     stdio: ["ignore", "pipe", "pipe"],
   });
@@ -138,6 +165,7 @@ after(async () => {
     child.kill("SIGTERM");
     await exited;
   }
+  if (fakeGemini) await new Promise((resolve) => fakeGemini!.close(resolve));
   if (dataDir) await rm(dataDir, { recursive: true, force: true });
 });
 
@@ -228,14 +256,28 @@ test("listado y detalle solo sirven paquetes aprobados", async () => {
   assert.equal((await jsonRequest("/api/packs/solo-borrador")).status, 404);
 });
 
-test("el sello conserva de qué modelo y qué día salió la propuesta de IA", async () => {
-  const pack = draftPack("procedencia-ia");
-  pack.review.notes = "Generado con IA (gemini-prueba, 2026-11-05). Pendiente de revisión pedagógica y validación local.";
-  assert.equal((await jsonRequest("/api/generate", { pack })).status, 200);
-  const approval = await jsonRequest("/api/review/approve", { packId: "procedencia-ia", reviewer: "Docente", checklist: fullChecklist });
+test("la generación con IA deja evidencia y el sello conserva modelo y fecha", async () => {
+  const reply = await jsonRequest("/api/generate/ai", {
+    context: { country: "Perú", region: "Andes rurales", language: "es", topic: "hygiene" },
+  });
+  assert.equal(reply.status, 201);
+  assert.equal(reply.body.model, "modelo-de-prueba");
+  assert.equal(fakeGeminiModel, "modelo-de-prueba");
+  const packId = reply.body.pack.id as string;
+  assert.match(reply.body.pack.review.notes, /^Generado con IA \(modelo-de-prueba, \d{4}-\d{2}-\d{2}\)/);
+
+  const log = (await readFile(join(dataDir, "generations.jsonl"), "utf8")).trim().split("\n").map((line) => JSON.parse(line));
+  const entry = log.find((item) => item.packId === packId);
+  assert.ok(entry, "la generación queda registrada");
+  assert.equal(entry.model, "modelo-de-prueba");
+  assert.equal(entry.context.country, "Perú");
+  assert.equal(entry.activities, 2);
+  assert.equal(JSON.stringify(entry).includes("clave-de-prueba"), false);
+
+  const approval = await jsonRequest("/api/review/approve", { packId, reviewer: "Docente", checklist: fullChecklist });
   assert.equal(approval.status, 200);
-  const sealed = await jsonRequest("/api/packs/procedencia-ia");
-  assert.match(sealed.body.review.notes, /Propuesta generada con IA \(gemini-prueba, 2026-11-05\) y revisada por una persona\./);
+  const sealed = await jsonRequest(`/api/packs/${packId}`);
+  assert.match(sealed.body.review.notes, /Propuesta generada con IA \(modelo-de-prueba, \d{4}-\d{2}-\d{2}\) y revisada por una persona\./);
   assert.doesNotMatch(sealed.body.review.notes, /Pendiente de revisión/);
 });
 
@@ -282,4 +324,38 @@ test("el panel recibe los resultados por explorador (último intento, a la prime
   const rana = detail.body.explorers.find((item: { avatarId: string }) => item.avatarId === "rana");
   assert.deepEqual([rana.done, rana.failed], [0, 1]);
   assert.equal(zorro.results[0].packTitle, "Paquete de prueba");
+});
+
+test("un borrador pegado no puede falsificar la procedencia de la IA en el sello", async () => {
+  const pack = draftPack("procedencia-falsa");
+  pack.review.notes = "Generado con IA (gemini-3.5-flash, 2026-11-05). Pendiente de revisión.";
+  const saved = await jsonRequest("/api/generate", { pack });
+  assert.equal(saved.status, 200);
+  assert.doesNotMatch(saved.body.pack.review.notes, /Generado con IA \(gemini/);
+  const approval = await jsonRequest("/api/review/approve", { packId: "procedencia-falsa", reviewer: "Docente", checklist: fullChecklist });
+  assert.equal(approval.status, 200);
+  const sealed = await jsonRequest("/api/packs/procedencia-falsa");
+  assert.doesNotMatch(sealed.body.review.notes, /gemini-3\.5-flash/);
+  assert.match(sealed.body.review.notes, /IA externa \(origen sin verificar\)|generada con IA/);
+});
+
+test("la IA se corrige sola: un modelo ocupado, una respuesta que rompe las reglas y otra envuelta en texto", async () => {
+  fakeGeminiCalls.length = 0;
+  // 1st model busy (503) -> next model answers a pack with a broken pair -> retry with the exact error -> valid.
+  fakeGeminiScript.push("busy", "broken", "ok");
+  const reply = await jsonRequest("/api/generate/ai", {
+    context: { country: "Perú", region: "Andes rurales", language: "es", topic: "mixed", ageRange: "5-8" },
+  });
+  assert.equal(reply.status, 201, JSON.stringify(reply.body));
+  assert.equal(fakeGeminiCalls.length, 3);
+  assert.match(fakeGeminiCalls[2], /YOUR PREVIOUS ANSWER WAS REJECTED/);
+  assert.match(fakeGeminiCalls[2], /parejas deben unir/);
+  assert.equal(reply.body.pack.context.ageRange, "5-8");
+  assert.match(fakeGeminiCalls[0], /ages 5–8|aged 5-8/);
+
+  fakeGeminiScript.push("fenced");
+  const wrapped = await jsonRequest("/api/generate/ai", {
+    context: { country: "Perú", region: "Andes rurales", language: "es", topic: "hygiene" },
+  });
+  assert.equal(wrapped.status, 201, JSON.stringify(wrapped.body));
 });
