@@ -1,20 +1,26 @@
 {
   "packVersion": "0.1",
   "id": "help-northern-uganda-en",
-  "title": "Asking for help — Northern Uganda (draft)",
+  "title": "Asking for help — Northern Uganda (expanded draft)",
   "language": "en",
   "context": {
     "country": "Uganda",
     "region": "Northern Uganda (illustrative context)",
-    "communityType": "TO VALIDATE",
-    "foods": ["TO VALIDATE"],
-    "resources": ["TO VALIDATE"],
-    "culturalNotes": ["Generic draft; validate language and suitability with someone familiar with the local context."],
+    "communityType": "A VALIDAR: comunidad concreta",
+    "foods": [
+      "A VALIDAR"
+    ],
+    "resources": [
+      "A VALIDAR: personas adultas y recursos disponibles"
+    ],
+    "culturalNotes": [
+      "Borrador ilustrativo. Confirmar lenguaje y adecuación con una persona conocedora de la comunidad elegida."
+    ],
     "ageRange": "6-10"
   },
   "review": {
     "status": "draft",
-    "notes": "Pedagogical draft; requires human review before use. Illustrative context; local cultural validation pending. Not tested with children."
+    "notes": "Expanded draft; statically reviewed by Carlos’s copilot on 2026-11-05. Pending Carlos’s review and decision, local suitability, player test and second safety review by Mario or Sergio. Not tested with children."
   },
   "modules": [
     {
@@ -23,19 +29,105 @@
       "title": "Asking for help",
       "activities": [
         {
-          "id": "ask-for-help-at-school",
-          "type": "choice",
-          "prompt": "If you do not understand a school activity, what could you do?",
-          "audioText": "If you do not understand a school activity, what could you do?",
-          "options": [
-            {"id": "ask-for-explanation", "text": "Ask a trusted adult to explain it again.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."},
-            {"id": "ask-for-first-step", "text": "Ask for help to start the first step.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."},
-            {"id": "ask-them-to-listen", "text": "Ask the adult to listen while you say which part is hard to understand.", "feedback": "It is okay to ask for help. An adult can explain it another way or help you."}
-          ],
-          "correct": ["ask-for-explanation", "ask-for-first-step", "ask-them-to-listen"],
-          "feedback": "Asking for help is one option. You can talk to a trusted adult.",
+          "id": "help-story",
+          "type": "story",
+          "prompt": "Sometimes a task feels hard. You can ask a trusted adult for help.",
+          "audioText": "Sometimes a task feels hard. You can ask a trusted adult for help.",
+          "feedback": "Asking for help is one option.",
           "safetyTag": "help-adult",
-          "teacherNotes": "Generic draft. Do not ask the child to share personal situations; review wording and local suitability before use.",
+          "teacherNotes": "Generic draft; review with someone local. Second review by Mario or Sergio pending.",
+          "durationMin": 1
+        },
+        {
+          "id": "choose-how-to-ask",
+          "type": "choice",
+          "prompt": "You do not understand a task. What could you do?",
+          "audioText": "You do not understand a task. What could you do?",
+          "options": [
+            {
+              "id": "ask-again",
+              "text": "Ask someone to explain it again",
+              "icon": "🙋",
+              "feedback": "You can ask for another explanation."
+            },
+            {
+              "id": "ask-first-step",
+              "text": "Ask for help with the first step",
+              "icon": "👣",
+              "feedback": "You can start with help."
+            },
+            {
+              "id": "ask-for-example",
+              "text": "Ask a trusted adult for an example",
+              "icon": "💡",
+              "feedback": "An example can help you start."
+            }
+          ],
+          "correct": [
+            "ask-again",
+            "ask-first-step",
+            "ask-for-example"
+          ],
+          "feedback": "You can ask for the help that works for you.",
+          "safetyTag": "help-adult",
+          "teacherNotes": "Everyday school situation. Do not ask the child for personal details. Second review by Mario or Sergio pending.",
+          "durationMin": 2
+        },
+        {
+          "id": "steps-to-ask",
+          "type": "order",
+          "prompt": "Put these steps in order to ask for help.",
+          "audioText": "Put these steps in order to ask for help.",
+          "options": [
+            {
+              "id": "find-adult",
+              "text": "Find a trusted adult",
+              "icon": "🧑‍🏫"
+            },
+            {
+              "id": "say-what-is-hard",
+              "text": "Say which part is hard",
+              "icon": "💬"
+            },
+            {
+              "id": "hear-it-again",
+              "text": "Listen to the explanation",
+              "icon": "👂"
+            }
+          ],
+          "correct": [
+            "find-adult",
+            "say-what-is-hard",
+            "hear-it-again"
+          ],
+          "feedback": "You can ask someone to explain it calmly.",
+          "safetyTag": "help-adult",
+          "teacherNotes": "Do not ask the child to describe a personal situation. Second review by Mario or Sergio pending.",
+          "durationMin": 2
+        },
+        {
+          "id": "trusted-adult-at-school",
+          "type": "scenario",
+          "prompt": "You cannot find your teacher. What is a safe choice?",
+          "audioText": "You cannot find your teacher. What is a safe choice?",
+          "options": [
+            {
+              "id": "find-another-adult",
+              "text": "Find another trusted adult at school",
+              "icon": "🏫",
+              "feedback": "You can ask another trusted adult for help."
+            },
+            {
+              "id": "leave-alone",
+              "text": "Leave school without telling anyone",
+              "icon": "🚪",
+              "feedback": "Stay somewhere safe and find a trusted adult."
+            }
+          ],
+          "correct": "find-another-adult",
+          "feedback": "You can find another trusted adult.",
+          "safetyTag": "help-adult",
+          "teacherNotes": "TO VALIDATE: adapt “school” and trusted adult examples locally. Second review by Mario or Sergio pending.",
           "durationMin": 2
         }
       ]

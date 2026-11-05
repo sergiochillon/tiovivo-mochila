@@ -1,20 +1,26 @@
 {
   "packVersion": "0.1",
   "id": "emotions-andes-es",
-  "title": "Reconocer emociones — Andes (borrador)",
+  "title": "Reconocer emociones — Andes (borrador ampliado)",
   "language": "es",
   "context": {
     "country": "Perú",
     "region": "Andes rurales (contexto ilustrativo)",
-    "communityType": "A VALIDAR",
-    "foods": ["A VALIDAR"],
-    "resources": ["A VALIDAR"],
-    "culturalNotes": ["Borrador genérico; validar lenguaje y adecuación con una persona conocedora del contexto local."],
+    "communityType": "A VALIDAR: comunidad concreta",
+    "foods": [
+      "A VALIDAR"
+    ],
+    "resources": [
+      "A VALIDAR: personas adultas y recursos disponibles"
+    ],
+    "culturalNotes": [
+      "Borrador ilustrativo. Confirmar lenguaje y adecuación con una persona conocedora de la comunidad elegida."
+    ],
     "ageRange": "6-10"
   },
   "review": {
     "status": "draft",
-    "notes": "Borrador pedagógico; requiere revisión humana antes de usarse. Contexto ilustrativo; validación cultural local pendiente. No probado con niños."
+    "notes": "Borrador ampliado; revisión estática del copiloto de Carlos el 2026-11-05. Pendiente de revisión y decisión de Carlos, adecuación local, prueba en reproductor y segunda revisión sensible por Mario o Sergio. No probado con niños."
   },
   "modules": [
     {
@@ -23,19 +29,118 @@
       "title": "Reconocer emociones",
       "activities": [
         {
-          "id": "notar-como-me-siento",
-          "type": "choice",
-          "prompt": "A veces las personas sienten calma, alegría, tristeza, preocupación u otra emoción. Si quieres darte cuenta de cómo te sientes, ¿qué puedes hacer?",
-          "audioText": "A veces las personas sienten calma, alegría, tristeza, preocupación u otra emoción. Si quieres darte cuenta de cómo te sientes, ¿qué puedes hacer?",
-          "options": [
-            {"id": "tomar-un-momento", "text": "Tomarme un momento y elegir una palabra para mí.", "feedback": "Puedes notar cómo estás, pedir apoyo o tomar una pausa."},
-            {"id": "hablar-con-adulto", "text": "Hablar con una persona adulta de confianza si quiero apoyo.", "feedback": "Puedes notar cómo estás, pedir apoyo o tomar una pausa."},
-            {"id": "pedir-pausa", "text": "Pedir una pausa si prefiero no responder ahora.", "feedback": "Puedes notar cómo estás, pedir apoyo o tomar una pausa."}
-          ],
-          "correct": ["tomar-un-momento", "hablar-con-adulto", "pedir-pausa"],
-          "feedback": "No hay una sola emoción que debas sentir. Puedes notar cómo estás, pedir apoyo o tomar una pausa.",
+          "id": "historia-emociones",
+          "type": "story",
+          "prompt": "A lo largo del día, cada persona puede sentir cosas distintas. No hay una sola forma correcta de sentirse.",
+          "audioText": "A lo largo del día, cada persona puede sentir cosas distintas. No hay una sola forma correcta de sentirse.",
+          "feedback": "Puedes sentir cosas distintas.",
           "safetyTag": "emotion-self-choice",
-          "teacherNotes": "Borrador genérico; no solicitar que el niño comparta su emoción ni inferirla. Revisar vocabulario y adecuación local antes de usar.",
+          "teacherNotes": "Borrador genérico; no inferir emociones ni pedir que el niño las comparta. Segunda revisión de Mario o Sergio pendiente.",
+          "durationMin": 1
+        },
+        {
+          "id": "elegir-por-mi",
+          "type": "choice",
+          "prompt": "Si quieres notar cómo te sientes, ¿qué puedes hacer?",
+          "audioText": "Si quieres notar cómo te sientes, ¿qué puedes hacer?",
+          "options": [
+            {
+              "id": "tomar-tiempo",
+              "text": "Tomarme un momento",
+              "icon": "⏸️",
+              "feedback": "Puedes tomarte tu tiempo."
+            },
+            {
+              "id": "elegir-palabra",
+              "text": "Elegir una palabra para mí",
+              "icon": "💭",
+              "feedback": "Puedes elegir una palabra para ti."
+            },
+            {
+              "id": "no-responder",
+              "text": "No responder ahora",
+              "icon": "🙅",
+              "feedback": "También puedes pasar."
+            }
+          ],
+          "correct": [
+            "tomar-tiempo",
+            "elegir-palabra",
+            "no-responder"
+          ],
+          "feedback": "Tú eliges si quieres responder.",
+          "safetyTag": "emotion-self-choice",
+          "teacherNotes": "No pedir que el niño comparta su emoción ni inferirla. Segunda revisión de Mario o Sergio pendiente.",
+          "durationMin": 2
+        },
+        {
+          "id": "pausa-o-apoyo",
+          "type": "scenario",
+          "prompt": "No quieres hablar ahora. ¿Qué puedes hacer?",
+          "audioText": "No quieres hablar ahora. ¿Qué puedes hacer?",
+          "options": [
+            {
+              "id": "pedir-pausa",
+              "text": "Pedir una pausa",
+              "icon": "⏸️",
+              "feedback": "Está bien pedir una pausa."
+            },
+            {
+              "id": "hablar-adulto",
+              "text": "Hablar con una persona adulta de confianza",
+              "icon": "🧑‍🏫",
+              "feedback": "Puedes pedir apoyo si quieres."
+            },
+            {
+              "id": "no-compartir",
+              "text": "No compartir cómo te sientes ahora",
+              "icon": "🙅",
+              "feedback": "No tienes que compartirlo."
+            }
+          ],
+          "correct": [
+            "pedir-pausa",
+            "hablar-adulto",
+            "no-compartir"
+          ],
+          "feedback": "Tú decides si quieres hablar o pasar.",
+          "safetyTag": "emotion-self-choice",
+          "teacherNotes": "No pedir detalles personales ni forzar una respuesta. Segunda revisión de Mario o Sergio pendiente.",
+          "durationMin": 2
+        },
+        {
+          "id": "elegir-una-pausa",
+          "type": "choice",
+          "prompt": "Si quieres una pausa, ¿qué podrías elegir?",
+          "audioText": "Si quieres una pausa, ¿qué podrías elegir?",
+          "options": [
+            {
+              "id": "tomar-pausa",
+              "text": "Tomarme un momento",
+              "icon": "⏸️",
+              "feedback": "Puedes tomarte tu tiempo."
+            },
+            {
+              "id": "pedir-apoyo",
+              "text": "Pedir apoyo a una persona adulta",
+              "icon": "🙋",
+              "feedback": "Puedes pedir apoyo si quieres."
+            },
+            {
+              "id": "volver-despues",
+              "text": "Volver cuando yo quiera",
+              "icon": "↩️",
+              "feedback": "Puedes volver cuando quieras."
+            }
+          ],
+          "correct": [
+            "tomar-pausa",
+            "pedir-apoyo",
+            "volver-despues"
+          ],
+          "feedback": "Tú eliges si quieres una pausa.",
+          "safetyTag": "emotion-self-choice",
+          "teacherNotes": "La pausa es opcional; no se infiere estado emocional. Segunda revisión de Mario o Sergio pendiente.",
           "durationMin": 2
         }
       ]

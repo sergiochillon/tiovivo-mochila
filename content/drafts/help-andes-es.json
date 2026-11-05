@@ -1,20 +1,26 @@
 {
   "packVersion": "0.1",
   "id": "help-andes-es",
-  "title": "Pedir ayuda — Andes (borrador)",
+  "title": "Pedir ayuda — Andes (borrador ampliado)",
   "language": "es",
   "context": {
     "country": "Perú",
     "region": "Andes rurales (contexto ilustrativo)",
-    "communityType": "A VALIDAR",
-    "foods": ["A VALIDAR"],
-    "resources": ["A VALIDAR"],
-    "culturalNotes": ["Borrador genérico; validar lenguaje y adecuación con una persona conocedora del contexto local."],
+    "communityType": "A VALIDAR: comunidad concreta",
+    "foods": [
+      "A VALIDAR"
+    ],
+    "resources": [
+      "A VALIDAR: personas adultas y recursos disponibles"
+    ],
+    "culturalNotes": [
+      "Borrador ilustrativo. Confirmar lenguaje y adecuación con una persona conocedora de la comunidad elegida."
+    ],
     "ageRange": "6-10"
   },
   "review": {
     "status": "draft",
-    "notes": "Borrador pedagógico; requiere revisión humana antes de usarse. Contexto ilustrativo; validación cultural local pendiente. No probado con niños."
+    "notes": "Borrador ampliado; revisión estática del copiloto de Carlos el 2026-11-05. Pendiente de revisión y decisión de Carlos, adecuación local, prueba en reproductor y segunda revisión de seguridad por Mario o Sergio. No probado con niños."
   },
   "modules": [
     {
@@ -23,19 +29,105 @@
       "title": "Pedir ayuda",
       "activities": [
         {
-          "id": "pedir-apoyo-en-clase",
-          "type": "choice",
-          "prompt": "Si no entiendes una actividad en la escuela, ¿qué puedes hacer?",
-          "audioText": "Si no entiendes una actividad en la escuela, ¿qué puedes hacer?",
-          "options": [
-            {"id": "pedir-explicacion", "text": "Pedir a una persona adulta de confianza que me explique otra vez.", "feedback": "Está bien pedir ayuda. La persona adulta puede explicar de otra manera o acompañarte."},
-            {"id": "pedir-primer-paso", "text": "Pedir ayuda para empezar el primer paso.", "feedback": "Está bien pedir ayuda. La persona adulta puede explicar de otra manera o acompañarte."},
-            {"id": "pedir-que-escuche", "text": "Pedir que escuche qué parte no entiendo.", "feedback": "Está bien pedir ayuda. La persona adulta puede explicar de otra manera o acompañarte."}
-          ],
-          "correct": ["pedir-explicacion", "pedir-primer-paso", "pedir-que-escuche"],
-          "feedback": "Pedir ayuda es una opción. Puedes hablar con una persona adulta de confianza.",
+          "id": "historia-pedir-ayuda",
+          "type": "story",
+          "prompt": "A veces una actividad cuesta. Puedes pedir ayuda a una persona adulta de confianza.",
+          "audioText": "A veces una actividad cuesta. Puedes pedir ayuda a una persona adulta de confianza.",
+          "feedback": "Pedir ayuda es una opción.",
           "safetyTag": "help-adult",
-          "teacherNotes": "Borrador genérico. No pedir al niño que cuente situaciones personales; revisar vocabulario y adecuación local antes de usar.",
+          "teacherNotes": "Borrador genérico; revisar con una persona local. Segunda revisión de Mario o Sergio pendiente.",
+          "durationMin": 1
+        },
+        {
+          "id": "elige-como-pedir-ayuda",
+          "type": "choice",
+          "prompt": "No entiendes una tarea. ¿Qué puedes hacer?",
+          "audioText": "No entiendes una tarea. ¿Qué puedes hacer?",
+          "options": [
+            {
+              "id": "pedir-otra-explicacion",
+              "text": "Pedir que te expliquen otra vez",
+              "icon": "🙋",
+              "feedback": "Puedes pedir que te lo expliquen de otra manera."
+            },
+            {
+              "id": "pedir-primer-paso",
+              "text": "Pedir ayuda con el primer paso",
+              "icon": "👣",
+              "feedback": "Puedes empezar con ayuda."
+            },
+            {
+              "id": "pedir-un-ejemplo",
+              "text": "Pedir un ejemplo a una persona adulta",
+              "icon": "💡",
+              "feedback": "Un ejemplo puede ayudarte a empezar."
+            }
+          ],
+          "correct": [
+            "pedir-otra-explicacion",
+            "pedir-primer-paso",
+            "pedir-un-ejemplo"
+          ],
+          "feedback": "Puedes pedir ayuda de la forma que te sirva.",
+          "safetyTag": "help-adult",
+          "teacherNotes": "Situación escolar cotidiana. No pedir datos personales. Segunda revisión de Mario o Sergio pendiente.",
+          "durationMin": 2
+        },
+        {
+          "id": "pasos-para-pedir-apoyo",
+          "type": "order",
+          "prompt": "Ordena estos pasos para pedir ayuda.",
+          "audioText": "Ordena estos pasos para pedir ayuda.",
+          "options": [
+            {
+              "id": "buscar-adulto",
+              "text": "Buscar una persona adulta de confianza",
+              "icon": "🧑‍🏫"
+            },
+            {
+              "id": "decir-que-necesitas",
+              "text": "Decir qué parte necesita ayuda",
+              "icon": "💬"
+            },
+            {
+              "id": "escuchar-otra-vez",
+              "text": "Escuchar la explicación",
+              "icon": "👂"
+            }
+          ],
+          "correct": [
+            "buscar-adulto",
+            "decir-que-necesitas",
+            "escuchar-otra-vez"
+          ],
+          "feedback": "Puedes pedir que te expliquen con calma.",
+          "safetyTag": "help-adult",
+          "teacherNotes": "No pedir que el niño relate una situación personal. Segunda revisión de Mario o Sergio pendiente.",
+          "durationMin": 2
+        },
+        {
+          "id": "adulto-de-confianza",
+          "type": "scenario",
+          "prompt": "No encuentras a tu docente. ¿Qué opción es segura?",
+          "audioText": "No encuentras a tu docente. ¿Qué opción es segura?",
+          "options": [
+            {
+              "id": "otro-adulto-escuela",
+              "text": "Buscar otra persona adulta de confianza en la escuela",
+              "icon": "🏫",
+              "feedback": "Puedes pedir ayuda a otra persona adulta de confianza."
+            },
+            {
+              "id": "salir-solo",
+              "text": "Salir de la escuela sin avisar",
+              "icon": "🚪",
+              "feedback": "Quédate en un lugar seguro. Busca a una persona adulta de confianza."
+            }
+          ],
+          "correct": "otro-adulto-escuela",
+          "feedback": "Puedes buscar a otra persona adulta de confianza.",
+          "safetyTag": "help-adult",
+          "teacherNotes": "A VALIDAR: ajustar “escuela” y referentes adultos al entorno local. Segunda revisión de Mario o Sergio pendiente.",
           "durationMin": 2
         }
       ]

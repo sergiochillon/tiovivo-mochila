@@ -1,0 +1,132 @@
+{
+  "packVersion": "0.1",
+  "id": "hygiene-andes-es",
+  "title": "Manos limpias — borrador",
+  "language": "es",
+  "context": {
+    "country": "Perú",
+    "region": "Andes rurales (contexto ilustrativo)",
+    "communityType": "A VALIDAR: comunidad concreta",
+    "foods": [
+      "A VALIDAR"
+    ],
+    "resources": [
+      "A VALIDAR: personas adultas y recursos disponibles"
+    ],
+    "culturalNotes": [
+      "Borrador ilustrativo. Confirmar lenguaje y adecuación con una persona conocedora de la comunidad elegida."
+    ],
+    "ageRange": "6-10"
+  },
+  "review": {
+    "status": "draft",
+    "notes": "Borrador genérico ampliado; revisión estática del copiloto de Carlos el 2026-11-05. Pendiente de revisión y decisión de Carlos, adaptación local, prueba en reproductor y segunda revisión de seguridad por Mario o Sergio. No probado con niños."
+  },
+  "modules": [
+    {
+      "id": "manos-limpias",
+      "topic": "hygiene",
+      "title": "Higiene de manos",
+      "activities": [
+        {
+          "id": "historia-antes-de-comer",
+          "type": "story",
+          "prompt": "Antes de comer, alguien pregunta qué puede usar para lavarse las manos.",
+          "audioText": "Antes de comer, alguien pregunta qué puede usar para lavarse las manos.",
+          "feedback": "Puedes preguntar a una persona adulta.",
+          "safetyTag": "hygiene",
+          "teacherNotes": "A VALIDAR: adaptar la disponibilidad de agua y jabón, sin culpabilizar cuando falten. Revisar vocabulario local.",
+          "durationMin": 1
+        },
+        {
+          "id": "elige-higiene",
+          "type": "choice",
+          "prompt": "¿Qué ayuda a lavarte las manos?",
+          "audioText": "¿Qué ayuda a lavarte las manos?",
+          "options": [
+            {
+              "id": "agua-jabon",
+              "text": "Mojar y frotar con jabón",
+              "icon": "🧼",
+              "feedback": "El jabón ayuda a lavar las manos."
+            },
+            {
+              "id": "ropa",
+              "text": "Frotarlas en la ropa",
+              "icon": "👕",
+              "feedback": "Si hay agua y jabón, puedes usarlos."
+            }
+          ],
+          "correct": "agua-jabon",
+          "feedback": "Si hay agua y jabón, puedes usarlos.",
+          "safetyTag": "hygiene",
+          "teacherNotes": "A VALIDAR: validar el mensaje y opciones con una persona local. No responsabilizar al niño por falta de recursos.",
+          "durationMin": 2
+        },
+        {
+          "id": "orden-lavado",
+          "type": "order",
+          "prompt": "Ordena los pasos para lavarte las manos, si hay agua y jabón.",
+          "audioText": "Ordena los pasos para lavarte las manos, si hay agua y jabón.",
+          "options": [
+            {
+              "id": "mojar-manos",
+              "text": "Mojar las manos",
+              "icon": "💧"
+            },
+            {
+              "id": "frotar-jabon",
+              "text": "Frotar con jabón",
+              "icon": "🧼"
+            },
+            {
+              "id": "enjuagar-manos",
+              "text": "Enjuagar las manos",
+              "icon": "🚿"
+            },
+            {
+              "id": "secar-manos",
+              "text": "Secarlas si hay un paño limpio",
+              "icon": "🧻"
+            }
+          ],
+          "correct": [
+            "mojar-manos",
+            "frotar-jabon",
+            "enjuagar-manos",
+            "secar-manos"
+          ],
+          "feedback": "Si falta algo, pregunta a una persona adulta por una opción segura.",
+          "safetyTag": "hygiene",
+          "teacherNotes": "A VALIDAR: revisar recursos, vocabulario y adaptación para casos sin agua o jabón.",
+          "durationMin": 2
+        },
+        {
+          "id": "si-no-hay-agua",
+          "type": "scenario",
+          "prompt": "No hay agua para lavarte ahora. ¿Qué puedes hacer?",
+          "audioText": "No hay agua para lavarte ahora. ¿Qué puedes hacer?",
+          "options": [
+            {
+              "id": "preguntar-adulto",
+              "text": "Preguntar a una persona adulta qué hacer",
+              "icon": "🙋",
+              "feedback": "Puedes pedir una opción segura."
+            },
+            {
+              "id": "usar-agua-desconocida",
+              "text": "Usar agua que no conoces",
+              "icon": "💧",
+              "feedback": "Pregunta primero a una persona adulta."
+            }
+          ],
+          "correct": "preguntar-adulto",
+          "feedback": "Puedes pedir ayuda para buscar una opción segura.",
+          "safetyTag": "hygiene",
+          "teacherNotes": "A VALIDAR: adaptar a recursos reales. Segunda revisión de seguridad por Mario o Sergio pendiente.",
+          "durationMin": 2
+        }
+      ]
+    }
+  ]
+}

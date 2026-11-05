@@ -1,0 +1,107 @@
+{
+  "packVersion": "0.1",
+  "id": "food-northern-uganda-en",
+  "title": "Choosing from what is available — revised proposal",
+  "language": "en",
+  "context": {
+    "country": "Uganda",
+    "region": "Northern Uganda (specific community to be selected)",
+    "communityType": "TO VALIDATE: specific rural community",
+    "foods": ["millet", "sorghum", "cassava", "beans", "leafy greens"],
+    "resources": ["TO VALIDATE: local availability, affordability and water for each activity"],
+    "culturalNotes": [
+      "Candidate foods come from the previous repository pack; confirm availability, price, names, language, water and preparation with someone from the selected community.",
+      "FAO Uganda nutrition profile (2010): https://www.fao.org/4/aq011e/aq011e.pdf. Broad, older reference; it does not validate present-day availability or customs in a specific community."
+    ],
+    "ageRange": "6-10"
+  },
+  "review": {
+    "status": "draft",
+    "notes": "Rewritten proposal statically reviewed by Carlos's copilot on 2026-11-05. Requires Carlos's review and decision, local cultural validation and a player test. Local cultural validation pending. Not tested with children."
+  },
+  "modules": [
+    {
+      "id": "food",
+      "topic": "food",
+      "title": "A meal we can make",
+      "activities": [
+        {
+          "id": "story-at-home",
+          "type": "story",
+          "prompt": "Ayo's family has millet and beans today. Another family may have different foods.",
+          "audioText": "Ayo's family has millet and beans today. Another family may have different foods.",
+          "feedback": "Each family chooses from the foods it has available.",
+          "safetyTag": "none",
+          "teacherNotes": "TO VALIDATE: confirm the name, foods, availability and wording with someone from the selected community.",
+          "durationMin": 1
+        },
+        {
+          "id": "choose-a-possible-meal",
+          "type": "choice",
+          "prompt": "Ayo's family has millet and beans. Which foods can go on the plate?",
+          "audioText": "Ayo's family has millet and beans. Which foods can go on the plate?",
+          "options": [
+            {"id": "millet", "text": "Millet", "icon": "🌾", "feedback": "Yes. The story says they have millet today."},
+            {"id": "beans", "text": "Beans", "icon": "🫘", "feedback": "Yes. The story says they have beans today."},
+            {"id": "leafy-greens", "text": "Leafy greens", "icon": "🥬", "feedback": "The story does not say they have leafy greens today. Choose what they do have."}
+          ],
+          "correct": ["millet", "beans"],
+          "feedback": "A possible meal uses foods the family has.",
+          "safetyTag": "none",
+          "teacherNotes": "TO VALIDATE: candidate foods only; this is not portion or diet advice. Confirm that the icon and food name are clear in the chosen language.",
+          "durationMin": 2
+        },
+        {
+          "id": "ask-before-preparing",
+          "type": "scenario",
+          "prompt": "You do not know how to prepare a food. What can you do?",
+          "audioText": "You do not know how to prepare a food. What can you do?",
+          "options": [
+            {"id": "ask-trusted-adult", "text": "Ask a trusted adult", "icon": "🙋", "feedback": "Asking for help is a good choice."},
+            {"id": "try-without-asking", "text": "Try it without asking", "icon": "🍽️", "feedback": "Ask a trusted adult before preparing a food you do not know."}
+          ],
+          "correct": "ask-trusted-adult",
+          "feedback": "Ask for help before preparing that food.",
+          "safetyTag": "help-adult",
+          "teacherNotes": "Second safety review pending.",
+          "durationMin": 1
+        },
+        {
+          "id": "match-tasks-and-help",
+          "type": "match",
+          "prompt": "Match each task with the help it needs.",
+          "audioText": "Match each task with the help it needs.",
+          "options": [
+            {"id": "wash-food", "text": "Wash a food", "icon": "🥬"},
+            {"id": "cook-food", "text": "Cook a food", "icon": "🍲"},
+            {"id": "serve-food", "text": "Serve the food", "icon": "🍽️"},
+            {"id": "adult-approved-water", "text": "Water an adult says is okay to use", "icon": "💧"},
+            {"id": "adult-nearby", "text": "A trusted adult", "icon": "🧑‍🍳"},
+            {"id": "clean-dish", "text": "A clean dish", "icon": "🍽️"}
+          ],
+          "correct": ["wash-food:adult-approved-water", "cook-food:adult-nearby", "serve-food:clean-dish"],
+          "feedback": "An adult can help with water and cooking.",
+          "safetyTag": "food-safety",
+          "teacherNotes": "TO VALIDATE: confirm local language, dishes, water and cooking resources. Do not assume a water source or cooking method.",
+          "durationMin": 2
+        },
+        {
+          "id": "order-preparation-with-help",
+          "type": "order",
+          "prompt": "Put these steps in order before serving beans.",
+          "audioText": "Put these steps in order before serving beans.",
+          "options": [
+            {"id": "ask-about-water", "text": "Ask an adult what water to use", "icon": "💧"},
+            {"id": "wash-if-possible", "text": "Wash the food if the right water is available", "icon": "🥬"},
+            {"id": "adult-prepares", "text": "Ask an adult to prepare the food", "icon": "🧑‍🍳"}
+          ],
+          "correct": ["ask-about-water", "wash-if-possible", "adult-prepares"],
+          "feedback": "Ask what water to use and get help with preparation.",
+          "safetyTag": "food-safety",
+          "teacherNotes": "TO VALIDATE: confirm the preparation sequence, water guidance and food choice with a local reviewer. This activity does not teach how to assess water.",
+          "durationMin": 2
+        }
+      ]
+    }
+  ]
+}

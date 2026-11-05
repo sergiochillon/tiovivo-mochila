@@ -1,0 +1,107 @@
+{
+  "packVersion": "0.1",
+  "id": "alimentacion-andes-es",
+  "title": "Elegimos con lo que hay — propuesta revisada",
+  "language": "es",
+  "context": {
+    "country": "Perú",
+    "region": "Andes rurales (comunidad concreta pendiente de elegir)",
+    "communityType": "A VALIDAR: comunidad rural andina concreta",
+    "foods": ["papa", "habas", "quinua", "zanahoria", "huevo"],
+    "resources": ["A VALIDAR: disponibilidad, coste y agua para cada actividad"],
+    "culturalNotes": [
+      "Candidatos tomados del paquete anterior del repositorio; confirmar alimentos, disponibilidad, precio, vocabulario, agua y preparación con una persona de la comunidad elegida.",
+      "FAO, Guía de Campo de los Cultivos Andinos (2007): https://www.fao.org/family-farming/detail/es/c/1635590/. Referencia general; no valida disponibilidad ni prácticas de una comunidad concreta."
+    ],
+    "ageRange": "6-10"
+  },
+  "review": {
+    "status": "draft",
+    "notes": "Propuesta reescrita y revisada estáticamente por el copiloto de Carlos el 2026-11-05. Requiere revisión y decisión de Carlos, validación cultural local y prueba en el reproductor. Validación cultural local pendiente. No probado con niños."
+  },
+  "modules": [
+    {
+      "id": "alimentacion",
+      "topic": "food",
+      "title": "Una comida posible",
+      "activities": [
+        {
+          "id": "historia-de-ana",
+          "type": "story",
+          "prompt": "Ana y su familia tienen papa y habas para la comida. En otra casa puede haber otros alimentos.",
+          "audioText": "Ana y su familia tienen papa y habas para la comida. En otra casa puede haber otros alimentos.",
+          "feedback": "Cada familia elige con los alimentos que tiene disponibles.",
+          "safetyTag": "none",
+          "teacherNotes": "A VALIDAR: confirmar nombre, alimentos, disponibilidad y vocabulario con una persona de la comunidad concreta.",
+          "durationMin": 1
+        },
+        {
+          "id": "arma-un-plato-posible",
+          "type": "choice",
+          "prompt": "La familia tiene papa y habas. ¿Qué alimentos puede poner en su plato?",
+          "audioText": "La familia tiene papa y habas. ¿Qué alimentos puede poner en su plato?",
+          "options": [
+            {"id": "papa", "text": "Papa", "icon": "🥔", "feedback": "Sí. La historia dice que hoy tienen papa."},
+            {"id": "habas", "text": "Habas", "icon": "🫘", "feedback": "Sí. La historia dice que hoy tienen habas."},
+            {"id": "zanahoria", "text": "Zanahoria", "icon": "🥕", "feedback": "La historia no dice que hoy tengan zanahoria. Puedes elegir lo que sí tienen."}
+          ],
+          "correct": ["papa", "habas"],
+          "feedback": "Un plato posible usa alimentos que la familia tiene.",
+          "safetyTag": "none",
+          "teacherNotes": "A VALIDAR: alimentos candidatos; no es una recomendación de porciones ni de dieta.",
+          "durationMin": 2
+        },
+        {
+          "id": "preparar-con-ayuda",
+          "type": "order",
+          "prompt": "Ordena estos pasos antes de servir la papa.",
+          "audioText": "Ordena estos pasos antes de servir la papa.",
+          "options": [
+            {"id": "preguntar-agua", "text": "Preguntar a una persona adulta qué agua se puede usar", "icon": "💧"},
+            {"id": "lavar-si-se-puede", "text": "Lavar la papa si hay agua indicada para eso", "icon": "🥔"},
+            {"id": "adulto-cocina", "text": "Pedir a una persona adulta que se encargue de cocinar", "icon": "🧑‍🍳"}
+          ],
+          "correct": ["preguntar-agua", "lavar-si-se-puede", "adulto-cocina"],
+          "feedback": "Pregunta qué agua usar y pide ayuda para cocinar.",
+          "safetyTag": "food-safety",
+          "teacherNotes": "A VALIDAR: una persona local debe confirmar cómo se indica agua apta y qué preparación corresponde. La actividad no enseña a evaluar el agua.",
+          "durationMin": 2
+        },
+        {
+          "id": "parejas-comida-segura",
+          "type": "match",
+          "prompt": "Une cada tarea con la ayuda que necesita.",
+          "audioText": "Une cada tarea con la ayuda que necesita.",
+          "options": [
+            {"id": "lavar-alimento", "text": "Lavar un alimento", "icon": "🥔"},
+            {"id": "cocinar-alimento", "text": "Cocinar un alimento", "icon": "🍲"},
+            {"id": "servir-comida", "text": "Servir la comida", "icon": "🍽️"},
+            {"id": "agua-indicada", "text": "Agua indicada por una persona adulta", "icon": "💧"},
+            {"id": "adulto-cerca", "text": "Una persona adulta", "icon": "🧑‍🍳"},
+            {"id": "plato-limpio", "text": "Un plato limpio", "icon": "🍽️"}
+          ],
+          "correct": ["lavar-alimento:agua-indicada", "cocinar-alimento:adulto-cerca", "servir-comida:plato-limpio"],
+          "feedback": "Una persona adulta puede ayudar con el agua y la cocina.",
+          "safetyTag": "food-safety",
+          "teacherNotes": "A VALIDAR: confirmar agua, cocina, vajilla y lenguaje con una persona local; no dar por hecho que hay recursos de un tipo concreto.",
+          "durationMin": 2
+        },
+        {
+          "id": "preguntar-preparacion",
+          "type": "scenario",
+          "prompt": "No sabes cómo preparar un alimento. ¿Qué puedes hacer?",
+          "audioText": "No sabes cómo preparar un alimento. ¿Qué puedes hacer?",
+          "options": [
+            {"id": "preguntar-adulta", "text": "Preguntar a una persona adulta de confianza", "icon": "🙋", "feedback": "Pedir ayuda es una buena opción."},
+            {"id": "probar-sin-preguntar", "text": "Probarlo sin preguntar", "icon": "🍽️", "feedback": "Primero pregunta a una persona adulta de confianza."}
+          ],
+          "correct": "preguntar-adulta",
+          "feedback": "Puedes pedir ayuda antes de preparar algo que no conoces.",
+          "safetyTag": "help-adult",
+          "teacherNotes": "Segunda revisión de seguridad pendiente.",
+          "durationMin": 1
+        }
+      ]
+    }
+  ]
+}
