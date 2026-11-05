@@ -31,7 +31,7 @@ Cada `correct` existe entre las opciones; en `order`, `correct` lista todas las 
 - `review.notes` aprobado: «Revisión pedagógica interna por <nombre> el <fecha>. Validación cultural local pendiente. No probado con niños.» No existe «validado por la comunidad» sin una validación real.
 - Un borrador generado por IA lo dice en las notas.
 - **Segunda revisión obligatoria** (otra persona, anotada en `review.notes`) para actividades con `safetyTag` `food-safety`, `help-adult`, `emotion-self-choice` o `privacy`. Es una regla **manual**: el endpoint de aprobación del servidor no la comprueba ni registra a la segunda persona; anótala tú en `review.notes`.
-- Si falla un punto, el paquete sigue como `draft`. La interfaz de `/autoria` exige la lista de 6 puntos; el servidor no la exige (una llamada directa a la API aprueba sin ella).
+- Si falla un punto, el paquete sigue como `draft`. La lista de 6 puntos de `/autoria` la exigen la interfaz y el servidor (`checklist`; sin ella, 422). La segunda revisión de actividades sensibles sigue siendo manual.
 
 ## Temas
 Permitidos: alimentación, higiene, pedir ayuda, emociones por autoelección, convivencia, seguridad cotidiana no alarmista y autonomía. Prohibidos: abuso, violencia, armas, sustancias, instrucciones médicas o dietas, culpabilizar por pobreza, salud o emociones, y cualquier recogida de datos.
