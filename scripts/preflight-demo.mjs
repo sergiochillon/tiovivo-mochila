@@ -3,7 +3,7 @@
 // Opcional: API=http://127.0.0.1:3001 APP=http://127.0.0.1:4173 node scripts/preflight-demo.mjs
 const API = process.env.API ?? "http://127.0.0.1:3001";
 const APP = process.env.APP ?? "http://127.0.0.1:4173";
-const NEEDED = ["alimentacion-andes-es", "food-northern-uganda-en", "food-altiplano-es"];
+const NEEDED = ["alimentacion-andes-es", "expedicion-mercado-9-12-es", "food-altiplano-es", "food-northern-uganda-en", "kitchen-missions-5-8-en", "misiones-cocina-5-8-es"];
 
 let failures = 0;
 const ok = (text) => console.log(`  ✓ ${text}`);
@@ -34,9 +34,9 @@ if (packs.status === 404) {
   ok(`responde; paquetes aprobados: ${ids.length}`);
   const missing = NEEDED.filter((id) => !ids.includes(id));
   if (missing.length) bad(`faltan paquetes aprobados: ${missing.join(", ")}`, "para la API, ejecuta npm run seed:approved-packs en server/ y vuelve a arrancarla");
-  else ok("están los tres paquetes de la demo (Andes, Uganda, Altiplano)");
+  else ok(`están los ${NEEDED.length} paquetes aprobados de content/packs/`);
   const extra = ids.filter((id) => !NEEDED.includes(id));
-  if (extra.length) console.log(`  ! hay otros paquetes aprobados que saldrán en «Mis mochilas»: ${extra.join(", ")}\n      → si no son de la demo, reinicia los datos (GUIA-VIDEO.md §8)`);
+  if (extra.length) console.log(`  ! hay otros paquetes aprobados que saldrán en «Mis mochilas»: ${extra.join(", ")}\n      → si no son de la demo, borra server/data/store.json con la API parada y vuelve a ejecutar npm run seed:approved-packs`);
   const progress = await get(`${API}/api/progress/DEMO-01`);
   if (progress.status === 200) {
     const { eventsReceived, activitiesCompleted } = JSON.parse(progress.text);
@@ -63,7 +63,7 @@ else {
 }
 
 console.log(`\nIA (opcional)`);
-console.log("  · el servidor no expone su clave; para saber si Gemini está activo, mira si «Generar propuesta con IA» responde en /autoria.\n    Para la toma final usa el Plan B (GUIA-VIDEO.md) y no dependas de Gemini en directo.");
+console.log("  · el servidor no expone su clave; para saber si Gemini está activo, mira si «Generar propuesta con IA» responde en /autoria.\n    Para una demo en directo, ten preparado el Plan B (pegar un borrador JSON) y no dependas de Gemini.");
 
 console.log(failures ? `\n${failures} problema(s) por resolver antes de la demo.` : "\nTodo listo. Recuerda: graba y enseña desde http://127.0.0.1:4173 (no localhost).");
 process.exit(failures ? 1 : 0);
