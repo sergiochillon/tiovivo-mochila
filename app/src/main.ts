@@ -719,7 +719,7 @@ async function pendingCount() {
 
 function teacherPanel() {
   teacherHeader('Cuaderno de clase', 'Clase DEMO-01')
-  screen('Cuaderno de clase', 'Clase DEMO-01 · prepara el material, sigue el progreso y deja las tablets listas.')
+  screen('Cuaderno de clase', 'Clase DEMO-01: prepara el material, sigue el progreso y deja las tablets listas.')
   lesson.className = 'teacher-home'
   const metrics = document.createElement('div')
   metrics.className = 'metrics'
@@ -852,7 +852,7 @@ const reviewRoute = location.pathname === '/revision'
 const technicalPreview = reviewRoute && import.meta.env.MODE === 'revision'
 if (technicalPreview) {
   document.querySelector('.edition')!.textContent = 'Revisión técnica'
-  document.querySelector('footer')!.textContent = 'Ejemplo técnico en borrador · Solo para pruebas del equipo.'
+  document.querySelector('footer')!.textContent = 'Ejemplo técnico en borrador. Solo para pruebas del equipo.'
 }
 if (location.pathname === '/docente') teacherPanel()
 else if (location.pathname === '/autoria') {
