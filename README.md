@@ -5,6 +5,7 @@
 Equipo **TIOVIVO.exe** · Hack4Edu 2026 (VII edición, ProFuturo + UPSA) · Reto 02 «Aprender sin conexión» (Reto ProFuturo)
 
 > **Estado real (4–5 nov 2026):** MOCHILA funciona de principio a fin en local: la docente prepara un módulo con ayuda de la IA, lo revisa y lo aprueba; el alumnado lo descarga una vez y lo usa **sin conexión**; el progreso se envía después al panel docente sin duplicados. Probado en navegador de escritorio y, según el registro del equipo (`qa/registro-pruebas.md`), en un iPhone en modo avión con el paquete real de los Andes. Lo que **no** está hecho: validación cultural con las comunidades, pruebas con niños, cuentas de usuario y despliegue público.
+
 ---
 
 ## Problema
@@ -39,7 +40,7 @@ MOCHILA separa dos momentos:
  │ → "sello" y export    │                      └───────────┬──────────────┘
  └──────────────────────┘                                   │ cola de progreso
             ▲                                                ▼ (cuando hay red)
-            └─────────────────── panel docente ◀─── sincronización manual
+            └──────── panel docente ◀─── sincronización (al volver la red o a mano)
 ```
 
 ## Características (objetivo del MVP; ver prioridades en `docs/PRODUCT_BRIEF.md`)
@@ -48,10 +49,10 @@ MOCHILA separa dos momentos:
 |---|---|---|
 | Imprescindible | Esquema de paquete v0.1 y módulo de alimentación en 2 contextos (Andes/ES, norte de Uganda/EN) | Hecho: revisión pedagógica aprobada; validación cultural local pendiente |
 | Imprescindible | Autoría: contexto → IA (Gemini o asistente externo) → revisión humana → aprobación → descarga JSON | Hecho; un módulo generado con IA (Altiplano, contexto sintético) revisado y aprobado |
-| Imprescindible | Reproductor PWA sin conexión (selector de mochilas, actividades, sellos) | Hecho; probado en iPhone en modo avión según `qa/` |
-| Imprescindible | Progreso local con avatares y sincronización manual al panel docente | Hecho, idempotente |
-| Importante | Escuchar actividades con voces del dispositivo (ES/EN) | En revisión (PR 34); depende de las voces instaladas |
-| Importante | Módulos «pedir ayuda a un adulto» y «emociones» | Borradores sin aprobar (PR 35) |
+| Imprescindible | Reproductor PWA sin conexión (selector de mochilas, seis exploradores, cinco tipos de juego, álbum de pegatinas, ayuda de Mochi) | Hecho; probado en iPhone en modo avión según `qa/` (versión anterior al sprint final) |
+| Imprescindible | Progreso local con avatares y sincronización al panel docente (automática al volver la red, o manual) | Hecho, idempotente (sin duplicados al reenviar) |
+| Importante | Escuchar actividades con voces del dispositivo (ES/EN) | Hecho; según el registro de `qa/`, se oye sin conexión en iPhone (no con el modo silencio); depende de las voces instaladas |
+| Importante | Módulos «pedir ayuda a un adulto» y «emociones» | Borradores en `content/drafts/`, sin aprobar |
 | Prescindible | IA local en el navegador, voz neuronal offline, exportación a Kolibri | No empezado |
 
 ## Ejecución
@@ -81,7 +82,7 @@ npm run preview -- --host 127.0.0.1 --port 4173
 1. `/autoria`: describir la comunidad → «Generar propuesta con IA» o «Preparar instrucciones» → revisar y corregir → lista de revisión y nombre → «Aprobar y publicar».
 2. `/`: «Mis mochilas» → abrir una mochila con conexión (queda «✓ Lista sin conexión») → elegir avatar → actividades.
 3. Sin conexión: recargar y seguir jugando; el progreso se guarda en el dispositivo.
-4. `/docente`: «Enviar progreso» al volver la conexión; los contadores suben sin duplicar.
+4. Al volver la conexión el progreso se envía solo; en `/docente`, «Enviar progreso» lo reenvía a mano y los contadores suben sin duplicar.
 
 Para probar en un móvil real hace falta HTTPS: ver `docs/decisions/ADR-003-https-pruebas-movil.md`.
 
@@ -106,6 +107,6 @@ Las bases (Base 9) exigen una licencia aprobada por OSI para el código y recomi
 | `qa/` | Plan de pruebas y registro de pruebas offline | Carlos |
 | `pitch/` | Guion, diapositivas, vídeo, guion de demo | Mario |
 | `research/` | Notas de validación, competencia, fuentes | Mario |
-| `scripts/` | Utilidades (diagnóstico de Macs) | Sergio |
+| `scripts/` | Utilidades (diagnóstico de Macs, validación de todo el contenido) | Sergio |
 
 Lectura recomendada para cualquier integrante nuevo (o IA): `docs/PROJECT_CONTEXT.md` → `docs/TEAM_ROLES.md` → `docs/GIT_WORKFLOW.md` → tu carpeta.

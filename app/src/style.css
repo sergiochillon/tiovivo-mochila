@@ -8,11 +8,19 @@
   font:100%/1.5 var(--texto);color:var(--tinta);background:var(--cielo);font-synthesis:none
 }
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:linear-gradient(180deg,var(--cielo) 0,var(--cielo) 62%,#d3edd0 100%)}
-main{max-width:1180px;margin:auto;padding:0 clamp(12px,3vw,40px) 28px}
+/* Sentirse app instalada en móvil y tableta (skill mobile-native): sin destello gris al tocar, sin
+   inflado de texto al girar y sin «tirar para recargar» a mitad de una actividad. */
+html{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%;text-size-adjust:100%;overscroll-behavior:none}
+/* Los controles responden al instante (sin espera de doble toque) y no seleccionan su texto al mantener pulsado.
+   El texto de contenido sigue siendo seleccionable. */
+button,a,[role="button"]{touch-action:manipulation}
+button,a.button-link,a.backpack,a.back{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+body{margin:0;min-height:100vh;min-height:100dvh;background:linear-gradient(180deg,var(--cielo) 0,var(--cielo) 62%,#d3edd0 100%)}
+/* Con viewport-fit=cover el contenido se aparta de la muesca y del indicador de inicio. */
+main{max-width:1180px;margin:auto;padding:0 max(clamp(12px,3vw,40px),env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) max(clamp(12px,3vw,40px),env(safe-area-inset-left,0px))}
 
 /* Cabecera */
-header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 0}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(14px + env(safe-area-inset-top,0px)) 0 14px}
 .brand{display:flex;align-items:center;gap:10px}
 .brand img{width:44px;height:44px;filter:drop-shadow(0 3px 0 rgba(28,43,75,.15))}
 .brand b{font:800 1.7rem/1 var(--titulo);letter-spacing:-.01em;color:var(--tinta);text-transform:lowercase}
@@ -216,6 +224,8 @@ button.primary-ai.working{opacity:.75;cursor:progress}
 .field textarea{resize:vertical;line-height:1.45}
 .field input:focus,.field select:focus,.field textarea:focus,.reopen-bar input:focus{outline:none;border-color:var(--lago)}
 .prompt-box{margin-top:6px}.prompt-box textarea{font:.85rem/1.45 ui-monospace,monospace;background:#F7FBFE}
+/* iOS amplía la página al enfocar un campo de menos de 16px y no vuelve: nunca por debajo en pantallas táctiles. */
+@media (pointer:coarse){.field input,.field select,.field textarea,.reopen-bar input,.prompt-box textarea{font-size:max(16px,1em)}}
 .notice{border-radius:14px;padding:10px 14px;margin:10px 0;font-weight:700}.notice p{margin:.2rem 0}
 .notice.ok{background:#DDF5E8;color:var(--verde-oscuro)}.notice.error{background:var(--intento-fondo);color:#8a3d06}
 .review-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin-bottom:12px}
@@ -235,10 +245,10 @@ a.secondary-link{margin-top:18px}
 /* Tablet en horizontal: escenario a la izquierda, juego a la derecha */
 @media (min-width:900px) and (orientation:landscape){
   :root{font-size:112%}
-  body:not(.teacher) article{display:grid;grid-template-columns:minmax(260px,32%) 1fr;min-height:calc(100vh - 120px)}
+  body:not(.teacher) article{display:grid;grid-template-columns:minmax(260px,32%) 1fr;min-height:calc(100vh - 120px);min-height:calc(100dvh - 120px)}
   body:not(.teacher) aside{min-height:100%;justify-content:flex-start;background-position:30% bottom}
   body:not(.teacher) .scene-notice{position:absolute;bottom:14px;left:14px;right:14px;max-width:none;margin:0}
-  body:not(.teacher) section{max-height:calc(100vh - 120px);overflow-y:auto;padding:24px 30px}
+  body:not(.teacher) section{max-height:calc(100vh - 120px);max-height:calc(100dvh - 120px);overflow-y:auto;overscroll-behavior:contain;padding:24px 30px}
   /* Fit one game on one screen: compact heading, Mochi beside the plate. */
   .activity-screen h1{font-size:1.5rem;max-width:none}
   .activity-screen .back{margin-bottom:8px}
@@ -255,7 +265,7 @@ a.secondary-link{margin-top:18px}
   .guide-art{width:88px;height:96px}
 }
 @media (max-width:480px){
-  header{padding:10px 0}
+  header{padding:calc(10px + env(safe-area-inset-top,0px)) 0 10px}
   .edition{display:none}
   .pairs{gap:10px}
 }
