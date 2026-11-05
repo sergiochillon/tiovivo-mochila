@@ -80,12 +80,7 @@ elif [ -d "/Applications/Visual Studio Code.app" ]; then
 else
   row "VS Code" "NO encontrado"
 fi
-if have claude; then
-  row "Claude Code (claude)" "$(claude --version 2>/dev/null | head -n1)  (solo indica que está instalado, no que haya sesión)"
-else
-  row "Claude Code (claude)" "no instalado (no es obligatorio)"
-fi
-for app in "Claude" "ChatGPT" "Antigravity" "Google Chrome" "Safari" "Keynote"; do
+for app in "ChatGPT" "Antigravity" "Google Chrome" "Safari" "Keynote"; do
   if [ -d "/Applications/$app.app" ]; then row "App: $app" "instalada"; else row "App: $app" "no encontrada en /Applications"; fi
 done
 

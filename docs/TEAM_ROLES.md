@@ -16,7 +16,7 @@ Responsable: Sergio. **La asignación es una recomendación basada en datos obje
 
 ## 2. Justificación de R2 y del intercambio R1↔R3
 
-- **R2 → Sergio.** Es quien crea el repositorio, invita y administra, y tiene Claude Code (revisión de PR, scaffolding, depuración difícil). Tiene ADET y ha hecho la auditoría, así que conoce las decisiones.
+- **R2 → Sergio.** Es quien crea el repositorio, invita y administra, y usa un asistente de código (revisión de PR, scaffolding, depuración difícil). Tiene ADET y ha hecho la auditoría, así que conoce las decisiones.
 - **R1 → Mario y R3 → Rodrigo.** Decisión del equipo el 4 nov (comunicada por Sergio). Rodrigo tiene el entorno de desarrollo listo (git, `gh`, Node). Mario no tiene formación ADET: **Sergio revisa con él el modelo de negocio y la transferencia al mercado (20 min hoy y 20 mañana)** sin quitarle la autoría del pitch.
 - **Riesgo de R2:** Sergio concentra repositorio, arquitectura e integración (cuello de botella). Mitigaciones: Alejandro es segundo revisor de las PR de Sergio; las carpetas de dominio son de sus dueños; Sergio solo decide interfaces y alcance.
 
@@ -80,7 +80,7 @@ Para no bloquearse: **Rodrigo puede empezar con un paquete de ejemplo escrito a 
 
 | Persona | Principal | Apoyo | Notas |
 |---|---|---|---|
-| Sergio | Claude Code (repo, revisión, integración) | Claude Pro (decisiones, ADR), Google AI Pro/Gemini (investigación larga), ChatGPT Go | Reservar Claude Pro/Code para integración, revisión y depuración difícil; no gastarlo en contenido masivo |
+| Sergio | Asistente de código (repo, revisión, integración) | IA de pago (decisiones, ADR), Google AI Pro/Gemini (investigación larga), ChatGPT Go | Reservar la asistencia de IA para integración, revisión y depuración difícil; no gastarla en contenido masivo |
 | Rodrigo | ChatGPT Plus | Grok temporal (con cautela con citas); VS Code; Copilot Student **solo si ya lo tiene verificado** | No asumir agente de código en ChatGPT: comprobar qué incluye su plan |
 | Mario | ChatGPT Plus (investigación, redacción, estructura del pitch) | Keynote/Google Slides para diapositivas | No asumir Canva ni nada de pago |
 | Alejandro | ChatGPT Plus | Clave gratuita de Gemini API (AI Studio) con **su** cuenta, si se decide | Claves solo en `.env` |
