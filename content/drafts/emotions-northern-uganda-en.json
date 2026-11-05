@@ -14,7 +14,7 @@
   },
   "review": {
     "status": "draft",
-    "notes": "Pedagogical draft; requires human review before use. Illustrative context; local cultural validation pending. Not tested with children."
+    "notes": "Leído por Carlos Herrero el 2026-11-05. Pendiente segunda revisión humana, prueba en el reproductor y validación cultural local. No probado con niños."
   },
   "modules": [
     {
@@ -25,15 +25,15 @@
         {
           "id": "notice-how-i-feel",
           "type": "choice",
-          "prompt": "People can feel calm, happy, sad, worried, or something else. If you want to notice how you feel, what could you do?",
-          "audioText": "People can feel calm, happy, sad, worried, or something else. If you want to notice how you feel, what could you do?",
+          "prompt": "If you want to notice your feelings, what could you do?",
+          "audioText": "If you want to notice your feelings, what could you do?",
           "options": [
-            {"id": "take-a-moment", "text": "Take a moment and choose a word for myself.", "feedback": "Notice your feelings, ask for help, or pause."},
-            {"id": "talk-to-trusted-adult", "text": "Talk to a trusted adult if I want support.", "feedback": "Notice your feelings, ask for help, or pause."},
-            {"id": "ask-for-a-pause", "text": "Ask for a pause if I do not want to answer now.", "feedback": "Notice your feelings, ask for help, or pause."}
+            {"id": "take-a-moment", "text": "🌱 Take a moment and choose a word for yourself.", "feedback": "Choosing a word may help you notice how you feel."},
+            {"id": "talk-to-trusted-adult", "text": "💬 Talk to a trusted adult if you want support.", "feedback": "Talking to a trusted adult for support is okay."},
+            {"id": "ask-for-a-pause", "text": "⏸️ Ask for a pause if you do not want to answer.", "feedback": "It is okay to pause. You do not have to answer."}
           ],
           "correct": ["take-a-moment", "talk-to-trusted-adult", "ask-for-a-pause"],
-          "feedback": "There is no one feeling you should have. Notice your feelings, ask for help, or pause.",
+          "feedback": "You can feel different ways. You may ask for help or pause.",
           "safetyTag": "emotion-self-choice",
           "teacherNotes": "Generic draft; do not ask the child to share a feeling or infer one. Review wording and local suitability before use.",
           "durationMin": 2
