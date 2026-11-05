@@ -2,7 +2,9 @@
 
 Responsable: Sergio (integración). Fue una **propuesta** para 2 jornadas con 5 personas y hoy es en gran parte realidad (ver «Estado real a 5 nov»). Cualquier cambio de arquitectura o de interfaces se propone por Issue/ADR y lo aprueba el responsable de integración **antes** de tocar código ajeno.
 
-## Estado real a 5 nov (`main` en a044acb)
+## Estado a mediodía del 5 nov (instantánea histórica, `main` en a044acb)
+
+> Varios pendientes de esta lista se resolvieron después (tests y CI, lista de revisión exigida en el servidor, sincronización al volver la red). El estado actual de la versión entregada (`v1.0`) está en el [README](../README.md).
 
 - **Front (`app/`):** Vite + TypeScript **vanilla** (sin React) + `vite-plugin-pwa`; progreso en IndexedDB; `/alumno`, `/docente` y `/autoria`. Lo del sprint de calidad (PR 37) no está aún en `main`.
 - **Back (`server/`):** Node + Express + AJV; Gemini solo desde el servidor; sin chat para niños ni datos personales.
