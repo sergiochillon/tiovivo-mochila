@@ -457,7 +457,9 @@ export function authoring(lesson: HTMLElement) {
   checkList.append(...checks.map(check => check.label))
   four.append(sensitiveNote, checkList, field('Revisado por', reviewer), approve, approveResult, approved)
 
-  const back = element('a', 'button-link secondary-link', '← Cuaderno de clase')
+  // The way back goes FIRST: at the bottom nobody found it.
+  const back = element('a', 'back', '← Cuaderno de clase')
   back.href = '/docente'
-  lesson.append(one, two, three, four, back)
+  lesson.append(one, two, three, four)
+  lesson.prepend(back)
 }

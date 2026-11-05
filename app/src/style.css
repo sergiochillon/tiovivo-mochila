@@ -385,3 +385,7 @@ details.explorer[open] ul{animation:enter .3s ease both}
 .roster-row input:focus{outline:none;border-color:var(--lago)}
 .roster-row small{color:var(--tinta-suave);font-size:.8rem}
 @media (max-width:480px){.roster-row small{display:none}}
+
+.roster-row strong{flex:1;font:800 1.05rem/1.2 var(--titulo)}
+/* Cards hidden by the age filter must really disappear (a display rule on the card would override [hidden]) */
+a.backpack[hidden]{display:none}

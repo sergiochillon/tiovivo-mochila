@@ -1123,16 +1123,9 @@ function showScene(scene: Scene) {
   document.body.dataset.scene = scene.id
 }
 
-const defaultAlias = (avatarId: string) => 'Alumno ' + (avatars.findIndex(avatar => avatar.id === avatarId) + 1)
-function loadRoster(): Record<string, string> {
-  let saved: Record<string, unknown> = {}
-  try { saved = JSON.parse(localStorage.getItem('mochila-alumnado') ?? '{}') } catch { /* ignore */ }
-  return Object.fromEntries(avatars.map(avatar => [avatar.id,
-    typeof saved[avatar.id] === 'string' && (saved[avatar.id] as string).trim() ? (saved[avatar.id] as string).slice(0, 24) : defaultAlias(avatar.id)]))
-}
-function saveRoster(roster: Record<string, string>) {
-  try { localStorage.setItem('mochila-alumnado', JSON.stringify(roster)) } catch { /* ignore */ }
-}
+/** Fixed labels, no free text and nothing stored: «Alumno 1»…«Alumno 6» are the six explorers in order.
+ *  (The repo rules forbid free text and personal data about minors.) */
+const studentLabel = (avatarId: string) => 'Alumno ' + (avatars.findIndex(avatar => avatar.id === avatarId) + 1)
 
 function teacherHeader(title: string, subtitle: string) {
   document.body.classList.add('teacher')
@@ -1177,35 +1170,25 @@ function teacherPanel() {
   metricsHelp.textContent = 'Cada vez que un alumno termina una actividad (la resuelve, la lee o se queda sin intentos), su tablet lo apunta y lo envía cuando hay conexión. Abajo ves el detalle de cada alumno.'
   lesson.append(metricsHelp)
   // Per-explorer results: what each pseudonymous explorer solved at first try, with help, or not yet.
-  // The class roster: each explorer on the tablets is one student. Aliases live only on this device.
-  const roster = loadRoster()
+  // The class: each explorer on the tablets is one student, shown with a fixed label.
   const rosterTitle = document.createElement('h2')
   rosterTitle.textContent = 'Tu alumnado'
   const rosterHelp = document.createElement('p')
   rosterHelp.className = 'step-help'
-  rosterHelp.textContent = 'Cada niño o niña elige un explorador en la tablet. Aquí le pones el nombre con el que lo ves tú: «Alumno 1», un apodo o un número. Nunca uses nombres y apellidos reales: no hace falta y no se envían al servidor.'
+  rosterHelp.textContent = 'Cada niño o niña elige un explorador en la tablet y aquí lo ves como «Alumno 1» a «Alumno 6». No se guarda ningún nombre ni dato personal.'
   const rosterList = document.createElement('div')
   rosterList.className = 'roster'
   for (const avatar of avatars) {
-    const row = document.createElement('label')
+    const row = document.createElement('div')
     row.className = 'roster-row'
     const portrait = new Image()
     portrait.src = avatar.portrait
     portrait.alt = ''
-    const field = document.createElement('input')
-    field.type = 'text'
-    field.maxLength = 24
-    field.value = roster[avatar.id]
-    field.setAttribute('aria-label', 'Nombre de ' + texts.es.avatars[avatar.id])
-    field.onchange = () => {
-      roster[avatar.id] = field.value.trim().slice(0, 24) || defaultAlias(avatar.id)
-      field.value = roster[avatar.id]
-      saveRoster(roster)
-      void showResults()
-    }
+    const label = document.createElement('strong')
+    label.textContent = studentLabel(avatar.id)
     const who = document.createElement('small')
     who.textContent = texts.es.avatars[avatar.id]
-    row.append(portrait, field, who)
+    row.append(portrait, label, who)
     rosterList.append(row)
   }
   lesson.append(rosterTitle, rosterHelp, rosterList)
@@ -1236,7 +1219,7 @@ function teacherPanel() {
           summary.append(portrait)
         }
         const name = document.createElement('strong')
-        name.textContent = roster[explorer.avatarId] ?? texts.es.avatars[explorer.avatarId] ?? explorer.avatarId
+        name.textContent = studentLabel(explorer.avatarId)
         const chips = document.createElement('span')
         chips.className = 'result-chips'
         const chip = (label: string, kind: string) => {
