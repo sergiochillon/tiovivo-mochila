@@ -84,7 +84,7 @@ const texts = {
     edition: 'Atlas de aula', expedition: 'EXPEDICIÓN 01', footer: 'El progreso se guarda en este dispositivo.',
     who: '¿Qué explorador eliges hoy?', whoHelp: 'Cada explorador guarda sus propias pegatinas. Elige el tuyo.',
     activities: 'Actividades', goingWith: (name: string) => 'Vas con ' + name + '. Toca una actividad para empezar.',
-    next: 'Siguiente', start: 'Empezar', done: 'Completada', minutes: 'min', changeAvatar: 'Cambiar de explorador',
+    start: 'Empezar', done: 'Completada', minutes: 'min', changeAvatar: 'Cambiar de explorador',
     back: '← Actividades', continue: 'Continuar', needsReview: 'Esta actividad necesita revisión.', goBack: 'Volver',
     yourOrder: 'Tu orden', firstStep: '¿Cuál es el primer paso?', wrongStep: 'Ese no va ahora. Prueba otro paso.',
     nextStep: '¡Bien! ¿Cuál va después?', tryAgain: 'Puedes volver a elegir.',
@@ -108,7 +108,7 @@ const texts = {
     edition: 'Class atlas', expedition: 'EXPEDITION 01', footer: 'Your progress is saved on this device.',
     who: 'Which explorer do you pick today?', whoHelp: 'Each explorer keeps their own stickers. Choose yours.',
     activities: 'Activities', goingWith: (name: string) => 'You are with ' + name + '. Tap an activity to start.',
-    next: 'Next', start: 'Start', done: 'Done', minutes: 'min', changeAvatar: 'Change explorer',
+    start: 'Start', done: 'Done', minutes: 'min', changeAvatar: 'Change explorer',
     back: '← Activities', continue: 'Continue', needsReview: 'This activity needs review.', goBack: 'Back',
     yourOrder: 'Your order', firstStep: 'What is the first step?', wrongStep: 'Not this one yet. Try another step.',
     nextStep: 'Good! What comes next?', tryAgain: 'You can choose again.',
@@ -155,7 +155,12 @@ function shuffled<T>(list: readonly T[], predictable: (order: T[]) => boolean = 
       const j = Math.floor(Math.random() * (i + 1))
       ;[order[i], order[j]] = [order[j], order[i]]
     }
-    if (!predictable(order)) break
+    if (!predictable(order)) return order
+  }
+  // Very unlucky draws: take the first rotation that is not predictable.
+  for (let shift = 1; shift < list.length; shift++) {
+    const rotated = [...list.slice(shift), ...list.slice(0, shift)]
+    if (!predictable(rotated)) return rotated
   }
   return order
 }
@@ -417,8 +422,14 @@ async function album(avatar: Avatar) {
   lesson.append(grid)
 }
 
-const stickerKind = (activity: Activity) =>
-  Array.isArray(activity.correct) && activity.correct.length > 1 && activity.type !== 'order' && activity.type !== 'match' ? 'plate' : activity.type
+/** «Fill the plate»: several right answers AND at least one wrong one. When every option is right
+ *  (self-choice, e.g. emotions), any tap is a good answer and it plays as a normal choice. */
+const isPlate = (activity: Activity) => {
+  const correct = activity.correct
+  return Array.isArray(correct) && correct.length > 1 && activity.type !== 'order' && activity.type !== 'match' &&
+    (activity.options ?? []).some(option => !correct.includes(option.id))
+}
+const stickerKind = (activity: Activity) => isPlate(activity) ? 'plate' : activity.type
 /** What the child sees as the game's name: a choice with several right answers is played as «fill the plate». */
 const kindLabel = (activity: Activity) => t.kinds[stickerKind(activity)] ?? t.kinds[activity.type] ?? ''
 
@@ -584,9 +595,9 @@ async function play(avatar: Avatar, activity: Activity, replay = false) {
     const rights = pairs.map(([, b]) => b)
     shuffled(rights, order => rights.length > 1 && order.some((b, index) => b === rights[index]))
       .forEach(b => card(b, right, 'right'))
-  } else if (Array.isArray(activity.correct) && activity.correct.length > 1) {
+  } else if (isPlate(activity)) {
     // "Fill the plate": every correct option must be collected; wrong ones bounce back.
-    const needed = new Set(activity.correct)
+    const needed = new Set(activity.correct as string[])
     coach.say(t.plateHelp, 'thinking')
     const plate = document.createElement('div')
     plate.className = 'plate'
@@ -887,7 +898,7 @@ else if (technicalPreview) {
       home.textContent = '← Mis mochilas'
       return lesson.append(home)
     }
-    document.title = 'MOCHILA · ' + downloaded.title
+    document.title = 'MOCHILA — ' + downloaded.title
     pack = downloaded
     document.documentElement.lang = pack.language
     if (pack.language === 'en') t = texts.en

@@ -330,7 +330,10 @@ export function authoring(lesson: HTMLElement) {
     draft!.modules.forEach(module => module.activities.forEach((activity, index) => {
       const card = element('article', 'review-card')
       const top = element('div', 'review-top')
-      top.append(element('small', '', (index + 1) + '. ' + (kindLabels[activity.type] ?? activity.type)), element('span', 'chip', activity.safetyTag))
+      // Same name the child will see: several right answers plus a wrong one is played as «Llena el plato».
+      const plate = Array.isArray(activity.correct) && activity.correct.length > 1 && (activity.type === 'choice' || activity.type === 'scenario') &&
+        (activity.options ?? []).some(option => !(activity.correct as string[]).includes(option.id))
+      top.append(element('small', '', (index + 1) + '. ' + (plate ? 'Llena el plato' : kindLabels[activity.type] ?? activity.type)), element('span', 'chip', activity.safetyTag))
       const promptEditor = area(activity.prompt, 3)
       const feedbackEditor = area(activity.feedback, 2)
       card.append(top, field('Enunciado', promptEditor))
