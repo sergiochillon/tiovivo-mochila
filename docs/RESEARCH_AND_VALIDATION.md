@@ -1,6 +1,6 @@
 # RESEARCH_AND_VALIDATION — qué investigamos y cómo validamos
 
-Responsable: Rodrigo. **Regla de oro: no se afirma validado lo que no lo está.** Todo lo de esta tabla empieza como **[HIPÓTESIS]**. La validación se anota en `research/` con fecha, fuente y qué cambia en el producto.
+Responsable: Mario. **Regla de oro: no se afirma validado lo que no lo está.** Todo lo de esta tabla empieza como **[HIPÓTESIS]**. La validación se anota en `research/` con fecha, fuente y qué cambia en el producto.
 
 ---
 
@@ -42,9 +42,9 @@ Ver `PRODUCT_BRIEF.md §8` (H1–H6). Cada una se mueve entre **Sin validar → 
 
 ## 5. Competencia
 
-Mantener una tabla viva en `research/competencia.md` (Rodrigo) con: nombre, qué hace, público, offline sí/no, IA sí/no, idioma/contexto, licencia/coste, fuente y fecha de consulta. Punto de partida (de la auditoría): Kolibri, aula digital ProFuturo, Rori, Khanmigo, Colors of Kindness, Ubongo (Akili and Me), prototipos académicos offline, Panorama. **Antes de decir «ninguno hace X», buscar de nuevo.** Preferimos «hasta donde hemos encontrado».
+Mantener una tabla viva en `research/competencia.md` (Mario) con: nombre, qué hace, público, offline sí/no, IA sí/no, idioma/contexto, licencia/coste, fuente y fecha de consulta. Punto de partida (de la auditoría): Kolibri, aula digital ProFuturo, Rori, Khanmigo, Colors of Kindness, Ubongo (Akili and Me), prototipos académicos offline, Panorama. **Antes de decir «ninguno hace X», buscar de nuevo.** Preferimos «hasta donde hemos encontrado».
 
-## 6. Posibles usuarios y dónde encontrarlos (a decidir por Rodrigo)
+## 6. Posibles usuarios y dónde encontrarlos (a decidir por Mario)
 
 - Docentes de primaria conocidos del equipo y de la universidad (incluidos alumnos de Educación si hay acceso).
 - Responsables de programas de ProFuturo o mentores presentes en la sede (**preguntar si hay mentores o jurado accesibles**).
