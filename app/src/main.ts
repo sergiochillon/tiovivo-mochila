@@ -935,5 +935,6 @@ if (!technicalPreview) {
   addEventListener('online', sendQuietly)
   // Opened with a connection (e.g. the next day): there is no «online» event, so also try once at start.
   // Nothing is sent when there is nothing pending, and /docente keeps its own manual button.
-  if (navigator.onLine && location.pathname !== '/docente') setTimeout(sendQuietly, 3000)
+  // Only where children play: not in /docente (own button) nor /autoria (the teacher's computer).
+  if (navigator.onLine && location.pathname !== '/docente' && location.pathname !== '/autoria') setTimeout(sendQuietly, 3000)
 }

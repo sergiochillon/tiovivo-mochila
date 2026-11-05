@@ -1,6 +1,7 @@
 import Ajv2020 from 'ajv/dist/2020'
 import addFormats from 'ajv-formats'
 import schema from '../../contracts/pack-v0.1.schema.json'
+import { timeoutSignal } from './net'
 
 export interface Activity {
   id: string
@@ -79,7 +80,7 @@ function savedPack(db: IDBDatabase, id: string) {
 export async function approvedCatalog(): Promise<Pack[]> {
   const base = import.meta.env.VITE_API_BASE_URL || '/api'
   try {
-    const response = await fetch(base + '/packs', { cache: 'no-store', signal: AbortSignal.timeout(5000) })
+    const response = await fetch(base + '/packs', { cache: 'no-store', signal: timeoutSignal(5000) })
     if (response.status !== 200) return []
     const data: unknown = await response.json()
     const list = typeof data === 'object' && data !== null && Array.isArray((data as { packs?: unknown }).packs)
@@ -103,7 +104,7 @@ export async function loadPack(db: IDBDatabase, id: string): Promise<Pack | unde
   let notApproved = false
   try {
     const response = await fetch(base + '/packs/' + encodeURIComponent(id), {
-      cache: 'no-store', signal: AbortSignal.timeout(6000)
+      cache: 'no-store', signal: timeoutSignal(6000)
     })
     if (response.status === 404) notApproved = true
     else if (response.status === 200) {

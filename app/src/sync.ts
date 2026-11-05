@@ -1,3 +1,5 @@
+import { timeoutSignal } from './net'
+
 const classCode = 'DEMO-01'
 const api = import.meta.env.VITE_API_BASE_URL || '/api'
 
@@ -17,7 +19,15 @@ function count(value: unknown): value is number {
   return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0
 }
 
-export async function sendProgress(db: IDBDatabase): Promise<string> {
+// One send at a time: the online event, the start-up send and the teacher's button can coincide.
+let sending: Promise<string> | undefined
+
+export function sendProgress(db: IDBDatabase): Promise<string> {
+  sending ??= sendPending(db).finally(() => { sending = undefined })
+  return sending
+}
+
+async function sendPending(db: IDBDatabase): Promise<string> {
   const records = await new Promise<Progress[]>((resolve, reject) => {
     const request = db.transaction('progress').objectStore('progress').getAll()
     request.onsuccess = () => resolve(request.result)
@@ -30,7 +40,7 @@ export async function sendProgress(db: IDBDatabase): Promise<string> {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ classCode, events }),
-    signal: AbortSignal.timeout(10000)
+    signal: timeoutSignal(10000)
   })
   if (response.status !== 200) throw new Error('Respuesta del servidor: ' + response.status)
   const ack = await response.json()
@@ -49,7 +59,7 @@ export async function sendProgress(db: IDBDatabase): Promise<string> {
 }
 
 export async function classTotals() {
-  const response = await fetch(api + '/progress/' + classCode, { cache: 'no-store', signal: AbortSignal.timeout(8000) })
+  const response = await fetch(api + '/progress/' + classCode, { cache: 'no-store', signal: timeoutSignal(8000) })
   if (response.status !== 200) throw new Error('No se pudo consultar el panel')
   const data = await response.json()
   if (data?.classCode !== classCode || !count(data.eventsReceived) ||
