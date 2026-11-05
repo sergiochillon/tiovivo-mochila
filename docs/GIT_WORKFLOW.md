@@ -8,7 +8,7 @@ Responsable: Sergio. Pensado para 5 personas y 2 jornadas: lo mínimo que evita 
 
 - **Nombre recomendado:** `tiovivo-mochila` (privado al inicio). Propietario: la cuenta de Sergio (único Mac con `gh` y auth confirmados).
 - **Fuente de verdad:** este repo. Lo que no está en `main` o en una PR abierta no existe para el equipo.
-- **Visibilidad en la entrega [PENDIENTE, P-08]:** las bases exigen enlace a GitHub/GitLab y licencia libre. Hay que confirmar si la organización acepta repo privado compartido con el jurado; si no, **se hace público en la entrega**, tras comprobar que no hay secretos ni datos personales.
+- **Visibilidad:** las bases exigen enlace a GitHub/GitLab y licencia libre. El repositorio es **público desde el 5 nov 2026** (etiqueta `v1.0`); ver `docs/decisions/ADR-005-licencias-y-visibilidad.md`.
 
 ## 2. Ramas
 
